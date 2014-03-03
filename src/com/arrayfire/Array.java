@@ -1,7 +1,5 @@
 package com.arrayfire;
 
-import android.util.Log;
-
 public class Array implements AutoCloseable {
 
     static {
@@ -100,7 +98,6 @@ public class Array implements AutoCloseable {
         if( elems.length > total_size || elems.length < total_size ) {
             throw new Exception("Mismatching dims and array size");
         }
-        Log.i("Array", "============ Array class =============== ");
         this.ref = createArrayElems(dims,elems);
     }
 

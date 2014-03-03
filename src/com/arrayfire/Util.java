@@ -1,7 +1,5 @@
 package com.arrayfire;
 
-import android.util.Log;
-
 public class Util {
 
     public static String toString(Array a, String delim) {        
@@ -14,8 +12,7 @@ public class Util {
             }
             ret_txt += Float.toString( fary[fary.length-1] );
         } catch(Exception e) {
-            Log.i("Util.toString","Array to String conversion failed");
-            ret_txt="";
+            ret_txt="Failed to convert to string";
         }
         return ret_txt;
     }
