@@ -7,6 +7,8 @@
 extern "C" {
 #endif
 
+// Simply display info
+JNIEXPORT void JNICALL Java_com_arrayfire_Array_info(JNIEnv *env, jclass clazz);
 
 // Loader methods
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArray(JNIEnv *env, jclass clazz, jintArray dims);

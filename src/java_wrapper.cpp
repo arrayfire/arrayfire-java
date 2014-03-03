@@ -15,6 +15,17 @@
 
 const int MaxDimSupported = 3;
 
+JNIEXPORT void JNICALL Java_com_arrayfire_Array_info(JNIEnv *env, jclass clazz)
+{
+    try{
+#ifndef ANDROID
+        af::info();
+#endif
+    } catch(af::exception& e) {
+    } catch(std::exception& e) {
+    }
+}
+
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArray(JNIEnv *env, jclass clazz, jintArray dims)
 {
     jlong ret;

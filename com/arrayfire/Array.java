@@ -6,6 +6,8 @@ public class Array implements AutoCloseable {
         System.loadLibrary("af_java");
     }
 
+    public native static void info();
+
     private native static long createArray(int[] dims);
     private native static long createArrayElems(int[] dims, float[] elems);
     private native static void destroyArray(long ref);

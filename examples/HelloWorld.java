@@ -30,6 +30,9 @@ public class HelloWorld {
         }
 
         try {
+            // Get info about arrayfire information
+            Array.info();
+
             // Send data to ArrayFire
             Array A = new Array(dims, left);
             Array B = new Array(dims, right);
