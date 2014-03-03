@@ -2,10 +2,6 @@ package com.arrayfire;
 
 public class Image extends Array {
 
-    static {
-        System.loadLibrary("arrayfire");
-    }
-
     private native static long erode    (long a, long b);
     private native static long dilate   (long a, long b);
     private native static long convolve (long a, long b);
