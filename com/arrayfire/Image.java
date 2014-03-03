@@ -14,9 +14,6 @@ public class Image extends Array {
     private native static long resize1  (long a, float scale, char method);
     private native static long resize2  (long a, float scalex, float scaley, char method);
     private native static long resize3  (long a, int height, int width, char method);
-    //private native static long fft      (long a, long b);
-    //private native static long fft2     (long a, long b);
-    //private native static long fft3     (long a, long b);
 
     public Image() throws Exception { super(); }
 

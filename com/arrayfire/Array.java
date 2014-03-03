@@ -39,6 +39,13 @@ public class Array implements AutoCloseable {
     private native static FloatComplex  [] getFloatComplexFromArray(long ref);
     private native static DoubleComplex [] getDoubleComplexFromArray(long ref);
 
+    private native static long fft  (long a);
+    private native static long fft2 (long a);
+    private native static long fft3 (long a);
+
+    private native static long ifft (long a);
+    private native static long ifft2(long a);
+    private native static long ifft3(long a);
 
     // Binary operations
     private native static long add(long a, long b);
@@ -475,6 +482,42 @@ public class Array implements AutoCloseable {
     public static double sumAll(Array a) throws Exception { return sumAll(a.ref); }
     public static double maxAll(Array a) throws Exception { return maxAll(a.ref); }
     public static double minAll(Array a) throws Exception { return minAll(a.ref); }
+
+    public static Array fft(Array a) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = fft(a.ref);
+        return ret_val;
+    }
+
+    public static Array fft2(Array a) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = fft2(a.ref);
+        return ret_val;
+    }
+
+    public static Array fft3(Array a) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = fft3(a.ref);
+        return ret_val;
+    }
+
+    public static Array ifft(Array a) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = ifft(a.ref);
+        return ret_val;
+    }
+
+    public static Array ifft2(Array a) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = ifft2(a.ref);
+        return ret_val;
+    }
+
+    public static Array ifft3(Array a) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = ifft3(a.ref);
+        return ret_val;
+    }
 
     public static Array sum(Array a, int dim) throws Exception {
         Array ret_val = new Array();

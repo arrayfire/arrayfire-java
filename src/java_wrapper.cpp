@@ -483,21 +483,48 @@ ARRAY_RET_OP_DEF(sum)
 ARRAY_RET_OP_DEF(max)
 ARRAY_RET_OP_DEF(min)
 
-#define SCALAR_OP1_DEF(func,operation) \
-    JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a, jfloat b) \
-    {                                           \
-        jlong ret;                              \
-        try {                                   \
-            af::array *A = (af::array*)(a);     \
-            af::array *res = new af::array();   \
-            (*res) = (*A) operation (b);        \
-            ret = (jlong)(res);                 \
-        } catch(af::exception& e) {             \
-            ret = 0;                            \
-        } catch(std::exception& e) {            \
-            ret = 0;                            \
-        }                                       \
-        return ret;                             \
+
+#define FFT_DEF(func)                                       \
+    JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func \
+    (JNIEnv *env, jclass clazz, jlong a)                    \
+    {                                                       \
+        jlong ret = 0;                                      \
+        try {                                               \
+            af::array *A = (af::array*)(a);                 \
+            af::array *res = new af::array();               \
+            *res = af::func((*A));                          \
+            ret = (jlong)res;                               \
+        } catch(af::exception& e) {                         \
+            return 0;                                       \
+        } catch(std::exception& e) {                        \
+            return 0;                                       \
+        }                                                   \
+        return ret;                                         \
+    }
+
+FFT_DEF(fft)
+FFT_DEF(fft2)
+FFT_DEF(fft3)
+FFT_DEF(ifft)
+FFT_DEF(ifft2)
+FFT_DEF(ifft3)
+
+#define SCALAR_OP1_DEF(func,operation)                          \
+    JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func(    \
+        JNIEnv *env, jclass clazz, jlong a, jfloat b)           \
+    {                                                           \
+        jlong ret;                                              \
+        try {                                                   \
+            af::array *A = (af::array*)(a);                     \
+            af::array *res = new af::array();                   \
+            (*res) = (*A) operation (b);                        \
+            ret = (jlong)(res);                                 \
+        } catch(af::exception& e) {                             \
+            ret = 0;                                            \
+        } catch(std::exception& e) {                            \
+            ret = 0;                                            \
+        }                                                       \
+        return ret;                                             \
     }
 
 SCALAR_OP1_DEF(addf,+)

@@ -88,6 +88,16 @@ ARRAY_RET_OP(sum)
 ARRAY_RET_OP(max)
 ARRAY_RET_OP(min)
 
+#define FFT(func) \
+    JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a);
+
+FFT(fft)
+FFT(fft2)
+FFT(fft3)
+FFT(ifft)
+FFT(ifft2)
+FFT(ifft3)
+
 #define SCALAR_OP1(func) \
     JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a, jfloat b);
 
