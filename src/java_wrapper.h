@@ -12,7 +12,6 @@ JNIEXPORT void JNICALL Java_com_arrayfire_Array_info(JNIEnv *env, jclass clazz);
 
 // Loader methods
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createEmptyArray(JNIEnv *env, jclass clazz, jintArray dims, jint type);
-
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromFloat(JNIEnv *env, jclass clazz, jintArray dims, jfloatArray elems);
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromDouble(JNIEnv *env, jclass clazz, jintArray dims, jdoubleArray elems);
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromInt(JNIEnv *env, jclass clazz, jintArray dims, jintArray elems);
@@ -21,6 +20,12 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromFloatComplex(JNI
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass clazz, jintArray dims, jobjectArray objs);
 // Unloader methods
 JNIEXPORT void JNICALL Java_com_arrayfire_Array_destroyArray(JNIEnv *env, jclass clazz, jlong ref);
+
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createRanduArray(JNIEnv *env, jclass clazz, jintArray dims, jint type);
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createRandnArray(JNIEnv *env, jclass clazz, jintArray dims, jint type);
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createConstantsArray(JNIEnv *env, jclass clazz, jdouble val, jintArray dims, jint type);
+
+
 
 // Data pull back methods
 JNIEXPORT jfloatArray JNICALL Java_com_arrayfire_Array_getFloatFromArray(JNIEnv *env, jclass clazz, jlong ref);
@@ -70,11 +75,18 @@ UNARY_OP(abs)
 UNARY_OP(sqrt)
 
 #define SCALAR_RET_OP(func) \
-    JNIEXPORT jfloat JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a);
+    JNIEXPORT jdouble JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a);
 
-SCALAR_RET_OP(sum)
-SCALAR_RET_OP(max)
-SCALAR_RET_OP(min)
+SCALAR_RET_OP(sumAll)
+SCALAR_RET_OP(maxAll)
+SCALAR_RET_OP(minAll)
+
+#define ARRAY_RET_OP(func) \
+    JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a, jint dim);
+
+ARRAY_RET_OP(sum)
+ARRAY_RET_OP(max)
+ARRAY_RET_OP(min)
 
 #define SCALAR_OP1(func) \
     JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a, jfloat b);

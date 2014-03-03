@@ -23,6 +23,11 @@ public class Array implements AutoCloseable {
     private native static long createArrayFromInt(int[] dims, int[] elems);
     private native static long createArrayFromBoolean(int[] dims, boolean[] elems);
 
+    private native static long createRanduArray(int[] dims, int type);
+    private native static long createRandnArray(int[] dims, int type);
+    private native static long createConstantsArray(double val, int[] dims, int type);
+
+
     private native static void destroyArray(long ref);
     private native static int[] getDims(long ref);
     private native static int   getType(long ref);
@@ -66,9 +71,13 @@ public class Array implements AutoCloseable {
     private native static long sqrt (long a);
 
     // Scalar return operations
-    private native static float sum(long a);
-    private native static float max(long a);
-    private native static float min(long a);
+    private native static double sumAll(long a);
+    private native static double maxAll(long a);
+    private native static double minAll(long a);
+
+    private native static long sum(long a, int dim);
+    private native static long max(long a, int dim);
+    private native static long min(long a, int dim);
 
     // Scalar operations
     private native static long addf(long a, float b);
@@ -115,7 +124,7 @@ public class Array implements AutoCloseable {
         throw new Exception("Unknown type");
     }
 
-    private int[] dim4(int[] dims) throws Exception {
+    private static int[] dim4(int[] dims) throws Exception {
 
         if( dims == null ) {
             throw new Exception("Null dimensions object provided");
@@ -280,6 +289,37 @@ public class Array implements AutoCloseable {
     }
 
     // Binary operations
+
+    public static Array randu(int[] dims, int type) throws Exception {
+        int[] adims = dim4(dims);
+        long ref = createRanduArray(adims, type);
+        if (ref == 0) throw new Exception("Failed to create Array");
+
+        Array ret_val = new Array();
+        ret_val.ref = ref;
+        return ret_val;
+    }
+
+    public static Array randn(int[] dims, int type) throws Exception {
+        int[] adims = dim4(dims);
+        long ref = createRandnArray(adims, type);
+        if (ref == 0) throw new Exception("Failed to create Array");
+
+        Array ret_val = new Array();
+        ret_val.ref = ref;
+        return ret_val;
+    }
+
+    public static Array constant(double val, int[] dims, int type) throws Exception {
+        int[] adims = dim4(dims);
+        long ref = createConstantsArray(val, adims, type);
+        if (ref == 0) throw new Exception("Failed to create Array");
+
+        Array ret_val = new Array();
+        ret_val.ref = ref;
+        return ret_val;
+    }
+
     public static Array add(Array a, Array b) throws Exception {
         Array ret_val = new Array();
         ret_val.ref = add(a.ref,b.ref);
@@ -432,11 +472,39 @@ public class Array implements AutoCloseable {
     }
 
     // Scalar return operations
-    public static float sum(Array a) throws Exception { return sum(a.ref); }
+    public static double sumAll(Array a) throws Exception { return sumAll(a.ref); }
+    public static double maxAll(Array a) throws Exception { return maxAll(a.ref); }
+    public static double minAll(Array a) throws Exception { return minAll(a.ref); }
 
-    public static float max(Array a) throws Exception { return max(a.ref); }
+    public static Array sum(Array a, int dim) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = sum(a.ref, dim);
+        return ret_val;
+    }
 
-    public static float min(Array a) throws Exception { return min(a.ref); }
+    public static Array max(Array a, int dim) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = max(a.ref, dim);
+        return ret_val;
+    }
+
+    public static Array min(Array a, int dim) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = min(a.ref, dim);
+        return ret_val;
+    }
+
+    public static Array sum(Array a) throws Exception {
+        return sum(a, -1);
+    }
+
+    public static Array max(Array a) throws Exception {
+        return max(a, -1);
+    }
+
+    public static Array min(Array a) throws Exception {
+        return min(a, -1);
+    }
 
     // Scalar operations
     public static Array add(Array a, float b) throws Exception {

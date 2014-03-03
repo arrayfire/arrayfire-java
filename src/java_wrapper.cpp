@@ -26,6 +26,61 @@ JNIEXPORT void JNICALL Java_com_arrayfire_Array_info(JNIEnv *env, jclass clazz)
     }
 }
 
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createRanduArray(JNIEnv *env, jclass clazz, jintArray dims, jint type)
+{
+    jlong ret;
+    try{
+        jint* dimptr = env->GetIntArrayElements(dims,0);
+        af::dtype ty = (af::dtype)(type);
+        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3], ty);
+        *A = af::randu(dimptr[0],dimptr[1],dimptr[2], ty);
+        ret = (jlong)(A);
+        env->ReleaseIntArrayElements(dims,dimptr,0);
+    } catch(af::exception& e) {
+        ret = 0;
+    } catch(std::exception& e) {
+        ret = 0;
+    }
+    return ret;
+}
+
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createRandnArray(JNIEnv *env, jclass clazz, jintArray dims, jint type)
+{
+    jlong ret;
+    try{
+        jint* dimptr = env->GetIntArrayElements(dims,0);
+        af::dtype ty = (af::dtype)(type);
+        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3], ty);
+        *A = af::randn(dimptr[0],dimptr[1],dimptr[2], ty);
+        ret = (jlong)(A);
+        env->ReleaseIntArrayElements(dims,dimptr,0);
+    } catch(af::exception& e) {
+        ret = 0;
+    } catch(std::exception& e) {
+        ret = 0;
+    }
+    return ret;
+}
+
+
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createConstantsArray(JNIEnv *env, jclass clazz, jdouble val, jintArray dims, jint type)
+{
+    jlong ret;
+    try{
+        jint* dimptr = env->GetIntArrayElements(dims,0);
+        af::dtype ty = (af::dtype)(type);
+        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3], ty);
+        *A = af::constant(val, dimptr[0],dimptr[1],dimptr[2], ty);
+        ret = (jlong)(A);
+        env->ReleaseIntArrayElements(dims,dimptr,0);
+    } catch(af::exception& e) {
+        ret = 0;
+    } catch(std::exception& e) {
+        ret = 0;
+    }
+    return ret;
+}
+
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createEmptyArray(JNIEnv *env, jclass clazz, jintArray dims, jint type)
 {
     jlong ret;
@@ -380,24 +435,53 @@ UNARY_OP_DEF(log)
 UNARY_OP_DEF(abs)
 UNARY_OP_DEF(sqrt)
 
-#define SCALAR_RET_OP_DEF(func) \
-    JNIEXPORT jfloat JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a) \
-    {                                           \
-        jfloat ret                              \
-        try {                                   \
-            af::array *A = (af::array*)(a);     \
-            ret = af::func<float>( (*A) );      \
-        } catch(af::exception& e) {             \
-            ret = 0;                            \
-        } catch(std::exception& e) {            \
-            ret = 0;                            \
-        }                                       \
-        return ret;                             \
+#define SCALAR_RET_OP_DEF(func)                                     \
+    JNIEXPORT jdouble JNICALL Java_com_arrayfire_Array_##func##All  \
+    (JNIEnv *env, jclass clazz, jlong a)                            \
+    {                                                               \
+        try {                                                       \
+            af::array *A = (af::array*)(a);                         \
+            if (A->type() == af::f32)                               \
+                return af::func<float>( (*A) );                     \
+            if (A->type() == af::s32)                               \
+                return af::func<int>( (*A) );                       \
+            if (A->type() == af::f64)                               \
+                return af::func<double>( (*A) );                    \
+            if (A->type() == af::b8)                                \
+                return af::func<float>( (*A) );                     \
+            return af::NaN;                                         \
+        } catch(af::exception& e) {                                 \
+            return af::NaN;                                         \
+        } catch(std::exception& e) {                                \
+            return af::NaN;                                         \
+        }                                                           \
     }
 
-SCALAR_RET_OP(sum)
-SCALAR_RET_OP(max)
-SCALAR_RET_OP(min)
+SCALAR_RET_OP_DEF(sum)
+SCALAR_RET_OP_DEF(max)
+SCALAR_RET_OP_DEF(min)
+
+#define ARRAY_RET_OP_DEF(func)                              \
+    JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func \
+    (JNIEnv *env, jclass clazz, jlong a, jint dim)          \
+    {                                                       \
+        jlong ret = 0;                                      \
+        try {                                               \
+            af::array *A = (af::array*)(a);                 \
+            af::array *res = new af::array();               \
+            *res = af::func((*A), dim);                     \
+            ret = (jlong)res;                               \
+        } catch(af::exception& e) {                         \
+            return 0;                                       \
+        } catch(std::exception& e) {                        \
+            return 0;                                       \
+        }                                                   \
+        return ret;                                         \
+    }
+
+ARRAY_RET_OP_DEF(sum)
+ARRAY_RET_OP_DEF(max)
+ARRAY_RET_OP_DEF(min)
 
 #define SCALAR_OP1_DEF(func,operation) \
     JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_##func(JNIEnv *env, jclass clazz, jlong a, jfloat b) \
