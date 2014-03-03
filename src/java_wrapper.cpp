@@ -4,11 +4,9 @@
 
 #ifdef ANDROID
 #include <android/log.h>
-#define  LOG_TAG    "ArrayFireJNI"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
+#define  LOG(...)  __android_log_print(ANDROID_LOG_INFO, "ArrayFireJNI", __VA_ARGS__)
 #else
-#define LOGI(msg,...) do {                      \
+#define LOG(msg,...) do {                       \
     printf(__FILE__":%d: " msg "\n",            \
            __LINE__, ##__VA_ARGS__);            \
   } while (0)
