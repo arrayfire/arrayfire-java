@@ -2,17 +2,38 @@ package com.arrayfire;
 
 public class Array implements AutoCloseable {
 
+    public static final int FloatType = 0;
+    public static final int FloatComplexType = 1;
+    public static final int DoubleType = 2;
+    public static final int DoubleComplexType = 3;
+    public static final int BooleanType = 4;
+    public static final int IntType = 5;
+
     static {
         System.loadLibrary("af_java");
     }
 
     public native static void info();
 
-    private native static long createArray(int[] dims);
-    private native static long createArrayElems(int[] dims, float[] elems);
+    private native static long createEmptyArray(int[] dims, int type);
+    private native static long createArrayFromFloat(int[] dims, float[] elems);
+    private native static long createArrayFromDouble(int[] dims, double[] elems);
+    private native static long createArrayFromFloatComplex(int[] dims, FloatComplex[] elems);
+    private native static long createArrayFromDoubleComplex(int[] dims, DoubleComplex[] elems);
+    private native static long createArrayFromInt(int[] dims, int[] elems);
+    private native static long createArrayFromBoolean(int[] dims, boolean[] elems);
+
     private native static void destroyArray(long ref);
-    private native static float[] host(long ref);
     private native static int[] getDims(long ref);
+    private native static int   getType(long ref);
+
+    private native static float  [] getFloatFromArray(long ref);
+    private native static double [] getDoubleFromArray(long ref);
+    private native static int    [] getIntFromArray(long ref);
+    private native static boolean       [] getBooleanFromArray(long ref);
+    private native static FloatComplex  [] getFloatComplexFromArray(long ref);
+    private native static DoubleComplex [] getDoubleComplexFromArray(long ref);
+
 
     // Binary operations
     private native static long add(long a, long b);
@@ -76,6 +97,24 @@ public class Array implements AutoCloseable {
         ref = 0;
     }
 
+    public int[] dims() {
+        return getDims(ref);
+    }
+
+    public int type() {
+        return getType(ref);
+    }
+
+    public String typeName(int ty) throws Exception {
+        if (ty == FloatType) return "float";
+        if (ty == DoubleType) return "double";
+        if (ty == IntType) return "int";
+        if (ty == BooleanType) return "boolean";
+        if (ty == FloatComplexType) return "FloatComplex";
+        if (ty == DoubleComplexType) return "DoubleComplex";
+        throw new Exception("Unknown type");
+    }
+
     private int[] dim4(int[] dims) throws Exception {
 
         if( dims == null ) {
@@ -91,12 +130,33 @@ public class Array implements AutoCloseable {
         return adims;
     }
 
+    private void assertType(int ty) throws Exception {
+
+        int myType = type();
+
+        if( myType != ty ) {
+            String str = "Type mismatch: ";
+            str = str + "Requested " + typeName(ty);
+            str = str + ". Found " + typeName(myType);
+            throw new Exception(str);
+        }
+        return;
+    }
+
     // Below version of constructor
     // allocates space on device and initializes
     // all elemets to zero
+
+    public Array(int[] dims, int type) throws Exception {
+        int[] adims = dim4(dims);
+        ref = createEmptyArray(adims, type);
+        if (ref == 0) throw new Exception("Failed to create Array");
+    }
+
     public Array(int[] dims) throws Exception {
         int[] adims = dim4(dims);
-        this.ref = createArray(adims);
+        ref = createEmptyArray(adims, FloatType);
+        if (ref == 0) throw new Exception("Failed to create Array");
     }
 
     public Array(int[] dims, float[] elems) throws Exception {
@@ -113,15 +173,110 @@ public class Array implements AutoCloseable {
             throw new Exception("Mismatching dims and array size");
         }
 
-        this.ref = createArrayElems(adims, elems);
+        ref = createArrayFromFloat(adims, elems);
+        if (ref == 0) throw new Exception("Failed to create Array");
     }
 
-    public int[] dims() {
-        return getDims(ref);
+    public Array(int[] dims, double[] elems) throws Exception {
+        int[] adims = dim4(dims);
+
+        int total_size = 1;
+        for (int i = 0; i < adims.length; i++) total_size *= adims[i];
+
+        if(elems == null) {
+            throw new Exception("Null elems object provided");
+        }
+
+        if( elems.length > total_size || elems.length < total_size ) {
+            throw new Exception("Mismatching dims and array size");
+        }
+
+        ref = createArrayFromDouble(adims, elems);
+        if (ref == 0) throw new Exception("Failed to create Array");
     }
 
-    public float[] host() throws Exception {
-        return host(ref);
+    public Array(int[] dims, int[] elems) throws Exception {
+        int[] adims = dim4(dims);
+
+        int total_size = 1;
+        for (int i = 0; i < adims.length; i++) total_size *= adims[i];
+
+        if(elems == null) {
+            throw new Exception("Null elems object provided");
+        }
+
+        if( elems.length > total_size || elems.length < total_size ) {
+            throw new Exception("Mismatching dims and array size");
+        }
+
+        ref = createArrayFromInt(adims, elems);
+        if (ref == 0) throw new Exception("Failed to create Array");
+    }
+
+    public Array(int[] dims, FloatComplex[] elems) throws Exception {
+        int[] adims = dim4(dims);
+
+        int total_size = 1;
+        for (int i = 0; i < adims.length; i++) total_size *= adims[i];
+
+        if(elems == null) {
+            throw new Exception("Null elems object provided");
+        }
+
+        if( elems.length > total_size || elems.length < total_size ) {
+            throw new Exception("Mismatching dims and array size");
+        }
+
+        ref = createArrayFromFloatComplex(adims, elems);
+        if (ref == 0) throw new Exception("Failed to create Array");
+    }
+
+    public Array(int[] dims, DoubleComplex[] elems) throws Exception {
+        int[] adims = dim4(dims);
+
+        int total_size = 1;
+        for (int i = 0; i < adims.length; i++) total_size *= adims[i];
+
+        if(elems == null) {
+            throw new Exception("Null elems object provided");
+        }
+
+        if( elems.length > total_size || elems.length < total_size ) {
+            throw new Exception("Mismatching dims and array size");
+        }
+
+        ref = createArrayFromDoubleComplex(adims, elems);
+        if (ref == 0) throw new Exception("Failed to create Array");
+    }
+
+    public float[] getFloatArray() throws Exception {
+        assertType(FloatType);
+        return getFloatFromArray(ref);
+    }
+
+    public double[] getDoubleArray() throws Exception {
+        assertType(DoubleType);
+        return getDoubleFromArray(ref);
+    }
+
+    public FloatComplex[] getFloatComplexArray() throws Exception {
+        assertType(FloatComplexType);
+        return getFloatComplexFromArray(ref);
+    }
+
+    public DoubleComplex[] getDoubleComplexArray() throws Exception {
+        assertType(DoubleComplexType);
+        return getDoubleComplexFromArray(ref);
+    }
+
+    public int[] getIntArray() throws Exception {
+        assertType(IntType);
+        return getIntFromArray(ref);
+    }
+
+    public boolean[] getBooleanArray() throws Exception {
+        assertType(BooleanType);
+        return getBooleanFromArray(ref);
     }
 
     // Binary operations

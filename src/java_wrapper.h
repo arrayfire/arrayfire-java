@@ -11,17 +11,27 @@ extern "C" {
 JNIEXPORT void JNICALL Java_com_arrayfire_Array_info(JNIEnv *env, jclass clazz);
 
 // Loader methods
-JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArray(JNIEnv *env, jclass clazz, jintArray dims);
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createEmptyArray(JNIEnv *env, jclass clazz, jintArray dims, jint type);
 
-JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayElems(JNIEnv *env, jclass clazz, jintArray dims, jfloatArray elems);
-
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromFloat(JNIEnv *env, jclass clazz, jintArray dims, jfloatArray elems);
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromDouble(JNIEnv *env, jclass clazz, jintArray dims, jdoubleArray elems);
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromInt(JNIEnv *env, jclass clazz, jintArray dims, jintArray elems);
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromBoolean(JNIEnv *env, jclass clazz, jintArray dims, jbooleanArray elems);
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromFloatComplex(JNIEnv *env, jclass clazz, jintArray dims, jobjectArray objs);
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass clazz, jintArray dims, jobjectArray objs);
 // Unloader methods
 JNIEXPORT void JNICALL Java_com_arrayfire_Array_destroyArray(JNIEnv *env, jclass clazz, jlong ref);
 
 // Data pull back methods
-JNIEXPORT jfloatArray JNICALL Java_com_arrayfire_Array_host(JNIEnv *env, jclass clazz, jlong ref);
+JNIEXPORT jfloatArray JNICALL Java_com_arrayfire_Array_getFloatFromArray(JNIEnv *env, jclass clazz, jlong ref);
+JNIEXPORT jdoubleArray JNICALL Java_com_arrayfire_Array_getDoubleFromArray(JNIEnv *env, jclass clazz, jlong ref);
+JNIEXPORT jintArray JNICALL Java_com_arrayfire_Array_getIntFromArray(JNIEnv *env, jclass clazz, jlong ref);
+JNIEXPORT jbooleanArray JNICALL Java_com_arrayfire_Array_getBooleanFromArray(JNIEnv *env, jclass clazz, jlong ref);
+JNIEXPORT jobjectArray JNICALL Java_com_arrayfire_Array_getFloatComplexFromArray(JNIEnv *env, jclass clazz, jlong ref);
+JNIEXPORT jobjectArray JNICALL Java_com_arrayfire_Array_getDoubleComplexFromArray(JNIEnv *env, jclass clazz, jlong ref);
 
 JNIEXPORT jintArray JNICALL Java_com_arrayfire_Array_getDims(JNIEnv *env, jclass clazz, jlong ref);
+JNIEXPORT jint JNICALL Java_com_arrayfire_Array_getType(JNIEnv *env, jclass clazz, jlong ref);
 
 // Library Methods
 

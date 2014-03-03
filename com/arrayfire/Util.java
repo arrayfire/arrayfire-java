@@ -2,12 +2,12 @@ package com.arrayfire;
 
 public class Util {
 
-    public static String toString(Array a, String delim) {        
+    public static String toString(Array a, String delim) {
         String ret_txt="";
         try {
-            float[] fary = a.host();
+            float[] fary = a.getFloatArray();
             for( int k=0; k<fary.length-1 ; ++k ) {
-                String temp = Float.toString(fary[k]) + delim;            
+                String temp = Float.toString(fary[k]) + delim;
                 ret_txt += temp;
             }
             ret_txt += Float.toString( fary[fary.length-1] );

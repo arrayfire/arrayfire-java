@@ -26,13 +26,14 @@ JNIEXPORT void JNICALL Java_com_arrayfire_Array_info(JNIEnv *env, jclass clazz)
     }
 }
 
-JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArray(JNIEnv *env, jclass clazz, jintArray dims)
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createEmptyArray(JNIEnv *env, jclass clazz, jintArray dims, jint type)
 {
     jlong ret;
     try{
         jint* dimptr = env->GetIntArrayElements(dims,0);
-        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3]);
-        *A = af::constant(0.0f,dimptr[0],dimptr[1],dimptr[2]);
+        af::dtype ty = (af::dtype)(type);
+        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3], ty);
+        *A = af::constant(0.0f,dimptr[0],dimptr[1],dimptr[2], ty);
         ret = (jlong)(A);
         env->ReleaseIntArrayElements(dims,dimptr,0);
     } catch(af::exception& e) {
@@ -43,17 +44,76 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArray(JNIEnv *env, jclass
     return ret;
 }
 
-JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayElems(JNIEnv *env, jclass clazz, jintArray dims, jfloatArray elems)
+#define CREATE_ARRAY_T(Ty, ty)                                          \
+    JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFrom##Ty \
+    (JNIEnv *env, jclass clazz, jintArray dims, j##ty##Array elems)     \
+    {                                                                   \
+        jlong ret;                                                      \
+        try{                                                            \
+            jint* dimptr = env->GetIntArrayElements(dims,0);            \
+            j##ty* inptr= env->Get##Ty##ArrayElements(elems,0);         \
+                af::array *A = new af::array(dimptr[0],dimptr[1],       \
+                                             dimptr[2],dimptr[3],inptr); \
+                                                                        \
+                ret = (jlong)(A);                                       \
+                env->ReleaseIntArrayElements(dims,dimptr,0);            \
+                env->Release##Ty##ArrayElements(elems,inptr,0);         \
+        } catch(af::exception& e) {                                     \
+            ret = 0;                                                    \
+        } catch(std::exception& e) {                                    \
+            ret = 0;                                                    \
+        }                                                               \
+        return ret;                                                     \
+    }                                                                   \
+
+CREATE_ARRAY_T(Float, float);
+CREATE_ARRAY_T(Double, double);
+CREATE_ARRAY_T(Int, int);
+CREATE_ARRAY_T(Boolean, boolean);
+
+#undef CREATE_ARRAY_T
+
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromFloatComplex(JNIEnv *env, jclass clazz, jintArray dims, jobjectArray objs)
 {
     jlong ret;
     try{
         jint* dimptr = env->GetIntArrayElements(dims,0);
-        jfloat* inptr= env->GetFloatArrayElements(elems,0);
-        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3],inptr);
+        jint len = env->GetArrayLength(objs);
+
+        static jclass cls;
+        static jfieldID re, im;
+        static bool isfirst = true;
+
+        if (isfirst) {
+            cls = env->FindClass("com/arrayfire/FloatComplex");
+            re = env->GetFieldID(cls, "real", "F");
+            im = env->GetFieldID(cls, "imag", "F");
+            isfirst = false;
+        }
+
+
+        cfloat *tmp = new cfloat[len];
+
+        for (int i = 0; i < len; i++) {
+            jobject obj = env->GetObjectArrayElement(objs, i);
+            jfloat real = env->GetFloatField(obj, re);
+            jfloat imag = env->GetFloatField(obj, im);
+
+#ifdef AFCL
+            tmp[i].s[0] = real;
+            tmp[i].s[1] = imag;
+#else
+            tmp[i].x = real;
+            tmp[i].y = imag;
+#endif
+        }
+
+        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3],tmp);
+        delete[] tmp;
 
         ret = (jlong)(A);
         env->ReleaseIntArrayElements(dims,dimptr,0);
-        env->ReleaseFloatArrayElements(elems,inptr,0);
+
     } catch(af::exception& e) {
         ret = 0;
     } catch(std::exception& e) {
@@ -61,6 +121,56 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayElems(JNIEnv *env, j
     }
     return ret;
 }
+
+JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromDoubleComplex(JNIEnv *env, jclass clazz, jintArray dims, jobjectArray objs)
+{
+    jlong ret;
+    try{
+        jint* dimptr = env->GetIntArrayElements(dims,0);
+        jint len = env->GetArrayLength(objs);
+
+        static jclass cls;
+        static jfieldID re, im;
+        static bool isfirst = true;
+
+        cdouble *tmp = new cdouble[len];
+
+        for (int i = 0; i < len; i++) {
+            jobject obj = env->GetObjectArrayElement(objs, i);
+
+            if (isfirst) {
+                cls = env->GetObjectClass(obj);
+                re = env->GetFieldID(cls, "real", "F");
+                im = env->GetFieldID(cls, "imag", "F");
+                isfirst = false;
+            }
+
+            jdouble real = env->GetDoubleField(obj, re);
+            jdouble imag = env->GetDoubleField(obj, im);
+
+#ifdef AFCL
+            tmp[i].s[0] = real;
+            tmp[i].s[1] = imag;
+#else
+            tmp[i].x = real;
+            tmp[i].y = imag;
+#endif
+        }
+
+        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3],tmp);
+        delete[] tmp;
+
+        ret = (jlong)(A);
+        env->ReleaseIntArrayElements(dims,dimptr,0);
+
+    } catch(af::exception& e) {
+        ret = 0;
+    } catch(std::exception& e) {
+        ret = 0;
+    }
+    return ret;
+}
+
 
 JNIEXPORT void JNICALL Java_com_arrayfire_Array_destroyArray(JNIEnv *env, jclass clazz, jlong ref)
 {
@@ -68,36 +178,115 @@ JNIEXPORT void JNICALL Java_com_arrayfire_Array_destroyArray(JNIEnv *env, jclass
         af::array *A = (af::array*)(ref);
         delete A;
     } catch(af::exception& e) {
-        // e.what();
     } catch(std::exception& e) {
-        // e.what();
     }
 }
 
-JNIEXPORT jfloatArray JNICALL Java_com_arrayfire_Array_host(JNIEnv *env, jclass clazz, jlong ref)
+#define GET_T_FROM_ARRAY(Ty, ty)                                        \
+    JNIEXPORT j##ty##Array JNICALL Java_com_arrayfire_Array_get##Ty##FromArray \
+    (JNIEnv *env, jclass clazz, jlong ref)                              \
+    {                                                                   \
+        j##ty##Array result;                                            \
+        try {                                                           \
+            af::array *A = (af::array*)(ref);                           \
+            int size = (*A).elements();                                 \
+            result = env->New##Ty##Array(size);                         \
+                if (result == NULL) {                                   \
+                LOG("Something terrible happened. "                     \
+                    "Couldn't allocate heap space!!!!");                \
+                return NULL;                                            \
+            }                                                           \
+            j##ty* resf  = env->Get##Ty##ArrayElements(result, 0);      \
+            (*A).host(resf);                                            \
+            env->Release##Ty##ArrayElements(result, resf, 0);           \
+        } catch(af::exception& e) {                                     \
+            result = NULL;                                              \
+        } catch(std::exception& e) {                                    \
+            result = NULL;                                              \
+        }                                                               \
+        return result;                                                  \
+    }                                                                   \
+
+GET_T_FROM_ARRAY(Float, float);
+GET_T_FROM_ARRAY(Double, double);
+GET_T_FROM_ARRAY(Int, int);
+GET_T_FROM_ARRAY(Boolean, boolean);
+
+JNIEXPORT jobjectArray JNICALL Java_com_arrayfire_Array_getFloatComplexFromArray(JNIEnv *env, jclass clazz, jlong ref)
 {
-  jfloatArray result;
-  try {
-      af::array *A = (af::array*)(ref);
-      int size = (*A).elements();
-      result = env->NewFloatArray(size);
-      if (result == NULL) {
-          LOG("Terrible thing happend, couldn't allocate heap space!!!!");
-          return NULL;
-      }
-      jfloat* resf  = env->GetFloatArrayElements(result, 0);
-      (*A).host(resf);
-      env->ReleaseFloatArrayElements(result, resf, 0);
-  } catch(af::exception& e) {
-      // e.what();
-      result = NULL;
-  } catch(std::exception& e) {
-      // e.what();
-      result = NULL;
-  }
-  return result;
+    jobjectArray result;
+    try {
+        af::array *A = (af::array *)(ref);
+        int size = (*A).elements();
+
+        jclass cls = env->FindClass("com/arrayfire/FloatComplex");
+        jmethodID id = env->GetMethodID(cls, "<init>", "(FF)V");
+        if (id == NULL) return NULL;
+
+        result = env->NewObjectArray(size, cls, NULL);
+
+        cfloat *tmp = (*A).host<cfloat>();
+
+        for (int i = 0; i < size; i++) {
+#ifdef AFCL
+            float re = tmp[i].s[0];
+            float im = tmp[i].s[1];
+#else
+            float re = tmp[i].x;
+            float im = tmp[i].y;
+#endif
+            jobject obj = env->NewObject(cls, id, re, im);
+
+            env->SetObjectArrayElement(result, i, obj);
+        }
+
+        af::array::free(tmp);
+
+    } catch (af::exception& e) {
+        result = NULL;
+    } catch (std::exception& e) {
+        result = NULL;
+    }
+    return result;
 }
 
+JNIEXPORT jobjectArray JNICALL Java_com_arrayfire_Array_getDoubleComplexFromArray(JNIEnv *env, jclass clazz, jlong ref)
+{
+    jobjectArray result;
+    try {
+        af::array *A = (af::array *)(ref);
+        int size = (*A).elements();
+
+        jclass cls = env->FindClass("com/arrayfire/DoubleComplex");
+        jmethodID id = env->GetMethodID(cls, "<init>", "(FF)V");
+        if (id == NULL) return NULL;
+
+        result = env->NewObjectArray(size, cls, NULL);
+
+        cdouble *tmp = (*A).host<cdouble>();
+
+        for (int i = 0; i < size; i++) {
+#ifdef AFCL
+            double re = tmp[i].s[0];
+            double im = tmp[i].s[1];
+#else
+            double re = tmp[i].x;
+            double im = tmp[i].y;
+#endif
+            jobject obj = env->NewObject(cls, id, re, im);
+
+            env->SetObjectArrayElement(result, i, obj);
+        }
+
+        af::array::free(tmp);
+
+    } catch (af::exception& e) {
+        result = NULL;
+    } catch (std::exception& e) {
+        result = NULL;
+    }
+    return result;
+}
 
 JNIEXPORT jintArray JNICALL Java_com_arrayfire_Array_getDims(JNIEnv *env, jclass clazz, jlong ref)
 {
@@ -114,13 +303,18 @@ JNIEXPORT jintArray JNICALL Java_com_arrayfire_Array_getDims(JNIEnv *env, jclass
           dimsf[k] = mydims[k];
       env->ReleaseIntArrayElements(result, dimsf, 0);
   } catch(af::exception& e) {
-      // e.what();
       result = NULL;
   } catch(std::exception& e) {
-      // e.what();
       result = NULL;
   }
   return result;
+}
+
+JNIEXPORT jint JNICALL Java_com_arrayfire_Array_getType(JNIEnv *env, jclass clazz, jlong ref)
+{
+    af::array *A = (af::array *)(ref);
+    jint ty = (jint)((*A).type());
+    return ty;
 }
 
 #define BINARY_OP_DEF(func, operation) \
@@ -132,7 +326,6 @@ JNIEXPORT jintArray JNICALL Java_com_arrayfire_Array_getDims(JNIEnv *env, jclass
             af::array *B = (af::array*)(b);     \
             af::array *res = new af::array();   \
             (*res) = (*A) operation (*B);       \
-            (*res) = (*res).as(af::f32);        \
             ret = (jlong)(res);                 \
         } catch(af::exception& e) {             \
             ret = 0;                            \
