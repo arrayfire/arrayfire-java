@@ -69,7 +69,7 @@ JNIEXPORT jfloatArray JNICALL Java_com_arrayfire_Array_host(JNIEnv *env, jclass 
       int size = (*A).elements();
       result = env->NewFloatArray(size);
       if (result == NULL) {
-          LOGI("Terrible thing happend, couldn't allocate heap space!!!!");
+          LOG("Terrible thing happend, couldn't allocate heap space!!!!");
           return NULL;
       }
       jfloat* resf  = env->GetFloatArrayElements(result, 0);
