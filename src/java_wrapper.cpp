@@ -1,6 +1,7 @@
-#include "java_wrapper.h"
-#include "arrayfire.h"
 #include <vector>
+#include <arrayfire.h>
+#include <af/utils.h>
+#include "java_wrapper.h"
 
 #ifdef ANDROID
 #include <android/log.h>
