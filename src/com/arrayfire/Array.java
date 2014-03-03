@@ -4,27 +4,27 @@ import android.util.Log;
 
 public class Array implements AutoCloseable {
 
-	static {
-		System.loadLibrary("af_java");
-	}
+    static {
+        System.loadLibrary("af_java");
+    }
 
-	private native static long createArray(int[] dims);
+    private native static long createArray(int[] dims);
     private native static long createArrayElems(int[] dims, float[] elems);
-	private native static void destroyArray(long ref);
-	private native static float[] host(long ref);
+    private native static void destroyArray(long ref);
+    private native static float[] host(long ref);
     private native static int[] getDims(long ref);
 
     // Binary operations
-	private native static long add(long a, long b);
-	private native static long sub(long a, long b);
-	private native static long mul(long a, long b);
-	private native static long div(long a, long b);
-	private native static long le (long a, long b);
-	private native static long lt (long a, long b);
-	private native static long ge (long a, long b);
-	private native static long gt (long a, long b);
-	private native static long eq (long a, long b);
-	private native static long ne (long a, long b);
+    private native static long add(long a, long b);
+    private native static long sub(long a, long b);
+    private native static long mul(long a, long b);
+    private native static long div(long a, long b);
+    private native static long le (long a, long b);
+    private native static long lt (long a, long b);
+    private native static long ge (long a, long b);
+    private native static long gt (long a, long b);
+    private native static long eq (long a, long b);
+    private native static long ne (long a, long b);
 
     // Unary operations
     private native static long sin  (long a);
@@ -51,26 +51,26 @@ public class Array implements AutoCloseable {
 
     // Scalar operations
     private native static long addf(long a, float b);
-   	private native static long subf(long a, float b);
-	private native static long mulf(long a, float b);
-	private native static long divf(long a, float b);
-	private native static long lef (long a, float b);
-	private native static long ltf (long a, float b);
-	private native static long gef (long a, float b);
-	private native static long gtf (long a, float b);
-	private native static long eqf (long a, float b);
-	private native static long nef (long a, float b);
-   	private native static long pow (long a, float b);
+    private native static long subf(long a, float b);
+    private native static long mulf(long a, float b);
+    private native static long divf(long a, float b);
+    private native static long lef (long a, float b);
+    private native static long ltf (long a, float b);
+    private native static long gef (long a, float b);
+    private native static long gtf (long a, float b);
+    private native static long eqf (long a, float b);
+    private native static long nef (long a, float b);
+    private native static long pow (long a, float b);
     private native static long fsub(float a, long b);
-	private native static long fdiv(float a, long b);
-	private native static long fle (float a, long b);
-	private native static long flt (float a, long b);
-	private native static long fge (float a, long b);
-	private native static long fgt (float a, long b);
+    private native static long fdiv(float a, long b);
+    private native static long fle (float a, long b);
+    private native static long flt (float a, long b);
+    private native static long fge (float a, long b);
+    private native static long fgt (float a, long b);
 
     // Global reference to JVM object
     // to persist between JNI calls
-	long ref;
+    long ref;
 
     public Array() {
         ref = 0;
@@ -85,8 +85,8 @@ public class Array implements AutoCloseable {
         } else if ( dims.length > 3 ) {
             throw new Exception("Upto 3 dimensions only supported for now.");
         }
-		this.ref = createArray(dims);
-	}
+        this.ref = createArray(dims);
+    }
 
     public Array(int[] dims, float[] elems) throws Exception {
         if( dims == null || elems == null ) {
@@ -101,168 +101,168 @@ public class Array implements AutoCloseable {
             throw new Exception("Mismatching dims and array size");
         }
         Log.i("Array", "============ Array class =============== ");
-		this.ref = createArrayElems(dims,elems);
-	}
+        this.ref = createArrayElems(dims,elems);
+    }
 
-	public int[] dims() {
-		return getDims(ref);
-	}
+    public int[] dims() {
+        return getDims(ref);
+    }
 
     public float[] host() throws Exception {
         return host(ref);
     }
 
     // Binary operations
-	public static Array add(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = add(a.ref,b.ref);
-		return ret_val;
-	}
+    public static Array add(Array a, Array b) throws Exception {
+        Array ret_val = new Array();
+        ret_val.ref = add(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array sub(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = sub(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = sub(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array mul(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = mul(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = mul(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array div(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = div(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = div(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array le(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = le(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = le(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array lt(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = lt(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = lt(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array ge(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = ge(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = ge(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array gt(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = gt(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = gt(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array eq(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = eq(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = eq(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Array ne(Array a, Array b) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = ne(a.ref,b.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = ne(a.ref,b.ref);
+        return ret_val;
+    }
 
     // Unary operations
     public static Array sin(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = sin(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = sin(a.ref);
+        return ret_val;
+    }
 
     public static Array cos(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = cos(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = cos(a.ref);
+        return ret_val;
+    }
 
     public static Array tan(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = tan(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = tan(a.ref);
+        return ret_val;
+    }
 
     public static Array asin(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = asin(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = asin(a.ref);
+        return ret_val;
+    }
 
     public static Array acos(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = acos(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = acos(a.ref);
+        return ret_val;
+    }
 
     public static Array atan(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = atan(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = atan(a.ref);
+        return ret_val;
+    }
 
     public static Array sinh(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = sinh(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = sinh(a.ref);
+        return ret_val;
+    }
 
     public static Array cosh(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = cosh(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = cosh(a.ref);
+        return ret_val;
+    }
 
     public static Array tanh(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = tanh(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = tanh(a.ref);
+        return ret_val;
+    }
 
     public static Array asinh(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = asinh(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = asinh(a.ref);
+        return ret_val;
+    }
     public static Array acosh(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = acosh(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = acosh(a.ref);
+        return ret_val;
+    }
     public static Array atanh(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = atanh(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = atanh(a.ref);
+        return ret_val;
+    }
     public static Array exp(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = exp(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = exp(a.ref);
+        return ret_val;
+    }
     public static Array log(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = log(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = log(a.ref);
+        return ret_val;
+    }
     public static Array abs(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = abs(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = abs(a.ref);
+        return ret_val;
+    }
     public static Array sqrt(Array a) throws Exception {
-		Array ret_val = new Array();
-		ret_val.ref = sqrt(a.ref);
-		return ret_val;
-	}
+        Array ret_val = new Array();
+        ret_val.ref = sqrt(a.ref);
+        return ret_val;
+    }
 
     // Scalar return operations
     public static float sum(Array a) throws Exception { return sum(a.ref); }
@@ -374,9 +374,9 @@ public class Array implements AutoCloseable {
         return res;
     }
 
-	@Override
-	public void close() throws Exception {
-		if (ref != 0) destroyArray(ref);
-	}
+    @Override
+    public void close() throws Exception {
+        if (ref != 0) destroyArray(ref);
+    }
 
 }

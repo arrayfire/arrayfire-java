@@ -6,51 +6,51 @@ public class Image extends Array {
         System.loadLibrary("arrayfire");
     }
 
-	private native static long erode    (long a, long b);
-	private native static long dilate   (long a, long b);
-	private native static long convolve (long a, long b);
-	private native static long medfilt  (long a, int w, int h);
+    private native static long erode    (long a, long b);
+    private native static long dilate   (long a, long b);
+    private native static long convolve (long a, long b);
+    private native static long medfilt  (long a, int w, int h);
     private native static long bilateral(long a, float space, float color);
     private native static long meanshift(long a, float space, float color, int iter);
     private native static long histogram(long a, int nbins);
     private native static long hist_mnmx(long a, int nbins, float min, float max);
     private native static long rotate   (long a, float theta, boolean crop);
-	private native static long resize1  (long a, float scale, char method);
-	private native static long resize2  (long a, float scalex, float scaley, char method);
-	private native static long resize3  (long a, int height, int width, char method);
-	//private native static long fft      (long a, long b);
-	//private native static long fft2     (long a, long b);
-	//private native static long fft3     (long a, long b);
+    private native static long resize1  (long a, float scale, char method);
+    private native static long resize2  (long a, float scalex, float scaley, char method);
+    private native static long resize3  (long a, int height, int width, char method);
+    //private native static long fft      (long a, long b);
+    //private native static long fft2     (long a, long b);
+    //private native static long fft3     (long a, long b);
 
-	public Image() throws Exception { super(); }
+    public Image() throws Exception { super(); }
 
-	public Image(int[] dims) throws Exception { super(dims); }
+    public Image(int[] dims) throws Exception { super(dims); }
 
-	public Image(int[] dims, float[] elems) throws Exception { super(dims,elems); }
+    public Image(int[] dims, float[] elems) throws Exception { super(dims,elems); }
 
-	public static Image erode(Image a, Image b) throws Exception {
-		Image ret_val = new Image();
-		ret_val.ref = erode(a.ref,b.ref);
-		return ret_val;
-	}
+    public static Image erode(Image a, Image b) throws Exception {
+        Image ret_val = new Image();
+        ret_val.ref = erode(a.ref,b.ref);
+        return ret_val;
+    }
 
-	public static Image dilate(Image a, Image b) throws Exception {
-		Image ret_val = new Image();
-		ret_val.ref = dilate(a.ref,b.ref);
-		return ret_val;
-	}
+    public static Image dilate(Image a, Image b) throws Exception {
+        Image ret_val = new Image();
+        ret_val.ref = dilate(a.ref,b.ref);
+        return ret_val;
+    }
 
-	public static Image convolve(Image a, Image b) throws Exception {
-		Image ret_val = new Image();
-		ret_val.ref = convolve(a.ref,b.ref);
-		return ret_val;
-	}
+    public static Image convolve(Image a, Image b) throws Exception {
+        Image ret_val = new Image();
+        ret_val.ref = convolve(a.ref,b.ref);
+        return ret_val;
+    }
 
     public static Image medianfilter(Image a, int width, int height) throws Exception {
-		Image ret_val = new Image();
-		ret_val.ref = medfilt(a.ref,width,height);
-		return ret_val;
-	}
+        Image ret_val = new Image();
+        ret_val.ref = medfilt(a.ref,width,height);
+        return ret_val;
+    }
 
     public static Image bilateral(Image a, float space, float color) throws Exception {
         Image ret_val = new Image();

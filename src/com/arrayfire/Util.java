@@ -8,7 +8,7 @@ public class Util {
         String ret_txt="";
         try {
             float[] fary = a.host();
-                        for( int k=0; k<fary.length-1 ; ++k ) {
+            for( int k=0; k<fary.length-1 ; ++k ) {
                 String temp = Float.toString(fary[k]) + delim;            
                 ret_txt += temp;
             }
