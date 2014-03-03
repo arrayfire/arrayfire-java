@@ -33,6 +33,9 @@ else
 	AF_JAVA_LIB_EXT=$(patsubst %.so, %_cuda.so, $(AF_JAVA_LIB))
 endif
 
+run: all
+	AF_JAVA_PATH=$(AF_JAVA_PATH) make -C examples run
+
 cuda: all
 
 opencl: all
@@ -40,7 +43,7 @@ opencl: all
 all: $(AF_JAVA_JAR)
 
 $(AF_JAVA_JAR): $(AF_JAVA_LIB) $(AF_JAVA_CLASSES)
-	jar cfm $@ $(AF_JAVA_MANIFEST) $(AF_JAVA_CLASSES) $(AF_JAVA_LIB)
+	jar cfm $@ $(AF_JAVA_MANIFEST) $(AF_JAVA_CLASSES)
 
 %.class: %.java
 	javac $<
