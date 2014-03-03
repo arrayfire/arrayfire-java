@@ -44,7 +44,7 @@ public class HelloWorld {
             C = Array.add(A, B);
 
             // Get result back to host memory
-            res = C.host();
+            res = C.getFloatArray();
 
             for(int i = 0; i < total; i++) {
                 str = Integer.toString(i) + ". ";
