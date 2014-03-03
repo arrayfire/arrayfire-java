@@ -76,38 +76,42 @@ public class Array implements AutoCloseable {
         ref = 0;
     }
 
+    private int[] dim4(int[] dims) throws Exception {
+
+        if( dims == null ) {
+            throw new Exception("Null dimensions object provided");
+        } else if ( dims.length > 4 ) {
+            throw new Exception("ArrayFire supports up to 4 dimensions only");
+        }
+
+        int[] adims;
+        adims = new int[] {1, 1, 1, 1};
+        for (int i = 0; i < dims.length; i++) adims[i] = dims[i];
+
+        return adims;
+    }
+
     // Below version of constructor
     // allocates space on device and initializes
     // all elemets to zero
     public Array(int[] dims) throws Exception {
-        if( dims == null ) {
-            throw new Exception("Null dimensions object provided");
-        } else if ( dims.length > 3 ) {
-            throw new Exception("Upto 3 dimensions only supported for now.");
-        }
-        int[] adims;
-        adims = new int[] {1, 1, 1, 1};
-        for (int i = 0; i < dims.length; i++) adims[i] = dims[i];
-
+        int[] adims = dim4(dims);
         this.ref = createArray(adims);
     }
 
     public Array(int[] dims, float[] elems) throws Exception {
-        if( dims == null || elems == null ) {
-            throw new Exception("Null object provided");
-        } else if ( dims.length > 3 ) {
-            throw new Exception("Upto 3 dimensions only supported for now.");
-        }
+        int[] adims = dim4(dims);
+
         int total_size = 1;
-        for (int i = 0; i < dims.length; i++) total_size *= dims[i];
+        for (int i = 0; i < adims.length; i++) total_size *= adims[i];
+
+        if(elems == null) {
+            throw new Exception("Null elems object provided");
+        }
 
         if( elems.length > total_size || elems.length < total_size ) {
             throw new Exception("Mismatching dims and array size");
         }
-
-        int[] adims;
-        adims = new int[] {1, 1, 1, 1};
-        for (int i = 0; i < dims.length; i++) adims[i] = dims[i];
 
         this.ref = createArrayElems(adims, elems);
     }
