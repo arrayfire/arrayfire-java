@@ -19,7 +19,7 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArray(JNIEnv *env, jclass
     jlong ret;
     try{
         jint* dimptr = env->GetIntArrayElements(dims,0);
-        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2]);
+        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3]);
         *A = af::constant(0.0f,dimptr[0],dimptr[1],dimptr[2]);
         ret = (jlong)(A);
         env->ReleaseIntArrayElements(dims,dimptr,0);
@@ -37,7 +37,8 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayElems(JNIEnv *env, j
     try{
         jint* dimptr = env->GetIntArrayElements(dims,0);
         jfloat* inptr= env->GetFloatArrayElements(elems,0);
-        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],inptr);
+        af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3],inptr);
+
         ret = (jlong)(A);
         env->ReleaseIntArrayElements(dims,dimptr,0);
         env->ReleaseFloatArrayElements(elems,inptr,0);

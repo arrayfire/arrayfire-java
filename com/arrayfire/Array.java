@@ -83,7 +83,11 @@ public class Array implements AutoCloseable {
         } else if ( dims.length > 3 ) {
             throw new Exception("Upto 3 dimensions only supported for now.");
         }
-        this.ref = createArray(dims);
+        int[] adims;
+        adims = new int[] {1, 1, 1, 1};
+        for (int i = 0; i < dims.length; i++) adims[i] = dims[i];
+
+        this.ref = createArray(adims);
     }
 
     public Array(int[] dims, float[] elems) throws Exception {
@@ -98,7 +102,12 @@ public class Array implements AutoCloseable {
         if( elems.length > total_size || elems.length < total_size ) {
             throw new Exception("Mismatching dims and array size");
         }
-        this.ref = createArrayElems(dims,elems);
+
+        int[] adims;
+        adims = new int[] {1, 1, 1, 1};
+        for (int i = 0; i < dims.length; i++) adims[i] = dims[i];
+
+        this.ref = createArrayElems(adims, elems);
     }
 
     public int[] dims() {
