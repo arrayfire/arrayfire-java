@@ -5,7 +5,7 @@ import android.util.Log;
 public class Array implements AutoCloseable {
 
 	static {
-		System.loadLibrary("arrayfire");
+		System.loadLibrary("af_java");
 	}
 
 	private native static long createArray(int[] dims);

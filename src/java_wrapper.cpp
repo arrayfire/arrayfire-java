@@ -1,4 +1,4 @@
-#include "jni_wrapper.h"
+#include "java_wrapper.h"
 #include "arrayfire.h"
 #include <vector>
 
