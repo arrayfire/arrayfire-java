@@ -37,6 +37,7 @@ all: $(AF_JAVA_LIB)
 
 $(AF_JAVA_LIB): $(AF_JAVA_LIB_EXT)
 	cp $(AF_JAVA_LIB_EXT) $(AF_JAVA_LIB)
+	cp $(AF_LIB_PATH)/lib$(AF).so $(AF_JAVA_PATH)/$(LIB)
 
 $(AF_JAVA_LIB_EXT): $(AF_JAVA_PATH)/src/java_wrapper.cpp
 	gcc -shared -fPIC $< $(AF_CFLAGS) -L$(AF_LIB_PATH) -l$(AF) -o $@
