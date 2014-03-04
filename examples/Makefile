@@ -11,6 +11,8 @@ AF_JAVA_LIB_PATH?=$(AF_JAVA_PATH)/$(LIB)
 CLASSES=$(patsubst %.java, %.class, $(shell ls *.java))
 BINS=$(patsubst %.class, %, $(CLASSES)) 
 
+all: $(CLASSES)
+
 run: $(BINS)
 
 %: %.class
