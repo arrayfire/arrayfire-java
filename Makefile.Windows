@@ -1,0 +1,34 @@
+all :	HelloWorld.class MonteCarloPi.class
+	@cd examples/
+	java -cp .;../ArrayFire.jar -Djava.library.path=../lib64/ HelloWorld
+	java -cp .;../ArrayFire.jar -Djava.library.path=../lib64/ MonteCarloPi
+	@cd ..
+
+HelloWorld:	HelloWorld.class
+	@cd examples/
+	@java -cp .;../ArrayFire.jar -Djava.library.path=../lib64/ HelloWorld
+	@cd ..
+
+MonteCarloPi: MonteCarloPi.class
+	@cd examples/
+	@java -cp .;../ArrayFire.jar -Djava.library.path=../lib64/ MonteCarloPi
+	@cd ..	
+
+HelloWorld.class: ArrayFire.jar
+	@cd examples
+	javac -cp ../ArrayFire.jar HelloWorld.java
+	@cd ../
+
+MonteCarloPi.class: ArrayFire.jar
+	@cd examples
+	javac -cp ../ArrayFire.jar MonteCarloPi.java
+	@cd ../
+
+ArrayFire.jar: lib64/af_java.dll
+	javac com/arrayfire/*.java
+	jar cfm ArrayFire.jar Manifest.txt com/arrayfire/*.class
+
+clean:
+	del com\arrayfire\*.class
+	del ArrayFire.jar
+	del examples\*.class
