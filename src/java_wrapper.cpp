@@ -99,20 +99,20 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createEmptyArray(JNIEnv *env, j
     return ret;
 }
 
-#define CREATE_ARRAY_T(Ty, ty)                                          \
+#define CREATE_ARRAY_T_(Ty, ty, wty)                                     \
     JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFrom##Ty \
     (JNIEnv *env, jclass clazz, jintArray dims, j##ty##Array elems)     \
     {                                                                   \
         jlong ret;                                                      \
         try{                                                            \
             jint* dimptr = env->GetIntArrayElements(dims,0);            \
-            j##ty* inptr= env->Get##Ty##ArrayElements(elems,0);         \
+            wty* inptr= (wty*)env->Get##Ty##ArrayElements(elems,0);     \
                 af::array *A = new af::array(dimptr[0],dimptr[1],       \
-                                             dimptr[2],dimptr[3],inptr); \
+                                             dimptr[2],dimptr[3],inptr);\
                                                                         \
                 ret = (jlong)(A);                                       \
                 env->ReleaseIntArrayElements(dims,dimptr,0);            \
-                env->Release##Ty##ArrayElements(elems,inptr,0);         \
+                env->Release##Ty##ArrayElements(elems,(j##ty*)inptr,0); \
         } catch(af::exception& e) {                                     \
             ret = 0;                                                    \
         } catch(std::exception& e) {                                    \
@@ -121,10 +121,14 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createEmptyArray(JNIEnv *env, j
         return ret;                                                     \
     }                                                                   \
 
+
+#define CREATE_ARRAY_T(Ty, ty) CREATE_ARRAY_T_(Ty, ty, ty)
+
 CREATE_ARRAY_T(Float, float);
 CREATE_ARRAY_T(Double, double);
 CREATE_ARRAY_T(Int, int);
-CREATE_ARRAY_T(Boolean, boolean);
+
+CREATE_ARRAY_T_(Boolean, boolean, bool);
 
 #undef CREATE_ARRAY_T
 
