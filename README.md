@@ -56,13 +56,17 @@ After you the necessary pre-requisites, edit the following paramets
 ### Windows
 
 - To build the JNI Wrapper for ArrayFire
-    - Open the project `ArrayFireJavaWrapper.vcxproj` in Visual Studio 2012 and build it.
+    - Verify if the following macros are correctly defined in the file `Makefile.Windows`.
+      - Ensure that `VC_ROOT` points to Visual-C (VC) installation path.
+      - Ensure that `WINSDK_X64` points to Windows SDK X64 library path.
+    - Launch `Developer command prompt for Visual Studio 2012`.
+    - `cd <Repository root>`.
+    - `nmake /F Makefile.Windows af_java` to build wrapper dll using CUDA.
     - OpenCL support coming soon.
 
 - To build and run the examples
-    - Launch `Developer command prompt for Visual Studio 2012`.
+    - `nmake /F Makefile.Windows examples` to build all examples.
     - `nmake /F Makefile.Windows` to build and run all examples.
-    - `nmake /F Makefile.Windows [HelloWorld | MonteCarloPi]` to run a specific example.
 
 
 Documentation

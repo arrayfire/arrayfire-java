@@ -2,3 +2,5 @@
 *.lib
 *.exp
 *.dll
+*.ilk
+*.pdb

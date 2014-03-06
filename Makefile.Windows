@@ -1,34 +1,61 @@
-all :	HelloWorld.class MonteCarloPi.class
-	@cd examples/
-	java -cp .;../ArrayFire.jar -Djava.library.path=../lib64/ HelloWorld
-	java -cp .;../ArrayFire.jar -Djava.library.path=../lib64/ MonteCarloPi
-	@cd ..
+VC_ROOT=C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC
+WINSDK_X64=C:\Program Files (x86)\Windows Kits\8.0\Lib\win8\um\x64
 
-HelloWorld:	HelloWorld.class
-	@cd examples/
-	@java -cp .;../ArrayFire.jar -Djava.library.path=../lib64/ HelloWorld
-	@cd ..
+TARGET_NAME=af_java
+TARGET=$(TARGET_NAME).dll
+TARGET_JAR=ArrayFire.jar
 
-MonteCarloPi: MonteCarloPi.class
-	@cd examples/
-	@java -cp .;../ArrayFire.jar -Djava.library.path=../lib64/ MonteCarloPi
-	@cd ..	
+TEMP=tmp
+LIB=lib64
 
-HelloWorld.class: ArrayFire.jar
-	@cd examples
-	javac -cp ../ArrayFire.jar HelloWorld.java
+PREREQ_LIBS=kernel32.lib user32.lib libafcu.lib
+
+CXXFLAGS=/GS /EHsc /W1 /WX /nologo /MD\
+				 /Gd /D "_WINDLL" /Z7 /O2 /Gm-\
+				 /fp:precise /Zc:forScope\
+				 /Zc:wchar_t /Fo"$(TEMP)\\" /Fa"$(TEMP)\\" /LD\
+				 /I"$(AF_PATH)\include" /I"$(CUDA_PATH)\include"\
+				 /I"$(JAVA_HOME)\include" /I"$(JAVA_HOME)\include\win32"
+
+LINKFLAGS=/OUT:$(LIB)\$(TARGET) /IMPLIB:$(LIB)\$(TARGET_NAME).lib\
+	/DLL /MACHINE:X64 /NOLOGO /LIBPATH:"$(AF_PATH)\lib64"\
+	/LIBPATH:"$(CUDA_PATH)\lib\x64" /LIBPATH:"$(VC_ROOT)\lib\amd64"\
+	/LIBPATH:"$(WINSDK_X64)" $(PREREQ_LIBS)
+
+JAVA_FLAGS=-cp .;../$(TARGET_JAR) -Djava.library.path=..\$(LIB)
+
+
+all: examples
+	@cd examples/
+	@echo off && @for /r %a in (*.java) do java $(JAVA_FLAGS) %~na
 	@cd ../
 
-MonteCarloPi.class: ArrayFire.jar
-	@cd examples
-	javac -cp ../ArrayFire.jar MonteCarloPi.java
-	@cd ../
 
-ArrayFire.jar: lib64/af_java.dll
-	javac com/arrayfire/*.java
-	jar cfm ArrayFire.jar Manifest.txt com/arrayfire/*.class
+examples: $(TARGET_JAR)
+	@echo "Compiling examples java files..."
+	@echo off && for /r %a in (examples\*.java) do javac examples\%~nxa
+	@echo "Examples class files built."
+
+
+$(TARGET_JAR): $(TARGET_NAME)
+	@echo "Compiling ArrayFire java API source files..."
+	@echo off && for /r %a in (com\arrayfire\*.java) do javac com\arrayfire\%~nxa
+	@echo "API class files built."
+	@echo "Building jar file..."
+	@jar cfm $@ Manifest.txt com\arrayfire\*.class
+	@echo "Jar file ready -> ArrayFire.jar"
+
+
+$(TARGET_NAME):
+	@IF NOT EXIST $(TEMP) mkdir $(TEMP)
+	"$(VC_ROOT)\vcvarsall.bat" amd64 &&\
+		$(CXX) $(CXXFLAGS) src/java_wrapper.cpp /link $(LINKFLAGS)
+
 
 clean:
-	del com\arrayfire\*.class
-	del ArrayFire.jar
-	del examples\*.class
+	del /Q com\arrayfire\*.class
+	del /Q $(TARGET_JAR)
+	del /Q examples\*.class
+	del /Q /F $(TEMP)\*.*
+	del /Q /F $(LIB)\$(TARGET_NAME).*
+	rmdir $(TEMP)
