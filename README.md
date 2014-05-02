@@ -6,7 +6,7 @@ This repository contains the files required to use ArrayFire from Java.
 Prerequisites
 ---------------
 
-- The latest version of ArrayFire. You can [download here](http://www.accelereyes.com/download_arrayfire)
+- The latest version of ArrayFire. You can [download here](http://www.arrayfire.com/docs/installation.htm)
     - All the pre-requisites for ArrayFire still apply.
 
 - The latest version of `JAVA SDK`. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
