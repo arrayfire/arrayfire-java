@@ -1,6 +1,6 @@
 #include <vector>
 #include <arrayfire.h>
-#include <af/utils.h>
+#include <af/util.h>
 #include "java_wrapper.h"
 
 #ifdef ANDROID
