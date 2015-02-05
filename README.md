@@ -37,7 +37,7 @@ Contents
 Usage
 ----------------
 
-After you the necessary pre-requisites, edit the following paramets
+After you satisfy the necessary pre-requisites, edit the following parameters
 
 - Open `Makefile` and change `AF_PATH` to the right location
 
