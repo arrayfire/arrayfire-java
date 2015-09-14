@@ -1,6 +1,6 @@
 #include <vector>
 #include <arrayfire.h>
-#include <af/utils.h>
+#include <af/util.h>
 #include "java_wrapper.h"
 
 #ifdef ANDROID
@@ -25,6 +25,9 @@ JNIEXPORT void JNICALL Java_com_arrayfire_Array_info(JNIEnv *env, jclass clazz)
     } catch(std::exception& e) {
     }
 }
+
+using af::cfloat;
+using af::cdouble;
 
 JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createRanduArray(JNIEnv *env, jclass clazz, jintArray dims, jint type)
 {
@@ -158,13 +161,8 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromFloatComplex(JNI
             jfloat real = env->GetFloatField(obj, re);
             jfloat imag = env->GetFloatField(obj, im);
 
-#ifdef AFCL
-            tmp[i].s[0] = real;
-            tmp[i].s[1] = imag;
-#else
-            tmp[i].x = real;
-            tmp[i].y = imag;
-#endif
+            tmp[i].real = real;
+            tmp[i].imag = imag;
         }
 
         af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3],tmp);
@@ -207,13 +205,8 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Array_createArrayFromDoubleComplex(JN
             jdouble real = env->GetDoubleField(obj, re);
             jdouble imag = env->GetDoubleField(obj, im);
 
-#ifdef AFCL
-            tmp[i].s[0] = real;
-            tmp[i].s[1] = imag;
-#else
-            tmp[i].x = real;
-            tmp[i].y = imag;
-#endif
+            tmp[i].real = real;
+            tmp[i].imag = imag;
         }
 
         af::array *A = new af::array(dimptr[0],dimptr[1],dimptr[2],dimptr[3],tmp);
@@ -287,20 +280,14 @@ JNIEXPORT jobjectArray JNICALL Java_com_arrayfire_Array_getFloatComplexFromArray
         cfloat *tmp = (*A).host<cfloat>();
 
         for (int i = 0; i < size; i++) {
-#ifdef AFCL
-            float re = tmp[i].s[0];
-            float im = tmp[i].s[1];
-#else
-            float re = tmp[i].x;
-            float im = tmp[i].y;
-#endif
+            float re = tmp[i].real;
+            float im = tmp[i].imag;
             jobject obj = env->NewObject(cls, id, re, im);
 
             env->SetObjectArrayElement(result, i, obj);
         }
 
-        af::array::free(tmp);
-
+        delete[] tmp;
     } catch (af::exception& e) {
         result = NULL;
     } catch (std::exception& e) {
@@ -325,20 +312,14 @@ JNIEXPORT jobjectArray JNICALL Java_com_arrayfire_Array_getDoubleComplexFromArra
         cdouble *tmp = (*A).host<cdouble>();
 
         for (int i = 0; i < size; i++) {
-#ifdef AFCL
-            double re = tmp[i].s[0];
-            double im = tmp[i].s[1];
-#else
-            double re = tmp[i].x;
-            double im = tmp[i].y;
-#endif
+            double re = tmp[i].real;
+            double im = tmp[i].imag;
             jobject obj = env->NewObject(cls, id, re, im);
 
             env->SetObjectArrayElement(result, i, obj);
         }
 
-        af::array::free(tmp);
-
+        delete[] tmp;
     } catch (af::exception& e) {
         result = NULL;
     } catch (std::exception& e) {
@@ -445,13 +426,13 @@ UNARY_OP_DEF(sqrt)
     {                                                               \
         try {                                                       \
             af::array *A = (af::array*)(a);                         \
-            if (A->type() == af::f32)                               \
+            if (A->type() == f32)                                   \
                 return af::func<float>( (*A) );                     \
-            if (A->type() == af::s32)                               \
+            if (A->type() == s32)                                   \
                 return af::func<int>( (*A) );                       \
-            if (A->type() == af::f64)                               \
+            if (A->type() == f64)                                   \
                 return af::func<double>( (*A) );                    \
-            if (A->type() == af::b8)                                \
+            if (A->type() == b8)                                    \
                 return af::func<float>( (*A) );                     \
             return af::NaN;                                         \
         } catch(af::exception& e) {                                 \
@@ -617,7 +598,7 @@ void blur_logic(unsigned char* bufIn, unsigned char* bufOut, int* info)
     convert_uchar2float(&inptr,bufIn,imgsz, chnls);
 
     af::array img(width,height,chnls,inptr);
-    af::array ker = af::gaussiankernel(5,5);
+    af::array ker = af::gaussianKernel(5,5);
     af::array res = af::convolve(img, ker);
     res(af::span, af::span, 3) = 1;
     res.host(outptr);
@@ -701,7 +682,7 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Image_meanshift(JNIEnv *env, jclass c
     try {
         af::array *A = (af::array*)(a);
         af::array *res = new af::array();
-        (*res) = af::meanshift( (*A) , space, color, iter );
+        (*res) = af::meanShift( (*A) , space, color, iter );
         ret = (jlong)(res);
     } catch(af::exception& e) {
         ret = 0;
@@ -765,7 +746,7 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Image_resize1(JNIEnv *env, jclass cla
     try {
         af::array *A = (af::array*)(a);
         af::array *res = new af::array();
-        (*res) = af::resize( scale, (*A) , method );
+        (*res) = af::resize( scale, (*A));
         ret = (jlong)(res);
     } catch(af::exception& e) {
         ret = 0;
@@ -781,7 +762,7 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Image_resize2(JNIEnv *env, jclass cla
     try {
         af::array *A = (af::array*)(a);
         af::array *res = new af::array();
-        (*res) = af::resize( scalex, scaley, (*A) , method );
+        (*res) = af::resize( scalex, scaley, (*A));
         ret = (jlong)(res);
     } catch(af::exception& e) {
         ret = 0;
@@ -797,7 +778,7 @@ JNIEXPORT jlong JNICALL Java_com_arrayfire_Image_resize3(JNIEnv *env, jclass cla
     try {
         af::array *A = (af::array*)(a);
         af::array *res = new af::array();
-        (*res) = af::resize( (unsigned int)height, (unsigned int)width, (*A) , method );
+        (*res) = af::resize( (unsigned int)height, (unsigned int)width, (*A));
         ret = (jlong)(res);
     } catch(af::exception& e) {
         ret = 0;
