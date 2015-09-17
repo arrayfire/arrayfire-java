@@ -5,7 +5,7 @@ public class Util {
     public static String toString(Array a, String delim) {
         String ret_txt="";
         try {
-            float[] fary = a.getFloatArray();
+            float[] fary = Data.getFloatArray(a);
             for( int k=0; k<fary.length-1 ; ++k ) {
                 String temp = Float.toString(fary[k]) + delim;
                 ret_txt += temp;

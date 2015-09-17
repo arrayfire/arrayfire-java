@@ -1,5 +1,5 @@
 import java.util.Random;
-import com.arrayfire.Array;
+import com.arrayfire.*;
 
 public class MonteCarloPi {
 
@@ -21,15 +21,15 @@ public class MonteCarloPi {
         try {
 
             int[] dims =  new int[] {size, 1};
-            x = Array.randu(dims, Array.FloatType);
-            y = Array.randu(dims, Array.FloatType);
+            x = Data.randu(dims, Array.FloatType);
+            y = Data.randu(dims, Array.FloatType);
 
-            x = Array.mul(x, x);
-            y = Array.mul(y, y);
+            x = Arith.mul(x, x);
+            y = Arith.mul(y, y);
 
-            res = Array.add(x , y);
-            res = Array.lt(res, 1);
-            double count = Array.sumAll(res);
+            res = Arith.add(x , y);
+            res = Arith.lt(res, 1);
+            double count = Algorithm.sumAll(res);
             return 4.0 * ((double)(count)) / size;
 
         } finally {

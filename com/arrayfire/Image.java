@@ -17,10 +17,6 @@ public class Image extends Array {
 
     public Image() throws Exception { super(); }
 
-    public Image(int[] dims) throws Exception { super(dims); }
-
-    public Image(int[] dims, float[] elems) throws Exception { super(dims,elems); }
-
     public static Image erode(Image a, Image b) throws Exception {
         Image ret_val = new Image();
         ret_val.ref = erode(a.ref,b.ref);
