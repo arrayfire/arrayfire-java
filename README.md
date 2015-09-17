@@ -6,31 +6,30 @@ This repository contains the files required to use ArrayFire from Java.
 Prerequisites
 ---------------
 
-- The latest version of ArrayFire. You can [download here](http://www.arrayfire.com/docs/installation.htm)
-    - All the pre-requisites for ArrayFire still apply.
+- The latest version of ArrayFire. You can get ArrayFire using one of the following:
+    - [Download binary installers](http://www.arrayfire.com/download)
+    - [Build from source](https://github.com/arrayfire/arrayfire)
 
 - The latest version of `JAVA SDK`. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
 
 - make
-    - `GNU Make` on `Linux`
-    - `nmake` on `Windows`
+    - `GNU Make` on Linux
 
 - C++ compiler
-    - `gcc/g++` on Linux
-    - `Visual Studio 2012` for `Windows`.
+    - `gcc` or `clang` on Linux
 
-- OSX support coming soon.
+- OSX and Windows support coming soon
 
 Contents
 ---------------
 
 - `src/`: Contains the source files for the ArrayFire Java wrapper
-    - `java_wrapper.cpp` The JNI wrapper file
-    - `java_wrapper.h` The JNI API definitions
+    - `*.cpp` The JNI wrapper files
+    - `jni_helper.h` The JNI API helper functions
 
-- `com/`: Contains the Java source files implementing `Array` and `Image` classes
+- `com/`: Contains the Java source files implementing algorithms
 
-- `lib/`, `lib64/`: The location where the JNI library is stored
+- `lib/`: The location where the JNI library is stored
 
 - `examples`: contains a few examples demonstrating the usage
 
@@ -52,23 +51,6 @@ After you the necessary pre-requisites, edit the following paramets
     - `make cuda run  ` to use build and run examples using CUDA
     - `make opencl run` to use build and run examples using OpenCL
 
-
-### Windows
-
-- To build the JNI Wrapper for ArrayFire
-    - Verify if the following macros are correctly defined in the file `Makefile.Windows`.
-      - Ensure that `VC_ROOT` points to Visual-C (VC) installation path.
-      - Ensure that `WINSDK_X64` points to Windows SDK X64 library path.
-    - Launch `Developer command prompt for Visual Studio 2012`.
-    - `cd <Repository root>`.
-    - `nmake /F Makefile.Windows af_java` to build wrapper dll using CUDA.
-    - OpenCL support coming soon.
-
-- To build and run the examples
-    - `nmake /F Makefile.Windows examples` to build all examples.
-    - `nmake /F Makefile.Windows` to build and run all examples.
-
-
 Documentation
 ---------------
 - TODO
@@ -77,4 +59,3 @@ License
 ---------------
 
 - Please check the LICENSE file in the root directory
-
