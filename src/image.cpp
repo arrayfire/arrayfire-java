@@ -27,23 +27,6 @@ BEGIN_EXTERN_C
 MORPH_OP_DEF(erode)
 MORPH_OP_DEF(dilate)
 
-JNIEXPORT jlong JNICALL IMAGE_FUNC(convolve)(JNIEnv *env, jclass clazz, jlong a, jlong b)
-{
-    jlong ret;
-    try {
-        af::array *A = (af::array*)(a);
-        af::array *B = (af::array*)(b);
-        af::array *res = new af::array();
-        (*res) = af::convolve( (*A) , (*B) );
-        ret = (jlong)(res);
-    } catch(af::exception& e) {
-        ret = 0;
-    } catch(std::exception& e) {
-        ret = 0;
-    }
-    return ret;
-}
-
 JNIEXPORT jlong JNICALL IMAGE_FUNC(medfilt)(JNIEnv *env, jclass clazz, jlong a, jint w, jint h)
 {
     jlong ret;

@@ -29,18 +29,16 @@ public class HelloWorld {
         }
 
         try {
+            Array A = new Array(), B = new Array(), C = new Array();
             // Get info about arrayfire information
             Array.info();
 
             // Send data to ArrayFire
-            Array A = Data.createArray(dims, left);
-            Array B = Data.createArray(dims, right);
-
-            // Create container for output
-            Array C = new Array();
+            Data.createArray(A, dims, left);
+            Data.createArray(B, dims, right);
 
             // Do vector addition on the device
-            C = Arith.add(A, B);
+            Arith.add(C, A, B);
 
             // Get result back to host memory
             res = Data.getFloatArray(C);

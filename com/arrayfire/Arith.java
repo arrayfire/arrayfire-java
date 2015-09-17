@@ -55,270 +55,230 @@ public class Arith extends Array {
     private native static long sqrt (long a);
 
 
-    public static Array add(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = add(a.ref,b.ref);
-        return ret_val;
+    public static void add(Array c, Array a, Array b) throws Exception {
+        long ref = add(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array sub(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = sub(a.ref,b.ref);
-        return ret_val;
+    public static void sub(Array c, Array a, Array b) throws Exception {
+        long ref = sub(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array mul(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = mul(a.ref,b.ref);
-        return ret_val;
+    public static void mul(Array c, Array a, Array b) throws Exception {
+        long ref = mul(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array div(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = div(a.ref,b.ref);
-        return ret_val;
+    public static void div(Array c, Array a, Array b) throws Exception {
+        long ref = div(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array le(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = le(a.ref,b.ref);
-        return ret_val;
+    public static void le(Array c, Array a, Array b) throws Exception {
+        long ref = le(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array lt(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = lt(a.ref,b.ref);
-        return ret_val;
+    public static void lt(Array c, Array a, Array b) throws Exception {
+        long ref = lt(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array ge(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = ge(a.ref,b.ref);
-        return ret_val;
+    public static void ge(Array c, Array a, Array b) throws Exception {
+        long ref = ge(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array gt(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = gt(a.ref,b.ref);
-        return ret_val;
+    public static void gt(Array c, Array a, Array b) throws Exception {
+        long ref = gt(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array eq(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = eq(a.ref,b.ref);
-        return ret_val;
+    public static void eq(Array c, Array a, Array b) throws Exception {
+        long ref = eq(a.ref,b.ref);
+        c.set(ref);
     }
 
-    public static Array ne(Array a, Array b) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = ne(a.ref,b.ref);
-        return ret_val;
+    public static void ne(Array c, Array a, Array b) throws Exception {
+        long ref = ne(a.ref,b.ref);
+        c.set(ref);
     }
 
     // Unary operations
-    public static Array sin(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = sin(a.ref);
-        return ret_val;
+    public static void sin(Array res, Array a) throws Exception {
+        long ref = sin(a.ref);
+        res.set(ref);
     }
 
-    public static Array cos(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = cos(a.ref);
-        return ret_val;
+    public static void cos(Array res, Array a) throws Exception {
+        long ref = cos(a.ref);
+        res.set(ref);
     }
 
-    public static Array tan(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = tan(a.ref);
-        return ret_val;
+    public static void tan(Array res, Array a) throws Exception {
+        long ref = tan(a.ref);
+        res.set(ref);
     }
 
-    public static Array asin(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = asin(a.ref);
-        return ret_val;
+    public static void asin(Array res, Array a) throws Exception {
+        long ref = asin(a.ref);
+        res.set(ref);
     }
 
-    public static Array acos(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = acos(a.ref);
-        return ret_val;
+    public static void acos(Array res, Array a) throws Exception {
+        long ref = acos(a.ref);
+        res.set(ref);
     }
 
-    public static Array atan(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = atan(a.ref);
-        return ret_val;
+    public static void atan(Array res, Array a) throws Exception {
+        long ref = atan(a.ref);
+        res.set(ref);
     }
 
-    public static Array sinh(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = sinh(a.ref);
-        return ret_val;
+    public static void sinh(Array res, Array a) throws Exception {
+        long ref = sinh(a.ref);
+        res.set(ref);
     }
 
-    public static Array cosh(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = cosh(a.ref);
-        return ret_val;
+    public static void cosh(Array res, Array a) throws Exception {
+        long ref = cosh(a.ref);
+        res.set(ref);
     }
 
-    public static Array tanh(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = tanh(a.ref);
-        return ret_val;
+    public static void tanh(Array res, Array a) throws Exception {
+        long ref = tanh(a.ref);
+        res.set(ref);
     }
 
-    public static Array asinh(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = asinh(a.ref);
-        return ret_val;
+    public static void asinh(Array res, Array a) throws Exception {
+        long ref = asinh(a.ref);
+        res.set(ref);
     }
-    public static Array acosh(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = acosh(a.ref);
-        return ret_val;
+
+    public static void acosh(Array res, Array a) throws Exception {
+        long ref = acosh(a.ref);
+        res.set(ref);
     }
-    public static Array atanh(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = atanh(a.ref);
-        return ret_val;
+
+    public static void atanh(Array res, Array a) throws Exception {
+        long ref = atanh(a.ref);
+        res.set(ref);
     }
-    public static Array exp(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = exp(a.ref);
-        return ret_val;
+
+    public static void exp(Array res, Array a) throws Exception {
+        long ref = exp(a.ref);
+        res.set(ref);
     }
-    public static Array log(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = log(a.ref);
-        return ret_val;
+
+    public static void log(Array res, Array a) throws Exception {
+        long ref = log(a.ref);
+        res.set(ref);
     }
-    public static Array abs(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = abs(a.ref);
-        return ret_val;
+
+    public static void abs(Array res, Array a) throws Exception {
+        long ref = abs(a.ref);
+        res.set(ref);
     }
-    public static Array sqrt(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = sqrt(a.ref);
-        return ret_val;
+
+    public static void sqrt(Array res, Array a) throws Exception {
+        long ref = sqrt(a.ref);
+        res.set(ref);
     }
 
     // Scalar operations
-    public static Array add(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = addf(a.ref,b);
-        return res;
+    public static void add(Array c, Array a, float b) throws Exception {
+        long ref = addf(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array sub(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = subf(a.ref,b);
-        return res;
+    public static void sub(Array c, Array a, float b) throws Exception {
+        long ref = subf(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array mul(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = mulf(a.ref,b);
-        return res;
+    public static void mul(Array c, Array a, float b) throws Exception {
+        long ref = mulf(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array div(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = divf(a.ref,b);
-        return res;
+    public static void div(Array c, Array a, float b) throws Exception {
+        long ref = divf(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array le(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = lef(a.ref,b);
-        return res;
+    public static void le(Array c, Array a, float b) throws Exception {
+        long ref = lef(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array lt(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = ltf(a.ref,b);
-        return res;
+    public static void lt(Array c, Array a, float b) throws Exception {
+        long ref = ltf(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array ge(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = gef(a.ref,b);
-        return res;
+    public static void ge(Array c, Array a, float b) throws Exception {
+        long ref = gef(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array gt(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = gtf(a.ref,b);
-        return res;
+    public static void gt(Array c, Array a, float b) throws Exception {
+        long ref = gtf(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array eq(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = eqf(a.ref,b);
-        return res;
+    public static void eq(Array c, Array a, float b) throws Exception {
+        long ref = eqf(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array ne(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = nef(a.ref,b);
-        return res;
+    public static void ne(Array c, Array a, float b) throws Exception {
+        long ref = nef(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array pow(Array a, float b) throws Exception {
-        Array res = new Array();
-        res.ref = powf(a.ref,b);
-        return res;
+    public static void pow(Array c, Array a, float b) throws Exception {
+        long ref = powf(a.ref,b);
+        c.set(ref);
     }
 
-    public static Array add(float a, Array b) throws Exception {
-        Array res = new Array();
-        res.ref = addf(b.ref,a);
-        return res;
+    public static void add(Array c, float a, Array b) throws Exception {
+        long ref = addf(b.ref,a);
+        c.set(ref);
     }
 
-    public static Array sub(float a, Array b) throws Exception {
-        Array res = new Array();
-        res.ref = fsub(a,b.ref);
-        return res;
+    public static void sub(Array c, float a, Array b) throws Exception {
+        long ref = fsub(a,b.ref);
+        c.set(ref);
     }
 
-    public static Array mul(float a, Array b) throws Exception {
-        Array res = new Array();
-        res.ref = mulf(b.ref,a);
-        return res;
+    public static void mul(Array c, float a, Array b) throws Exception {
+        long ref = mulf(b.ref,a);
+        c.set(ref);
     }
 
-    public static Array div(float a, Array b) throws Exception {
-        Array res = new Array();
-        res.ref = fdiv(a,b.ref);
-        return res;
+    public static void div(Array c, float a, Array b) throws Exception {
+        long ref = fdiv(a,b.ref);
+        c.set(ref);
     }
 
-    public static Array le(float a, Array b) throws Exception {
-        Array res = new Array();
-        res.ref = fle(a,b.ref);
-        return res;
+    public static void le(Array c, float a, Array b) throws Exception {
+        long ref = fle(a,b.ref);
+        c.set(ref);
     }
 
-    public static Array lt(float a, Array b) throws Exception {
-        Array res = new Array();
-        res.ref = flt(a,b.ref);
-        return res;
+    public static void lt(Array c, float a, Array b) throws Exception {
+        long ref = flt(a,b.ref);
+        c.set(ref);
     }
 
-    public static Array ge(float a, Array b) throws Exception {
-        Array res = new Array();
-        res.ref = fge(a,b.ref);
-        return res;
+    public static void ge(Array c, float a, Array b) throws Exception {
+        long ref = fge(a,b.ref);
+        c.set(ref);
     }
 
-    public static Array gt(float a, Array b) throws Exception {
-        Array res = new Array();
-        res.ref = fgt(a,b.ref);
-        return res;
+    public static void gt(Array c, float a, Array b) throws Exception {
+        long ref = fgt(a,b.ref);
+        c.set(ref);
     }
-
 }

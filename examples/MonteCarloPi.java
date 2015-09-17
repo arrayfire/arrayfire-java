@@ -17,18 +17,19 @@ public class MonteCarloPi {
     }
 
     public static double deviceCalcPi(int size) throws Exception {
-        Array x = null, y = null, res = null;
+        Array x = new Array(), y = new Array(), res = new Array();
         try {
 
             int[] dims =  new int[] {size, 1};
-            x = Data.randu(dims, Array.FloatType);
-            y = Data.randu(dims, Array.FloatType);
+            Data.randu(x, dims, Array.FloatType);
+            Data.randu(y, dims, Array.FloatType);
 
-            x = Arith.mul(x, x);
-            y = Arith.mul(y, y);
+            Arith.mul(x, x, x);
+            Arith.mul(y, y, y);
 
-            res = Arith.add(x , y);
-            res = Arith.lt(res, 1);
+            Arith.add(res, x, y);
+            Arith.lt(res, res, 1);
+
             double count = Algorithm.sumAll(res);
             return 4.0 * ((double)(count)) / size;
 
@@ -44,26 +45,27 @@ public class MonteCarloPi {
         try {
             int size = 5000000;
             int iter = 100;
-            double hostPi = hostCalcPi(size);
-            double devicePi = deviceCalcPi(size);
 
-            System.out.println("Results from host: " + hostPi);
+            double devicePi = deviceCalcPi(size);
             System.out.println("Results from device: " + devicePi);
 
-            long hostStart = System.currentTimeMillis();
-            for (int i = 0; i < iter; i++) {
-                hostPi = hostCalcPi(size);
-            }
-            double hostElapsed = (double)(System.currentTimeMillis() - hostStart)/iter;
+            double hostPi = hostCalcPi(size);
+            System.out.println("Results from host: " + hostPi);
 
             long deviceStart = System.currentTimeMillis();
             for (int i = 0; i < iter; i++) {
                 devicePi = deviceCalcPi(size);
             }
             double deviceElapsed = (double)(System.currentTimeMillis() - deviceStart)/iter;
-
-            System.out.println("Time taken for host (ms): " + hostElapsed);
             System.out.println("Time taken for device (ms): " + deviceElapsed);
+
+            long hostStart = System.currentTimeMillis();
+            for (int i = 0; i < iter; i++) {
+                hostPi = hostCalcPi(size);
+            }
+            double hostElapsed = (double)(System.currentTimeMillis() - hostStart)/iter;
+            System.out.println("Time taken for host (ms): " + hostElapsed);
+
             System.out.println("Speedup: " + Math.round((hostElapsed) / (deviceElapsed)));
 
         } catch (Exception e) {

@@ -16,33 +16,30 @@ public class Algorithm extends Array {
     public static double maxAll(Array a) throws Exception { return maxAll(a.ref); }
     public static double minAll(Array a) throws Exception { return minAll(a.ref); }
 
-    public static Array sum(Array a, int dim) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = sum(a.ref, dim);
-        return ret_val;
+    public static void sum(Array res, Array a, int dim) throws Exception {
+        long ref = sum(a.ref, dim);
+        res.set(ref);
     }
 
-    public static Array max(Array a, int dim) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = max(a.ref, dim);
-        return ret_val;
+    public static void max(Array res, Array a, int dim) throws Exception {
+        long ref = max(a.ref, dim);
+        res.set(ref);
     }
 
-    public static Array min(Array a, int dim) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = min(a.ref, dim);
-        return ret_val;
+    public static void min(Array res, Array a, int dim) throws Exception {
+        long ref = min(a.ref, dim);
+        res.set(ref);
     }
 
-    public static Array sum(Array a) throws Exception {
-        return sum(a, -1);
+    public static void sum(Array res, Array a) throws Exception {
+        sum(res, a, 0);
     }
 
-    public static Array max(Array a) throws Exception {
-        return max(a, -1);
+    public static void max(Array res, Array a) throws Exception {
+        max(res, a, 0);
     }
 
-    public static Array min(Array a) throws Exception {
-        return min(a, -1);
+    public static void min(Array res, Array a) throws Exception {
+        min(res, a, 0);
     }
 }

@@ -31,6 +31,11 @@ public class Array implements AutoCloseable {
         ref = other_ref;
     }
 
+    protected void set(long other_ref) {
+        if (ref != 0) destroyArray(ref);
+        ref = other_ref;
+    }
+
     public int[] dims() {
         return getDims(ref);
     }

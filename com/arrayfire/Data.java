@@ -25,21 +25,14 @@ public class Data extends Array {
     // allocates space on device and initializes
     // all elemets to zero
 
-    public static Array createArray(int[] dims, int type) throws Exception {
+    public static void allocate(Array res, int[] dims, int type) throws Exception {
         int[] adims = Array.dim4(dims);
         long ref = createEmptyArray(adims, type);
         if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
+        res.set(ref);
     }
 
-    public static Array createArray(int[] dims) throws Exception {
-        int[] adims = Array.dim4(dims);
-        long ref = createEmptyArray(adims, FloatType);
-        if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
-    }
-
-    public static Array createArray(int[] dims, float[] elems) throws Exception {
+    public static void createArray(Array res, int[] dims, float[] elems) throws Exception {
         int[] adims = Array.dim4(dims);
 
         int total_size = 1;
@@ -55,10 +48,10 @@ public class Data extends Array {
 
         long ref = createArrayFromFloat(adims, elems);
         if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
+        res.set(ref);
     }
 
-    public static Array createArray(int[] dims, double[] elems) throws Exception {
+    public static void createArray(Array res, int[] dims, double[] elems) throws Exception {
         int[] adims = Array.dim4(dims);
 
         int total_size = 1;
@@ -74,10 +67,10 @@ public class Data extends Array {
 
         long ref = createArrayFromDouble(adims, elems);
         if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
+        res.set(ref);
     }
 
-    public static Array createArray(int[] dims, int[] elems) throws Exception {
+    public static void createArray(Array res, int[] dims, int[] elems) throws Exception {
         int[] adims = Array.dim4(dims);
 
         int total_size = 1;
@@ -93,10 +86,10 @@ public class Data extends Array {
 
         long ref = createArrayFromInt(adims, elems);
         if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
+        res.set(ref);
     }
 
-    public static Array createArray(int[] dims, FloatComplex[] elems) throws Exception {
+    public static void createArray(Array res, int[] dims, FloatComplex[] elems) throws Exception {
         int[] adims = Array.dim4(dims);
 
         int total_size = 1;
@@ -112,10 +105,10 @@ public class Data extends Array {
 
         long ref = createArrayFromFloatComplex(adims, elems);
         if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
+        res.set(ref);
     }
 
-    public static Array createArray(int[] dims, DoubleComplex[] elems) throws Exception {
+    public static void createArray(Array res, int[] dims, DoubleComplex[] elems) throws Exception {
         int[] adims = Array.dim4(dims);
 
         int total_size = 1;
@@ -131,7 +124,7 @@ public class Data extends Array {
 
         long ref = createArrayFromDoubleComplex(adims, elems);
         if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
+        res.set(ref);
     }
 
 
@@ -166,25 +159,24 @@ public class Data extends Array {
     }
 
     // Binary operations
-    public static Array randu(int[] dims, int type) throws Exception {
+    public static void randu(Array res, int[] dims, int type) throws Exception {
         int[] adims = Array.dim4(dims);
         long ref = createRanduArray(adims, type);
         if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
+        res.set(ref);
     }
 
-    public static Array randn(int[] dims, int type) throws Exception {
+    public static void randn(Array res, int[] dims, int type) throws Exception {
         int[] adims = Array.dim4(dims);
         long ref = createRandnArray(adims, type);
         if (ref == 0) throw new Exception("Failed to create Array");
-        return new Array(ref);
+        res.set(ref);
     }
 
-    public static Array constant(double val, int[] dims, int type) throws Exception {
+    public static void constant(Array res, double val, int[] dims, int type) throws Exception {
         int[] adims = Array.dim4(dims);
         long ref = createConstantsArray(val, adims, type);
         if (ref == 0) throw new Exception("Failed to create Array");
-
-        return new Array(ref);
+        res.set(ref);
     }
 }

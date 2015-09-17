@@ -10,39 +10,40 @@ public class Signal extends Array {
     private native static long ifft2(long a);
     private native static long ifft3(long a);
 
-    public static Array fft(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = fft(a.ref);
-        return ret_val;
+    private native static long convolve (long a, long b);
+
+    public static void fft(Array res, Array a) throws Exception {
+        long ref = fft(a.ref);
+        res.set(ref);
     }
 
-    public static Array fft2(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = fft2(a.ref);
-        return ret_val;
+    public static void fft2(Array res, Array a) throws Exception {
+        long ref = fft2(a.ref);
+        res.set(ref);
     }
 
-    public static Array fft3(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = fft3(a.ref);
-        return ret_val;
+    public static void fft3(Array res, Array a) throws Exception {
+        long ref = fft3(a.ref);
+        res.set(ref);
     }
 
-    public static Array ifft(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = ifft(a.ref);
-        return ret_val;
+    public static void ifft(Array res, Array a) throws Exception {
+        long ref = ifft(a.ref);
+        res.set(ref);
     }
 
-    public static Array ifft2(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = ifft2(a.ref);
-        return ret_val;
+    public static void ifft2(Array res, Array a) throws Exception {
+        long ref = ifft2(a.ref);
+        res.set(ref);
     }
 
-    public static Array ifft3(Array a) throws Exception {
-        Array ret_val = new Array();
-        ret_val.ref = ifft3(a.ref);
-        return ret_val;
+    public static void ifft3(Array res, Array a) throws Exception {
+        long ref = ifft3(a.ref);
+        res.set(ref);
+    }
+
+    public static void convolve(Array res, Array a, Array b) throws Exception {
+        long ref = convolve(a.ref, b.ref);
+        res.set(ref);
     }
 }
