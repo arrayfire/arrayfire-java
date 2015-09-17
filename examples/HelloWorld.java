@@ -1,6 +1,5 @@
 import java.util.Random;
-import com.arrayfire.Array;
-import com.arrayfire.Util;
+import com.arrayfire.*;
 
 public class HelloWorld {
     public static void main(String[] args) {
@@ -30,21 +29,20 @@ public class HelloWorld {
         }
 
         try {
+            Array A = new Array(), B = new Array(), C = new Array();
+
             // Get info about arrayfire information
-            Array.info();
+            Util.info();
 
             // Send data to ArrayFire
-            Array A = new Array(dims, left);
-            Array B = new Array(dims, right);
-
-            // Create container for output
-            Array C = new Array();
+            Data.createArray(A, dims, left);
+            Data.createArray(B, dims, right);
 
             // Do vector addition on the device
-            C = Array.add(A, B);
+            Arith.add(C, A, B);
 
             // Get result back to host memory
-            res = C.getFloatArray();
+            res = Data.getFloatArray(C);
 
             for(int i = 0; i < total; i++) {
                 str = Integer.toString(i) + ". ";
