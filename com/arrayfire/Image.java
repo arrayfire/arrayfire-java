@@ -9,10 +9,10 @@ public class Image extends Array {
     private native static long meanshift(long a, float space, float color, int iter);
     private native static long histogram(long a, int nbins);
     private native static long hist_mnmx(long a, int nbins, float min, float max);
-    private native static long rotate   (long a, float theta, boolean crop);
-    private native static long resize1  (long a, float scale, char method);
-    private native static long resize2  (long a, float scalex, float scaley, char method);
-    private native static long resize3  (long a, int height, int width, char method);
+    private native static long rotate   (long a, float theta, boolean crop, int method);
+    private native static long resize1  (long a, float scale, int method);
+    private native static long resize2  (long a, float scalex, float scaley, int method);
+    private native static long resize3  (long a, int height, int width, int method);
 
     public static void erode(Array res, Array a, Array b) throws Exception {
         long ref = erode(a.ref,b.ref);
@@ -50,23 +50,41 @@ public class Image extends Array {
     }
 
     public static void rotate(Array res, Array a, float theta, boolean crop) throws Exception {
-        long ref = rotate(a.ref,theta,crop);
+        long ref = rotate(a.ref,theta,crop,0);
         res.set(ref);
     }
 
-    // method ='L' - Linear interpolation
-    // or 'N' - Nearest neighbor
-    public static void resize(Array res, Array a, float scale, char method) throws Exception {
+    public static void rotate(Array res, Array a, float theta, boolean crop, int method) throws Exception {
+        long ref = rotate(a.ref,theta,crop,method);
+        res.set(ref);
+    }
+
+    public static void resize(Array res, Array a, float scale) throws Exception {
+        long ref = resize1(a.ref,scale,0);
+        res.set(ref);
+    }
+
+    public static void resize(Array res, Array a, float scale, int method) throws Exception {
         long ref = resize1(a.ref,scale,method);
         res.set(ref);
     }
 
-    public static void resize(Array res, Array a, float scalex, float scaley, char method) throws Exception {
+    public static void resize(Array res, Array a, float scalex, float scaley) throws Exception {
+        long ref = resize2(a.ref,scalex,scaley,0);
+        res.set(ref);
+    }
+
+    public static void resize(Array res, Array a, float scalex, float scaley, int method) throws Exception {
         long ref = resize2(a.ref,scalex,scaley,method);
         res.set(ref);
     }
 
-    public static void resize(Array res, Array a, int height, int width, char method) throws Exception {
+    public static void resize(Array res, Array a, int height, int width) throws Exception {
+        long ref = resize3(a.ref,height,width,0);
+        res.set(ref);
+    }
+
+    public static void resize(Array res, Array a, int height, int width, int method) throws Exception {
         long ref = resize3(a.ref,height,width,method);
         res.set(ref);
     }

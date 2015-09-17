@@ -12,7 +12,7 @@ public class Arith extends Array {
     private native static long ge (long a, long b);
     private native static long gt (long a, long b);
     private native static long eq (long a, long b);
-    private native static long ne (long a, long b);
+    private native static long neq(long a, long b);
     //private native static long pow(long a, float b);
 
     // Scalar Binary operations
@@ -25,7 +25,7 @@ public class Arith extends Array {
     private native static long gef (long a, float b);
     private native static long gtf (long a, float b);
     private native static long eqf (long a, float b);
-    private native static long nef (long a, float b);
+    private native static long neqf(long a, float b);
     private native static long powf(long a, float b);
 
     private native static long fsub(float a, long b);
@@ -100,8 +100,8 @@ public class Arith extends Array {
         c.set(ref);
     }
 
-    public static void ne(Array c, Array a, Array b) throws Exception {
-        long ref = ne(a.ref,b.ref);
+    public static void neq(Array c, Array a, Array b) throws Exception {
+        long ref = neq(a.ref,b.ref);
         c.set(ref);
     }
 
@@ -232,8 +232,8 @@ public class Arith extends Array {
         c.set(ref);
     }
 
-    public static void ne(Array c, Array a, float b) throws Exception {
-        long ref = nef(a.ref,b);
+    public static void neq(Array c, Array a, float b) throws Exception {
+        long ref = neqf(a.ref,b);
         c.set(ref);
     }
 

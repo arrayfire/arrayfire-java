@@ -26,4 +26,5 @@ public class Util {
         return ret_ary;
     }
 
+    public native static void info();
 }

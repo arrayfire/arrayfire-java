@@ -16,10 +16,20 @@
 
 
 #ifdef __cplusplus
+using af::af_cfloat;
+using af::af_cdouble;
+
 #define BEGIN_EXTERN_C extern "C" {
 #define END_EXTERN_C }
 #endif
 
 #define AF_MANGLE(CLASS, FUNC) Java_com_arrayfire_##CLASS##_##FUNC
 
-const int MaxDimSupported = 3;
+const int MaxDimSupported = 4;
+
+//FIXME: Handle errors properly
+#define AF_TO_JAVA(fn) fn
+
+#define ARRAY(REF) (af_array)(REF)
+
+#define JLONG(ARR) (jlong)(ARR)

@@ -4,46 +4,102 @@ BEGIN_EXTERN_C
 
 #define SIGNAL_FUNC(FUNC) AF_MANGLE(Signal, FUNC)
 
-#define FFT_DEF(func)                           \
-    JNIEXPORT jlong JNICALL SIGNAL_FUNC(func)   \
-        (JNIEnv *env, jclass clazz, jlong a)    \
-    {                                           \
-        jlong ret = 0;                          \
-        try {                                   \
-            af::array *A = (af::array*)(a);     \
-            af::array *res = new af::array();   \
-            *res = af::func((*A));              \
-            ret = (jlong)res;                   \
-        } catch(af::exception& e) {             \
-            return 0;                           \
-        } catch(std::exception& e) {            \
-            return 0;                           \
-        }                                       \
-        return ret;                             \
-    }
+#define CONVOLVE(N)                                                 \
+    JNIEXPORT jlong JNICALL SIGNAL_FUNC(convolve##N)(JNIEnv *env,   \
+                                                     jclass clazz,  \
+                                                     jlong a,       \
+                                                     jlong b,       \
+                                                     int method)    \
+    {                                                               \
+        af_array ret = 0;                                           \
+        AF_TO_JAVA(af_convolve##N(&ret,                             \
+                                  ARRAY(a),                    \
+                                  ARRAY(b),                    \
+                                  (af_conv_mode)method,             \
+                                  AF_CONV_AUTO));                   \
+        return JLONG(ret);                                          \
+    }                                                               \
 
-FFT_DEF(fft)
-FFT_DEF(fft2)
-FFT_DEF(fft3)
-FFT_DEF(ifft)
-FFT_DEF(ifft2)
-FFT_DEF(ifft3)
+CONVOLVE(1)
+CONVOLVE(2)
+CONVOLVE(3)
 
-JNIEXPORT jlong JNICALL SIGNAL_FUNC(convolve)(JNIEnv *env, jclass clazz, jlong a, jlong b)
-{
-    jlong ret;
-    try {
-        af::array *A = (af::array*)(a);
-        af::array *B = (af::array*)(b);
-        af::array *res = new af::array();
-        (*res) = af::convolve( (*A) , (*B) );
-        ret = (jlong)(res);
-    } catch(af::exception& e) {
-        ret = 0;
-    } catch(std::exception& e) {
-        ret = 0;
-    }
-    return ret;
-}
+#define FFT(func, is_inv)                                   \
+    JNIEXPORT jlong JNICALL SIGNAL_FUNC(func)(JNIEnv *env,  \
+                                              jclass clazz, \
+                                              jlong a,      \
+                                              int dim0,     \
+                                              int method)   \
+    {                                                       \
+        af_array ret = 0;                                   \
+        double norm = 1.0;                                  \
+        dim_t dims[4];                                      \
+        AF_TO_JAVA(af_get_dims(dims + 0,                    \
+                               dims + 1,                    \
+                               dims + 2,                    \
+                               dims + 3,                    \
+                               ARRAY(a)));                  \
+        if (is_inv) norm *= dims[0];                        \
+        AF_TO_JAVA(af_##func(&ret,                          \
+                             ARRAY(a),                      \
+                             norm, dim0));                  \
+        return JLONG(ret);                                  \
+    }                                                       \
+
+FFT(fft, true)
+FFT(ifft, false)
+
+#define FFT2(func, is_inv)                                  \
+    JNIEXPORT jlong JNICALL SIGNAL_FUNC(func)(JNIEnv *env,  \
+                                              jclass clazz, \
+                                              jlong a,      \
+                                              int dim0,     \
+                                              int dim1,     \
+                                              int method)   \
+    {                                                       \
+        af_array ret = 0;                                   \
+        double norm = 1.0;                                  \
+        dim_t dims[4];                                      \
+        AF_TO_JAVA(af_get_dims(dims + 0,                    \
+                               dims + 1,                    \
+                               dims + 2,                    \
+                               dims + 3,                    \
+                               ARRAY(a)));                  \
+        if (is_inv) norm *= dims[0] * dims[1];              \
+        AF_TO_JAVA(af_##func(&ret,                          \
+                             ARRAY(a),                      \
+                             norm, dim0, dim1));            \
+        return JLONG(ret);                                  \
+    }                                                       \
+
+FFT2(fft2, true)
+FFT2(ifft2, false)
+
+#define FFT3(func, is_inv)                                  \
+    JNIEXPORT jlong JNICALL SIGNAL_FUNC(func)(JNIEnv *env,  \
+                                              jclass clazz, \
+                                              jlong a,      \
+                                              int dim0,     \
+                                              int dim1,     \
+                                              int dim2,     \
+                                              int method)   \
+    {                                                       \
+        af_array ret = 0;                                   \
+        double norm = 1.0;                                  \
+        dim_t dims[4];                                      \
+        AF_TO_JAVA(af_get_dims(dims + 0,                    \
+                               dims + 1,                    \
+                               dims + 2,                    \
+                               dims + 3,                    \
+                               ARRAY(a)));                  \
+        if (is_inv) norm *= dims[0] * dims[1] * dims[2];    \
+        AF_TO_JAVA(af_##func(&ret,                          \
+                             ARRAY(a),                      \
+                             norm, dim0, dim1, dim2));      \
+        return JLONG(ret);                                  \
+    }                                                       \
+
+FFT3(fft3, true)
+FFT3(ifft3, false)
 
 END_EXTERN_C

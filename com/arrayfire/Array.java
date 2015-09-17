@@ -13,8 +13,6 @@ public class Array implements AutoCloseable {
         System.loadLibrary("af_java");
     }
 
-    public native static void info();
-
     private native static void destroyArray(long ref);
     private native static int[] getDims(long ref);
     private native static int   getType(long ref);
