@@ -16,6 +16,7 @@ AF_JAVA_JAR	= $(AF_JAVA_PATH)/ArrayFire.jar
 AF_JAVA_MANIFEST= $(AF_JAVA_PATH)/Manifest.txt
 AF_JAVA_COM     = $(shell ls com/arrayfire/*.java)
 AF_JAVA_CLASSES = $(patsubst %.java, %.class, $(AF_JAVA_COM))
+AF_JNI_SRC      = $(shell ls $(AF_JAVA_PATH)/src/*.cpp)
 
 ifeq ($(findstring opencl, $(MAKECMDGOALS)), opencl)
 	AF=afopencl
@@ -44,8 +45,8 @@ $(AF_JAVA_LIB): $(AF_JAVA_LIB_EXT)
 	cp $(AF_JAVA_LIB_EXT) $(AF_JAVA_LIB)
 	cp $(AF_LIB_PATH)/lib$(AF).so $(AF_JAVA_PATH)/$(LIB)
 
-$(AF_JAVA_LIB_EXT): $(AF_JAVA_PATH)/src/java_wrapper.cpp
-	gcc -shared -fPIC $< $(AF_CFLAGS) -L$(AF_LIB_PATH) -l$(AF) -o $@
+$(AF_JAVA_LIB_EXT): $(AF_JNI_SRC)
+	gcc -shared -fPIC $(AF_JNI_SRC) $(AF_CFLAGS) -L$(AF_LIB_PATH) -l$(AF) -o $@
 
 clean:
 	rm -f lib/*.so $(AF_JAVA_JAR)
