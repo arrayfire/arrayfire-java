@@ -29,10 +29,10 @@ public class HelloWorld {
         }
 
         try {
-            Array A = new Array(), B = new Array(), C = new Array();
-
             // Get info about arrayfire information
             Util.info();
+
+            Array A = new Array(), B = new Array(), C = new Array();
 
             // Send data to ArrayFire
             Data.createArray(A, dims, left);
