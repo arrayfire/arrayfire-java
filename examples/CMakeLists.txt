@@ -1,13 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(AFJava-Examples)
 
-FIND_PACKAGE(Java COMPONENTS Runtime)
+FIND_PACKAGE(Java REQUIRED)
 INCLUDE(UseJava)
-
-IF(NOT Java_FOUND)
-    MESSAGE(FATAL_ERROR "Java SDK not found, if java is installed to non standard location, please
-    make sure to set JAVA_HOME environmental variable")
-ENDIF()
 
 FILE(GLOB af_examples_src "*.java")
 

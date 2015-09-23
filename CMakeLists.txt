@@ -13,13 +13,8 @@ IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
       "MinSizeRel" "RelWithDebInfo")
 ENDIF()
 
-FIND_PACKAGE(Java COMPONENTS Development)
+FIND_PACKAGE(Java REQUIRED)
 INCLUDE(UseJava)
-
-IF(NOT Java_FOUND)
-    MESSAGE(FATAL_ERROR "Java SDK not found, if java is installed to non standard location, please
-    make sure to set JAVA_HOME environmental variable")
-ENDIF()
 
 ADD_SUBDIRECTORY(src)
 
