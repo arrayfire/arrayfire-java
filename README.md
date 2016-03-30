@@ -12,7 +12,10 @@ Prerequisites
     - [Download binary installers](http://www.arrayfire.com/download)
     - [Build from source](https://github.com/arrayfire/arrayfire)
 
-- The latest version of `JAVA SDK`. Do take note that if you are using OpenJDK, then you need to download the version `1.7` only; `1.8` isn't supported. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
+- The latest version of `JAVA SDK`. It has been tested with OpenJDK 1.7 and OpenJDK 1.8. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
+
+- CUDA
+    - Tested for CUDA 7.5
 
 - make
     - `GNU Make` on Linux
