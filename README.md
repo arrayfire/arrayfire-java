@@ -12,7 +12,7 @@ Prerequisites
     - [Download binary installers](http://www.arrayfire.com/download)
     - [Build from source](https://github.com/arrayfire/arrayfire)
 
-- The latest version of `JAVA SDK`. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
+- The latest version of `JAVA SDK`. Do take note that if you are using OpenJDK, then you need to download the version `1.7` only; `1.8` isn't supported. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
 
 - make
     - `GNU Make` on Linux
@@ -40,18 +40,22 @@ Usage
 
 After you the necessary pre-requisites, edit the following paramets
 
-- Open `Makefile` and change `AF_PATH` to the right location
+- Open `Makefile` and change `JAVA_HOME` together with `AF_PATH` to the right location
 
 
 ### Linux
 
 - To build the JNI Wrapper for ArrayFire use
     - `make cuda`   to build using CUDA
+       - alternatively, you can pass in environment variables to the `Makefile` like this: `JAVA_HOME=<path to the Java SDK> AF_PATH=<path to ArrayFire> make cuda`
     - `make opencl` to build using OpenCL
+       - alternatively, you can pass in environment variables to the `Makefile` like this: `JAVA_HOME=<path to the Java SDK> AF_PATH=<path to ArrayFire> make cuda`
 
 - To build the examples do one of the following from the examples directory
     - `make cuda run  ` to use build and run examples using CUDA
+       - alternatively, you can pass in environment variables to the `Makefile` like this: `JAVA_HOME=<path to the Java SDK> AF_PATH=<path to ArrayFire> make cuda`
     - `make opencl run` to use build and run examples using OpenCL
+       - alternatively, you can pass in environment variables to the `Makefile` like this: `JAVA_HOME=<path to the Java SDK> AF_PATH=<path to ArrayFire> make cuda`
 
 Documentation
 ---------------
