@@ -1,5 +1,4 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-PROJECT(AFJava-Examples)
 
 FIND_PACKAGE(Java REQUIRED)
 INCLUDE(UseJava)
@@ -19,7 +18,9 @@ MACRO(BUILD_EXAMPLE src)
     # install examples jar
     INSTALL_JAR(${EXAMPLE} examples)
     # add target for running examples
-    ADD_CUSTOM_TARGET(ex${EXAMPLE} ${Java_JAVA_EXECUTABLE} -cp .:${_afJar}:${_jarFile} ${EXAMPLE})
+    ADD_CUSTOM_TARGET(ex${EXAMPLE} ${Java_JAVA_EXECUTABLE}
+        -Djava.library.path="${PROJECT_BINARY_DIR}/src"
+        -cp .:${_afJar}:${_jarFile} ${EXAMPLE})
 ENDMACRO()
 
 FOREACH(FILE ${af_examples_src})
