@@ -2,6 +2,12 @@ package com.arrayfire;
 
 public class Util {
 
+    static {
+        System.loadLibrary("af_java");
+    }
+
+    public native static void info();
+
     public static String toString(Array a, String delim) {
         String ret_txt="";
         try {
@@ -25,6 +31,4 @@ public class Util {
         }
         return ret_ary;
     }
-
-    public native static void info();
 }
