@@ -5,6 +5,12 @@ INCLUDE(UseJava)
 
 FILE(GLOB af_examples_src "*.java")
 
+IF(WIN32)
+    SET(JAVA_INCLUDE_FLAG_SEP ";")
+ELSE(WIN32)
+    SET(JAVA_INCLUDE_FLAG_SEP ":")
+ENDIF(WIN32)
+
 MACRO(BUILD_EXAMPLE src)
     # get arrayfire jar file
     GET_TARGET_PROPERTY(_afJar ${AF_JAR} JAR_FILE)
@@ -20,7 +26,7 @@ MACRO(BUILD_EXAMPLE src)
     # add target for running examples
     ADD_CUSTOM_TARGET(ex${EXAMPLE} ${Java_JAVA_EXECUTABLE}
         -Djava.library.path="${PROJECT_BINARY_DIR}/src"
-        -cp .:${_afJar}:${_jarFile} ${EXAMPLE})
+        -cp ".${JAVA_INCLUDE_FLAG_SEP}${_afJar}${JAVA_INCLUDE_FLAG_SEP}${_jarFile}" ${EXAMPLE})
 ENDMACRO()
 
 FOREACH(FILE ${af_examples_src})
