@@ -3,3 +3,4 @@
 *.suo
 x64/*
 tmp
+build

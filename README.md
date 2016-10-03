@@ -1,4 +1,4 @@
-arrayfire_java
+arrayfire-java
 ==============
 
 [![Join the chat at https://gitter.im/arrayfire/arrayfire-java](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/arrayfire/arrayfire-java?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -17,13 +17,9 @@ Prerequisites
 - CUDA
     - Tested for CUDA 7.5
 
-- make
-    - `GNU Make` on Linux
-
-- C++ compiler
-    - `gcc` or `clang` on Linux
-
-- OSX and Windows support coming soon
+- CMake, minimum version of 2.8.
+	- On Linux/OSX, it defaults to standard makefiles.
+	- On Windows, we have tested with `NMake Makefiles`.
 
 Contents
 ---------------
@@ -34,31 +30,21 @@ Contents
 
 - `com/`: Contains the Java source files implementing algorithms
 
-- `lib/`: The location where the JNI library is stored
-
 - `examples`: contains a few examples demonstrating the usage
 
 Usage
 ----------------
 
-After you the necessary pre-requisites, edit the following paramets
+After you the necessary pre-requisites, do the following:
 
-- Open `Makefile` and change `JAVA_HOME` together with `AF_PATH` to the right location
-
-
-### Linux
-
-- To build the JNI Wrapper for ArrayFire use
-    - `make cuda`   to build using CUDA
-       - alternatively, you can pass in environment variables to the `Makefile` like this: `JAVA_HOME=<path to the Java SDK> AF_PATH=<path to ArrayFire> make cuda`
-    - `make opencl` to build using OpenCL
-       - alternatively, you can pass in environment variables to the `Makefile` like this: `JAVA_HOME=<path to the Java SDK> AF_PATH=<path to ArrayFire> make cuda`
-
-- To build the examples do one of the following from the examples directory
-    - `make cuda run  ` to use build and run examples using CUDA
-       - alternatively, you can pass in environment variables to the `Makefile` like this: `JAVA_HOME=<path to the Java SDK> AF_PATH=<path to ArrayFire> make cuda`
-    - `make opencl run` to use build and run examples using OpenCL
-       - alternatively, you can pass in environment variables to the `Makefile` like this: `JAVA_HOME=<path to the Java SDK> AF_PATH=<path to ArrayFire> make cuda`
+- `mkdir build`
+- `cd build`
+- Configure and generate the platform specific make files.
+	- `cmake ..` on Linux/OSX
+	- `cmake -G "NMake Makefiles" ..` on Windows from visual studio x64 command prompt.
+- Build the project and run helloworld example.
+	- `make && make exHelloWorld` on Linux/OSX.
+	- `nmake && nmake exHelloWorld` on Windows.
 
 Documentation
 ---------------
