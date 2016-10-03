@@ -12,7 +12,10 @@ Prerequisites
     - [Download binary installers](http://www.arrayfire.com/download)
     - [Build from source](https://github.com/arrayfire/arrayfire)
 
-- The latest version of `JAVA SDK`. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
+- The latest version of `JAVA SDK`. It has been tested with OpenJDK 1.7 and OpenJDK 1.8. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
+
+- CUDA
+    - Tested for CUDA 7.5
 
 - CMake, minimum version of 2.8.
 	- On Linux/OSX, it defaults to standard makefiles.
