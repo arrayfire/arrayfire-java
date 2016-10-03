@@ -14,13 +14,9 @@ Prerequisites
 
 - The latest version of `JAVA SDK`. Make sure there is an environmental variable `JAVA_HOME` pointing to the root directory of java sdk installation.
 
-- make
-    - `GNU Make` on Linux
-
-- C++ compiler
-    - `gcc` or `clang` on Linux
-
-- OSX and Windows support coming soon
+- CMake, minimum version of 2.8.
+	- On Linux/OSX, it defaults to standard makefiles.
+	- On Windows, we have tested with `NMake Makefiles`.
 
 Contents
 ---------------
@@ -31,27 +27,21 @@ Contents
 
 - `com/`: Contains the Java source files implementing algorithms
 
-- `lib/`: The location where the JNI library is stored
-
 - `examples`: contains a few examples demonstrating the usage
 
 Usage
 ----------------
 
-After you the necessary pre-requisites, edit the following paramets
+After you the necessary pre-requisites, do the following:
 
-- Open `Makefile` and change `AF_PATH` to the right location
-
-
-### Linux
-
-- To build the JNI Wrapper for ArrayFire use
-    - `make cuda`   to build using CUDA
-    - `make opencl` to build using OpenCL
-
-- To build the examples do one of the following from the examples directory
-    - `make cuda run  ` to use build and run examples using CUDA
-    - `make opencl run` to use build and run examples using OpenCL
+- `mkdir build`
+- `cd build`
+- Configure and generate the platform specific make files.
+	- `cmake ..` on Linux/OSX
+	- `cmake -G "NMake Makefiles" ..` on Windows from visual studio x64 command prompt.
+- Build the project and run helloworld example.
+	- `make && make exHelloWorld` on Linux/OSX.
+	- `nmake && nmake exHelloWorld` on Windows.
 
 Documentation
 ---------------
