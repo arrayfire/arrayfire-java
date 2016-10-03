@@ -20,7 +20,7 @@ ADD_SUBDIRECTORY(src)
 
 FILE(GLOB af_java_src "com/arrayfire/*.java")
 
-ADD_JAR(${AF_JAR} ${af_java_src} MANIFEST "${CMAKE_CURRENT_SOURCE_DIR}/Manifest.txt")
+ADD_JAR(${AF_JAR} ${af_java_src})
 
 ADD_DEPENDENCIES(${AF_JAR} ${AF_LIB})
 
