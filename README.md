@@ -1,7 +1,7 @@
 arrayfire-java
 ==============
 
-[![Join the chat at https://gitter.im/arrayfire/arrayfire-java](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/arrayfire/arrayfire-java?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[Slack Channel](https://join.slack.com/t/arrayfire-org/shared_invite/enQtMjI4MjIzMDMzMTczLWM4ODIyZjA3YmY3NWEwMjk2N2Q0YTQyNGMwZmU4ZjkxNGU0MjYzYmUzYTg3ZTM0MDQxOTE2OTJjNGVkOGEwN2M)
 
 This repository contains the files required to use ArrayFire from Java.
 
