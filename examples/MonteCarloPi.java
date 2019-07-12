@@ -17,12 +17,12 @@ public class MonteCarloPi {
     }
 
     public static double deviceCalcPi(int size) throws Exception {
-        Array x = new Array(), y = new Array(), res = new Array();
+        Array x = null, y = null, res = new Array();
         try {
 
             int[] dims =  new int[] {size, 1};
-            Data.randu(x, dims, Array.FloatType);
-            Data.randu(y, dims, Array.FloatType);
+            x = Array.randu(dims, Array.FloatType);
+            y = Array.randu(dims, Array.FloatType);
 
             Arith.mul(x, x, x);
             Arith.mul(y, y, y);
@@ -34,9 +34,9 @@ public class MonteCarloPi {
             return 4.0 * ((double)(count)) / size;
 
         } finally {
-            if (x != null) x.close();
-            if (y != null) y.close();
-            if (res != null) res.close();
+            x.close();
+            y.close();
+            res.close();
         }
     }
 
