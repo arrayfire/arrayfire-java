@@ -18,9 +18,18 @@ INCLUDE(UseJava)
 
 ADD_SUBDIRECTORY(src)
 
-FILE(GLOB af_java_src "com/arrayfire/*.java")
-
-ADD_JAR(${AF_JAR} ${af_java_src})
+ADD_JAR(${AF_JAR}
+  com/arrayfire/Algorithm.java
+  com/arrayfire/Arith.java
+  com/arrayfire/ArrayFire.java
+  com/arrayfire/Array.java
+  com/arrayfire/Data.java
+  com/arrayfire/DoubleComplex.java
+  com/arrayfire/FloatComplex.java
+  com/arrayfire/Image.java
+  com/arrayfire/Signal.java
+  com/arrayfire/Util.java
+  )
 
 ADD_DEPENDENCIES(${AF_JAR} ${AF_LIB})
 

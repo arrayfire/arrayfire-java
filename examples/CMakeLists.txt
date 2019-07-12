@@ -1,34 +1,31 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-FIND_PACKAGE(Java REQUIRED)
-INCLUDE(UseJava)
+find_package(Java REQUIRED)
+include(UseJava)
 
-FILE(GLOB af_examples_src "*.java")
-
-IF(WIN32)
+if(WIN32)
     SET(JAVA_INCLUDE_FLAG_SEP ";")
-ELSE(WIN32)
+else(WIN32)
     SET(JAVA_INCLUDE_FLAG_SEP ":")
-ENDIF(WIN32)
+endif(WIN32)
 
-MACRO(BUILD_EXAMPLE src)
+macro(BUILD_EXAMPLE src)
     # get arrayfire jar file
-    GET_TARGET_PROPERTY(_afJar ${AF_JAR} JAR_FILE)
+    get_target_property(_afJar ${AF_JAR} JAR_FILE)
     # extract file name from source file
-    GET_FILENAME_COMPONENT(EXAMPLE ${src} NAME_WE)
+    get_filename_component(EXAMPLE ${src} NAME_WE)
     # add jar file for given source file
-    ADD_JAR(${EXAMPLE} SOURCES ${src} INCLUDE_JARS ${_afJar})
+    add_jar(${EXAMPLE} SOURCES ${src} INCLUDE_JARS ${_afJar})
     # udpate the jar file with program entry point
-    GET_TARGET_PROPERTY(_jarFile ${EXAMPLE} JAR_FILE)
-    ADD_CUSTOM_COMMAND(TARGET ${EXAMPLE} COMMAND ${Java_JAR_EXECUTABLE} ufe ${_jarFile} ${EXAMPLE})
+    get_target_property(_jarFile ${EXAMPLE} JAR_FILE)
+    add_custom_command(TARGET ${EXAMPLE} COMMAND ${Java_JAR_EXECUTABLE} ufe ${_jarFile} ${EXAMPLE})
     # install examples jar
-    INSTALL_JAR(${EXAMPLE} examples)
+    install_jar(${EXAMPLE} examples)
     # add target for running examples
-    ADD_CUSTOM_TARGET(ex${EXAMPLE} ${Java_JAVA_EXECUTABLE}
+    add_custom_target(ex${EXAMPLE} ${Java_JAVA_EXECUTABLE}
         -Djava.library.path="${PROJECT_BINARY_DIR}/src"
         -cp ".${JAVA_INCLUDE_FLAG_SEP}${_afJar}${JAVA_INCLUDE_FLAG_SEP}${_jarFile}" ${EXAMPLE})
-ENDMACRO()
+endmacro()
 
-FOREACH(FILE ${af_examples_src})
-    BUILD_EXAMPLE(${FILE})
-ENDFOREACH()
+build_example(HelloWorld.java)
+build_example(MonteCarloPi.java)
