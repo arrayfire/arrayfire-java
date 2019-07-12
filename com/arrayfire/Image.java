@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-public class Image extends Array {
+public class Image extends ArrayFire {
 
     private native static long erode    (long a, long b);
     private native static long dilate   (long a, long b);

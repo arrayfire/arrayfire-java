@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-public class Array implements AutoCloseable {
+public class Array extends ArrayFire implements AutoCloseable{
 
     public static final int FloatType = 0;
     public static final int FloatComplexType = 1;
@@ -8,10 +8,6 @@ public class Array implements AutoCloseable {
     public static final int DoubleComplexType = 3;
     public static final int BooleanType = 4;
     public static final int IntType = 5;
-
-    static {
-        System.loadLibrary("af_java");
-    }
 
     private native static void destroyArray(long ref);
     private native static int[] getDims(long ref);
@@ -29,6 +25,29 @@ public class Array implements AutoCloseable {
         ref = other_ref;
     }
 
+    public Array(int[] dims, int type) throws Exception {
+        Data.allocate(this, dims, type);
+    }
+
+    public Array(int[] dims, float[] elems) throws Exception {
+        Data.createArray(this, dims, elems);
+    }
+
+
+    public Array(int[] dims, int[] elems) throws Exception {
+        Data.createArray(this, dims, elems);
+    }
+
+
+    public Array(int[] dims, FloatComplex[] elems) throws Exception {
+        Data.createArray(this, dims, elems);
+    }
+
+
+    public Array(int[] dims, DoubleComplex[] elems) throws Exception {
+        Data.createArray(this, dims, elems);
+    }
+
     protected void set(long other_ref) {
         if (ref != 0) destroyArray(ref);
         ref = other_ref;
@@ -43,13 +62,15 @@ public class Array implements AutoCloseable {
     }
 
     public String typeName(int ty) throws Exception {
-        if (ty == FloatType) return "float";
-        if (ty == DoubleType) return "double";
-        if (ty == IntType) return "int";
-        if (ty == BooleanType) return "boolean";
-        if (ty == FloatComplexType) return "FloatComplex";
-        if (ty == DoubleComplexType) return "DoubleComplex";
-        throw new Exception("Unknown type");
+        switch (ty) {
+        case FloatType: return "float";
+        case DoubleType: return "double";
+        case IntType: return "int";
+        case BooleanType: return "boolean";
+        case FloatComplexType: return "FloatComplex";
+        case DoubleComplexType: return "DoubleComplex";
+        default: throw new Exception("Unknown type");
+        }
     }
 
     protected static int[] dim4(int[] dims) throws Exception {
@@ -80,9 +101,55 @@ public class Array implements AutoCloseable {
         return;
     }
 
-    @Override
-    public void close() throws Exception {
-        if (ref != 0) destroyArray(ref);
+
+    public float[] getFloatArray() throws Exception {
+        return Data.getFloatArray(this);
     }
 
+    public double[] getDoubleArray() throws Exception {
+        return Data.getDoubleArray(this);
+    }
+
+    public FloatComplex[] getFloatComplexArray() throws Exception {
+        return Data.getFloatComplexArray(this);
+    }
+
+    public DoubleComplex[] getDoubleComplexArray() throws Exception {
+        return Data.getDoubleComplexArray(this);
+    }
+
+    public int[] getIntArray() throws Exception {
+        return Data.getIntArray(this);
+    }
+
+    public boolean[] getBooleanArray() throws Exception {
+        return Data.getBooleanArray(this);
+    }
+
+
+    // Binary operations
+    public static Array randu(int[] dims, int type) throws Exception {
+        Array array = new Array();
+        Data.randu(array, dims, type);
+        return array;
+    }
+
+
+    public static Array randn(int[] dims, int type) throws Exception {
+        Array array = new Array();
+        Data.randn(array, dims, type);
+        return array;
+    }
+
+    public static Array constant(double val, int[] dims, int type) throws Exception {
+        Array array = new Array();
+        Data.constant(array, val, dims, type);
+        return array;
+    }
+
+    @Override
+    public void close() throws Exception {
+        System.out.println("Destroying");
+        if (ref != 0) destroyArray(ref);
+    }
 }

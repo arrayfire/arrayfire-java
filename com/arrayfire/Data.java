@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-public class Data extends Array {
+public class Data extends ArrayFire {
 
     private native static long createEmptyArray(int[] dims, int type);
     private native static long createArrayFromFloat(int[] dims, float[] elems);
@@ -126,7 +126,6 @@ public class Data extends Array {
         if (ref == 0) throw new Exception("Failed to create Array");
         res.set(ref);
     }
-
 
     public static  float[] getFloatArray(Array A) throws Exception {
         A.assertType(Array.FloatType);

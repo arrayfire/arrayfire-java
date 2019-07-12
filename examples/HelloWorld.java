@@ -32,17 +32,16 @@ public class HelloWorld {
             // Get info about arrayfire information
             Util.info();
 
-            Array A = new Array(), B = new Array(), C = new Array();
-
             // Send data to ArrayFire
-            Data.createArray(A, dims, left);
-            Data.createArray(B, dims, right);
+            Array A = new Array(dims, left);
+            Array B = new Array(dims, right);
+            Array C = new Array();
 
             // Do vector addition on the device
             Arith.add(C, A, B);
 
             // Get result back to host memory
-            res = Data.getFloatArray(C);
+            res = C.getFloatArray();
 
             for(int i = 0; i < total; i++) {
                 str = Integer.toString(i) + ". ";
@@ -52,6 +51,9 @@ public class HelloWorld {
                 str = str + Float.toString(res[i]);
                 System.out.println(str);
             }
+            A.close();
+            B.close();
+            C.close();
 
         } catch (Exception e) {
             System.out.println("Failed to use ArrayFire");

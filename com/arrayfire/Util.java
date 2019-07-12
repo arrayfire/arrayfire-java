@@ -1,10 +1,6 @@
 package com.arrayfire;
 
-public class Util {
-
-    static {
-        System.loadLibrary("af_java");
-    }
+public class Util extends ArrayFire {
 
     public native static void info();
 
