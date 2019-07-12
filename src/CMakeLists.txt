@@ -8,11 +8,19 @@ IF(NOT ArrayFire_FOUND)
     directory")
 ENDIF()
 
-FILE(GLOB af_jni_headers "*.h")
-FILE(GLOB af_jni_sources "*.cpp")
-
 INCLUDE_DIRECTORIES(${JNI_INCLUDE_DIRS} ${ArrayFire_INCLUDE_DIRS})
-ADD_LIBRARY(${AF_LIB} SHARED ${af_jni_headers} ${af_jni_sources})
+
+ADD_LIBRARY(${AF_LIB} SHARED
+  jni_helper.h
+  algorithm.cpp
+  arith.cpp
+  array.cpp
+  data.cpp
+  image.cpp
+  signal.cpp
+  util.cpp
+  )
+
 TARGET_LINK_LIBRARIES(${AF_LIB} ${JNI_LIBRARIES} ${ArrayFire_LIBRARIES})
 
 IF(${UNIX})
