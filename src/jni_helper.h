@@ -1,23 +1,23 @@
 #pragma once
-#include "exception.h"
 #include <assert.h>
+#include "java/JavaException.h"
 
 #ifdef ANDROID
 #include <android/log.h>
-#define  LOG(...)  __android_log_print(ANDROID_LOG_INFO, "ArrayFireJNI", __VA_ARGS__)
+#define LOG(...) \
+  __android_log_print(ANDROID_LOG_INFO, "ArrayFireJNI", __VA_ARGS__)
 #define AF_INFO()
 #else
-#define LOG(msg,...) do {                       \
-        printf(__FILE__":%d: " msg "\n",        \
-               __LINE__, ##__VA_ARGS__);        \
-    } while (0)
+#define LOG(msg, ...)                                           \
+  do {                                                          \
+    printf(__FILE__ ":%d: " msg "\n", __LINE__, ##__VA_ARGS__); \
+  } while (0)
 #define AF_INFO() af::info()
 #endif
 
-
 #ifdef __cplusplus
-using af::af_cfloat;
 using af::af_cdouble;
+using af::af_cfloat;
 
 #define BEGIN_EXTERN_C extern "C" {
 #define END_EXTERN_C }
@@ -32,4 +32,3 @@ const int MaxDimSupported = 4;
 #define ARRAY(REF) (af_array)(REF)
 
 #define JLONG(ARR) (jlong)(ARR)
-
