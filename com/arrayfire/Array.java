@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-public class Array extends ArrayFire implements AutoCloseable{
+public class Array extends ArrayFire implements AutoCloseable {
 
     public static final int FloatType = 0;
     public static final int FloatComplexType = 1;
@@ -12,6 +12,8 @@ public class Array extends ArrayFire implements AutoCloseable{
     private native static void destroyArray(long ref);
     private native static int[] getDims(long ref);
     private native static int   getType(long ref);
+
+    private native static long createIdentityArray(int[] dims, int type);
 
     // Global reference to JVM object
     // to persist between JNI calls
@@ -145,6 +147,20 @@ public class Array extends ArrayFire implements AutoCloseable{
         Array array = new Array();
         Data.constant(array, val, dims, type);
         return array;
+    }
+
+    public static Array identity(int[] dims, int type) throws Exception {
+        int[] adims = Array.dim4(dims);
+        long ref = createIdentityArray(adims, FloatType);
+        if (ref == 0) { throw new Exception("Failed to create Array"); }
+        return new Array(ref);
+    }
+
+
+    public static Array identity(int[] dims) throws Exception {
+        int[] adims = Array.dim4(dims);
+        long ref = createIdentityArray(adims, FloatType);
+        return new Array(ref);
     }
 
     @Override

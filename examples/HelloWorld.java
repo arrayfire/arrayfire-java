@@ -36,6 +36,16 @@ public class HelloWorld {
             Array A = new Array(dims, left);
             Array B = new Array(dims, right);
             Array C = new Array();
+            Array D = Array.identity(new int[] {0, 5}, Array.FloatType);
+            float[] values = D.getFloatArray();
+            for (int x = 0; x < 5; x++) {
+                for (int y = 0; y < 5; y++) {
+                    System.out.print(Float.toString(values[5 * x + y]) + " ");
+                }
+
+                System.out.println();
+            }
+
 
             // Do vector addition on the device
             Arith.add(C, A, B);
@@ -54,10 +64,11 @@ public class HelloWorld {
             A.close();
             B.close();
             C.close();
+            D.close();
 
         } catch (Exception e) {
             System.out.println("Failed to use ArrayFire");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }

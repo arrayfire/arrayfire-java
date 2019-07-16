@@ -6,7 +6,7 @@ BEGIN_EXTERN_C
 
 JNIEXPORT void JNICALL ARRAY_FUNC(destroyArray)(JNIEnv *env, jclass clazz, jlong ref)
 {
-    AF_TO_JAVA(af_release_array(ARRAY(ref)));
+    THROWS(af_release_array(ARRAY(ref)));
 }
 
 JNIEXPORT jintArray JNICALL ARRAY_FUNC(getDims)(JNIEnv *env, jclass clazz, jlong ref)
@@ -17,7 +17,7 @@ JNIEXPORT jintArray JNICALL ARRAY_FUNC(getDims)(JNIEnv *env, jclass clazz, jlong
     }
 
     dim_t dims[4];
-    AF_TO_JAVA(af_get_dims(dims + 0,
+    THROWS(af_get_dims(dims + 0,
                            dims + 1,
                            dims + 2,
                            dims + 3,
@@ -36,8 +36,18 @@ JNIEXPORT jintArray JNICALL ARRAY_FUNC(getDims)(JNIEnv *env, jclass clazz, jlong
 JNIEXPORT jint JNICALL ARRAY_FUNC(getType)(JNIEnv *env, jclass clazz, jlong ref)
 {
     af_dtype ty = f32;
-    AF_TO_JAVA(af_get_type(&ty, ARRAY(ref)));
+    THROWS(af_get_type(&ty, ARRAY(ref)));
     return ty;
+}
+
+JNIEXPORT jlong JNICALL ARRAY_FUNC(createIdentityArray)(JNIEnv *env, jclass clazz,
+                                                    jintArray dims, jint type) {
+  af_array ret = 0;
+  jint *dimptr = env->GetIntArrayElements(dims, 0);
+  dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
+  env->ReleaseIntArrayElements(dims, dimptr, 0);
+  THROWS(af_identity(&ret, 4, tdims, (af_dtype)(type)));
+  return JLONG(ret);
 }
 
 END_EXTERN_C
