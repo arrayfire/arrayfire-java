@@ -1,6 +1,6 @@
 #pragma once
-#include <arrayfire.h>
-#include <jni.h>
+#include "exception.h"
+#include <assert.h>
 
 #ifdef ANDROID
 #include <android/log.h>
@@ -27,9 +27,9 @@ using af::af_cdouble;
 
 const int MaxDimSupported = 4;
 
-//FIXME: Handle errors properly
 #define AF_TO_JAVA(fn) fn
 
 #define ARRAY(REF) (af_array)(REF)
 
 #define JLONG(ARR) (jlong)(ARR)
+
