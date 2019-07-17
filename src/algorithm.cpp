@@ -8,7 +8,7 @@ BEGIN_EXTERN_C
   JNIEXPORT jdouble JNICALL ALGO_FUNC(func##All)(JNIEnv * env, jclass clazz, \
                                                  jlong a) {                  \
     double real, imag;                                                       \
-    (af_##func##_all(&real, &imag, ARRAY(a)));                               \
+    THROWS(af_##func##_all(&real, &imag, ARRAY(a)));                         \
     return real;                                                             \
   }
 
@@ -20,7 +20,7 @@ SCALAR_RET_OP_DEF(min)
   JNIEXPORT jlong JNICALL ALGO_FUNC(func)(JNIEnv * env, jclass clazz, jlong a, \
                                           jint dim) {                          \
     af_array ret = 0;                                                          \
-    (af_##func(&ret, ARRAY(a), dim));                                          \
+    THROWS(af_##func(&ret, ARRAY(a), dim));                                    \
     return JLONG(ret);                                                         \
   }
 

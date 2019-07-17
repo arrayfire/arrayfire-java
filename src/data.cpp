@@ -14,7 +14,7 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createRanduArray)(JNIEnv *env, jclass clazz,
   jint *dimptr = env->GetIntArrayElements(dims, 0);
   dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
   env->ReleaseIntArrayElements(dims, dimptr, 0);
-  (af_randu(&ret, 4, tdims, (af_dtype)(type)));
+  THROWS(af_randu(&ret, 4, tdims, (af_dtype)(type)));
   return JLONG(ret);
 }
 
@@ -24,7 +24,7 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createRandnArray)(JNIEnv *env, jclass clazz,
   jint *dimptr = env->GetIntArrayElements(dims, 0);
   dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
   env->ReleaseIntArrayElements(dims, dimptr, 0);
-  (af_randn(&ret, 4, tdims, (af_dtype)(type)));
+  THROWS(af_randn(&ret, 4, tdims, (af_dtype)(type)));
   return JLONG(ret);
 }
 
@@ -34,7 +34,7 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createConstantsArray)(
   jint *dimptr = env->GetIntArrayElements(dims, 0);
   dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
   env->ReleaseIntArrayElements(dims, dimptr, 0);
-  (af_constant(&ret, val, 4, tdims, (af_dtype)(type)));
+  THROWS(af_constant(&ret, val, 4, tdims, (af_dtype)(type)));
   return JLONG(ret);
 }
 
@@ -44,7 +44,7 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createEmptyArray)(JNIEnv *env, jclass clazz,
   jint *dimptr = env->GetIntArrayElements(dims, 0);
   dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
   env->ReleaseIntArrayElements(dims, dimptr, 0);
-  (af_create_handle(&ret, 4, tdims, (af_dtype)(type)));
+  THROWS(af_create_handle(&ret, 4, tdims, (af_dtype)(type)));
   return JLONG(ret);
 }
 
@@ -55,7 +55,7 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createEmptyArray)(JNIEnv *env, jclass clazz,
     jint *dimptr = env->GetIntArrayElements(dims, 0);                   \
     dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};      \
     void *inptr = (void *)env->Get##Ty##ArrayElements(elems, 0);        \
-    (af_create_array(&ret, inptr, 4, tdims, dty));                      \
+    THROWS(af_create_array(&ret, inptr, 4, tdims, dty));                \
     env->ReleaseIntArrayElements(dims, dimptr, 0);                      \
     env->Release##Ty##ArrayElements(elems, (j##ty *)inptr, 0);          \
     return JLONG(ret);                                                  \
@@ -135,7 +135,7 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createArrayFromDoubleComplex)(
 
   dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
 
-  (af_create_array(&ret, (void *)tmp, 4, tdims, c64));
+  THROWS(af_create_array(&ret, (void *)tmp, 4, tdims, c64));
 
   free(tmp);
   env->ReleaseIntArrayElements(dims, dimptr, 0);
@@ -147,7 +147,7 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createArrayFromDoubleComplex)(
       JNIEnv * env, jclass clazz, jlong ref) {                  \
     j##ty##Array result;                                        \
     dim_t elements = 0;                                         \
-    (af_get_elements(&elements, ARRAY(ref)));                   \
+    THROWS(af_get_elements(&elements, ARRAY(ref)));             \
     result = env->New##Ty##Array(elements);                     \
     if (result == NULL) {                                       \
       LOG("Something terrible happened. "                       \
@@ -155,7 +155,7 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createArrayFromDoubleComplex)(
       return NULL;                                              \
     }                                                           \
     j##ty *resf = env->Get##Ty##ArrayElements(result, 0);       \
-    (af_get_data_ptr((void *)resf, ARRAY(ref)));                \
+    THROWS(af_get_data_ptr((void *)resf, ARRAY(ref)));          \
     env->Release##Ty##ArrayElements(result, resf, 0);           \
     return result;                                              \
   }
@@ -170,7 +170,7 @@ JNIEXPORT jobjectArray JNICALL DATA_FUNC(getFloatComplexFromArray)(JNIEnv *env,
                                                                    jlong ref) {
   jobjectArray result;
   dim_t elements = 0;
-  (af_get_elements(&elements, ARRAY(ref)));
+  THROWS(af_get_elements(&elements, ARRAY(ref)));
 
   jclass cls = env->FindClass("com/arrayfire/FloatComplex");
   jmethodID id = env->GetMethodID(cls, "<init>", "(FF)V");
@@ -179,7 +179,7 @@ JNIEXPORT jobjectArray JNICALL DATA_FUNC(getFloatComplexFromArray)(JNIEnv *env,
   result = env->NewObjectArray(elements, cls, NULL);
 
   af_cfloat *tmp = (af_cfloat *)malloc(sizeof(af_cfloat) * elements);
-  (af_get_data_ptr((void *)tmp, ARRAY(ref)));
+  THROWS(af_get_data_ptr((void *)tmp, ARRAY(ref)));
 
   for (int i = 0; i < elements; i++) {
     float re = tmp[i].real;
@@ -196,7 +196,7 @@ JNIEXPORT jobjectArray JNICALL
 DATA_FUNC(getDoubleComplexFromArray)(JNIEnv *env, jclass clazz, jlong ref) {
   jobjectArray result;
   dim_t elements = 0;
-  (af_get_elements(&elements, ARRAY(ref)));
+  THROWS(af_get_elements(&elements, ARRAY(ref)));
 
   jclass cls = env->FindClass("com/arrayfire/DoubleComplex");
   jmethodID id = env->GetMethodID(cls, "<init>", "(DD)V");
@@ -205,7 +205,7 @@ DATA_FUNC(getDoubleComplexFromArray)(JNIEnv *env, jclass clazz, jlong ref) {
   result = env->NewObjectArray(elements, cls, NULL);
 
   af_cdouble *tmp = (af_cdouble *)malloc(sizeof(af_cdouble) * elements);
-  (af_get_data_ptr((void *)tmp, ARRAY(ref)));
+  THROWS(af_get_data_ptr((void *)tmp, ARRAY(ref)));
 
   for (int i = 0; i < elements; i++) {
     double re = tmp[i].real;

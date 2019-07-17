@@ -4,40 +4,40 @@ BEGIN_EXTERN_C
 
 #define ARITH_FUNC(FUNC) AF_MANGLE(Arith, FUNC)
 
-#define BINARY_OP_DEF(func)                                                    \
-  JNIEXPORT jlong JNICALL ARITH_FUNC(func)(JNIEnv * env, jclass clazz,         \
-                                           jlong a, jlong b) {                 \
-    af_array ret = 0;                                                          \
-    AF_TO_JAVA(af_##func(&ret, ARRAY(a), ARRAY(b), false));                    \
-    return JLONG(ret);                                                         \
-  }                                                                            \
-                                                                               \
-  JNIEXPORT jlong JNICALL ARITH_FUNC(func##f)(JNIEnv * env, jclass clazz,      \
-                                              jlong a, jfloat b) {             \
-    af_array ret = 0;                                                          \
-    af_array tmp = 0;                                                          \
-    dim_t dims[4];                                                             \
-    af_dtype ty = f32;                                                         \
-    AF_TO_JAVA(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a))); \
-    AF_TO_JAVA(af_get_type(&ty, ARRAY(a)));                                    \
-    AF_TO_JAVA(af_constant(&tmp, b, 4, dims, ty));                             \
-    AF_TO_JAVA(af_##func(&ret, ARRAY(a), tmp, false));                         \
-    AF_TO_JAVA(af_release_array(tmp));                                         \
-    return JLONG(ret);                                                         \
-  }                                                                            \
-                                                                               \
-  JNIEXPORT jlong JNICALL ARITH_FUNC(f##func)(JNIEnv * env, jclass clazz,      \
-                                              float a, jlong b) {              \
-    af_array ret = 0;                                                          \
-    af_array tmp = 0;                                                          \
-    dim_t dims[4];                                                             \
-    af_dtype ty = f32;                                                         \
-    AF_TO_JAVA(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(b))); \
-    AF_TO_JAVA(af_get_type(&ty, ARRAY(b)));                                    \
-    AF_TO_JAVA(af_constant(&tmp, a, 4, dims, ty));                             \
-    AF_TO_JAVA(af_##func(&ret, tmp, ARRAY(b), false));                         \
-    AF_TO_JAVA(af_release_array(tmp));                                         \
-    return JLONG(ret);                                                         \
+#define BINARY_OP_DEF(func)                                                \
+  JNIEXPORT jlong JNICALL ARITH_FUNC(func)(JNIEnv * env, jclass clazz,     \
+                                           jlong a, jlong b) {             \
+    af_array ret = 0;                                                      \
+    THROWS(af_##func(&ret, ARRAY(a), ARRAY(b), false));                    \
+    return JLONG(ret);                                                     \
+  }                                                                        \
+                                                                           \
+  JNIEXPORT jlong JNICALL ARITH_FUNC(func##f)(JNIEnv * env, jclass clazz,  \
+                                              jlong a, jfloat b) {         \
+    af_array ret = 0;                                                      \
+    af_array tmp = 0;                                                      \
+    dim_t dims[4];                                                         \
+    af_dtype ty = f32;                                                     \
+    THROWS(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a))); \
+    THROWS(af_get_type(&ty, ARRAY(a)));                                    \
+    THROWS(af_constant(&tmp, b, 4, dims, ty));                             \
+    THROWS(af_##func(&ret, ARRAY(a), tmp, false));                         \
+    THROWS(af_release_array(tmp));                                         \
+    return JLONG(ret);                                                     \
+  }                                                                        \
+                                                                           \
+  JNIEXPORT jlong JNICALL ARITH_FUNC(f##func)(JNIEnv * env, jclass clazz,  \
+                                              float a, jlong b) {          \
+    af_array ret = 0;                                                      \
+    af_array tmp = 0;                                                      \
+    dim_t dims[4];                                                         \
+    af_dtype ty = f32;                                                     \
+    THROWS(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(b))); \
+    THROWS(af_get_type(&ty, ARRAY(b)));                                    \
+    THROWS(af_constant(&tmp, a, 4, dims, ty));                             \
+    THROWS(af_##func(&ret, tmp, ARRAY(b), false));                         \
+    THROWS(af_release_array(tmp));                                         \
+    return JLONG(ret);                                                     \
   }
 
 BINARY_OP_DEF(add)
@@ -56,7 +56,7 @@ BINARY_OP_DEF(pow)
   JNIEXPORT jlong JNICALL ARITH_FUNC(func)(JNIEnv * env, jclass clazz, \
                                            jlong a) {                  \
     af_array ret = 0;                                                  \
-    AF_TO_JAVA(af_##func(&ret, ARRAY(a)));                             \
+    THROWS(af_##func(&ret, ARRAY(a)));                                 \
     return JLONG(ret);                                                 \
   }
 
