@@ -164,7 +164,6 @@ public class Array extends ArrayFire implements AutoCloseable {
 
   @Override
   public void close() throws Exception {
-    System.out.println("Destroying");
     if (ref != 0)
       destroyArray(ref);
   }
