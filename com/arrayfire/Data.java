@@ -22,7 +22,6 @@ public class Data extends ArrayFire {
 
   private native static long createIdentityArray(int[] dims, int type);
 
-
   public static float[] getFloatArray(Array A) throws Exception {
     A.assertType(Array.FloatType);
     return getFloatFromArray(A.ref);
@@ -53,44 +52,29 @@ public class Data extends ArrayFire {
     return getBooleanFromArray(A.ref);
   }
 
-    // Binary operations
-  public static Array randu(int[] dims, int type) throws Exception {
-      int[] adims = Array.dim4(dims);
-      long ref = createRanduArray(adims, type);
-      if (ref == 0)
-          throw new Exception("Failed to create Array");
-      return new Array(ref);
+  // Binary operations
+  public static void randu(Array res, int[] dims, int type) throws Exception {
+    int[] adims = Array.dim4(dims);
+    res.set(createRanduArray(adims, type));
   }
 
-  public static Array randn(int[] dims, int type) throws Exception {
-      int[] adims = Array.dim4(dims);
-      long ref = createRandnArray(adims, type);
-      if (ref == 0)
-          throw new Exception("Failed to create Array");
-      return new Array(ref);
+  public static void randn(Array res, int[] dims, int type) throws Exception {
+    int[] adims = Array.dim4(dims);
+    res.set(createRandnArray(adims, type));
   }
 
-  public static Array constant(double val, int[] dims, int type) throws Exception {
-      int[] adims = Array.dim4(dims);
-      long ref = createConstantsArray(val, adims, type);
-      if (ref == 0)
-          throw new Exception("Failed to create Array");
-      return new Array(ref);
+  public static void constant(Array res, double val, int[] dims, int type) throws Exception {
+    int[] adims = Array.dim4(dims);
+    res.set(createConstantsArray(val, adims, type));
   }
 
-  public static Array identity(int[] dims, int type) throws Exception {
-      int[] adims = Array.dim4(dims);
-      long ref = createIdentityArray(adims, type);
-      if (ref == 0) {
-          throw new Exception("Failed to create Array");
-      }
-      return new Array(ref);
+  public static void identity(Array res, int[] dims, int type) throws Exception {
+    int[] adims = Array.dim4(dims);
+    res.set(createIdentityArray(adims, type));
   }
 
-  public static Array identity(int[] dims) throws Exception {
-      int[] adims = Array.dim4(dims);
-      long ref = createIdentityArray(adims, Array.FloatType);
-      return new Array(ref);
+  public static void identity(Array res, int[] dims) throws Exception {
+    identity(res, dims, Array.FloatType);
   }
 
 }
