@@ -2,20 +2,6 @@ package com.arrayfire;
 
 public class Data extends ArrayFire {
 
-  private native static long createEmptyArray(int[] dims, int type);
-
-  private native static long createArrayFromFloat(int[] dims, float[] elems);
-
-  private native static long createArrayFromDouble(int[] dims, double[] elems);
-
-  private native static long createArrayFromFloatComplex(int[] dims, FloatComplex[] elems);
-
-  private native static long createArrayFromDoubleComplex(int[] dims, DoubleComplex[] elems);
-
-  private native static long createArrayFromInt(int[] dims, int[] elems);
-
-  private native static long createArrayFromBoolean(int[] dims, boolean[] elems);
-
   private native static long createRanduArray(int[] dims, int type);
 
   private native static long createRandnArray(int[] dims, int type);
@@ -34,122 +20,8 @@ public class Data extends ArrayFire {
 
   private native static DoubleComplex[] getDoubleComplexFromArray(long ref);
 
-  // Below version of constructor
-  // allocates space on device and initializes
-  // all elemets to zero
+  private native static long createIdentityArray(int[] dims, int type);
 
-  public static void allocate(Array res, int[] dims, int type) throws Exception {
-    int[] adims = Array.dim4(dims);
-    long ref = createEmptyArray(adims, type);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
-  }
-
-  public static void createArray(Array res, int[] dims, float[] elems) throws Exception {
-    int[] adims = Array.dim4(dims);
-
-    int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
-
-    if (elems == null) {
-      throw new Exception("Null elems object provided");
-    }
-
-    if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
-    }
-
-    long ref = createArrayFromFloat(adims, elems);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
-  }
-
-  public static void createArray(Array res, int[] dims, double[] elems) throws Exception {
-    int[] adims = Array.dim4(dims);
-
-    int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
-
-    if (elems == null) {
-      throw new Exception("Null elems object provided");
-    }
-
-    if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
-    }
-
-    long ref = createArrayFromDouble(adims, elems);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
-  }
-
-  public static void createArray(Array res, int[] dims, int[] elems) throws Exception {
-    int[] adims = Array.dim4(dims);
-
-    int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
-
-    if (elems == null) {
-      throw new Exception("Null elems object provided");
-    }
-
-    if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
-    }
-
-    long ref = createArrayFromInt(adims, elems);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
-  }
-
-  public static void createArray(Array res, int[] dims, FloatComplex[] elems) throws Exception {
-    int[] adims = Array.dim4(dims);
-
-    int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
-
-    if (elems == null) {
-      throw new Exception("Null elems object provided");
-    }
-
-    if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
-    }
-
-    long ref = createArrayFromFloatComplex(adims, elems);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
-  }
-
-  public static void createArray(Array res, int[] dims, DoubleComplex[] elems) throws Exception {
-    int[] adims = Array.dim4(dims);
-
-    int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
-
-    if (elems == null) {
-      throw new Exception("Null elems object provided");
-    }
-
-    if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
-    }
-
-    long ref = createArrayFromDoubleComplex(adims, elems);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
-  }
 
   public static float[] getFloatArray(Array A) throws Exception {
     A.assertType(Array.FloatType);
@@ -181,28 +53,44 @@ public class Data extends ArrayFire {
     return getBooleanFromArray(A.ref);
   }
 
-  // Binary operations
-  public static void randu(Array res, int[] dims, int type) throws Exception {
-    int[] adims = Array.dim4(dims);
-    long ref = createRanduArray(adims, type);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
+    // Binary operations
+  public static Array randu(int[] dims, int type) throws Exception {
+      int[] adims = Array.dim4(dims);
+      long ref = createRanduArray(adims, type);
+      if (ref == 0)
+          throw new Exception("Failed to create Array");
+      return new Array(ref);
   }
 
-  public static void randn(Array res, int[] dims, int type) throws Exception {
-    int[] adims = Array.dim4(dims);
-    long ref = createRandnArray(adims, type);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
+  public static Array randn(int[] dims, int type) throws Exception {
+      int[] adims = Array.dim4(dims);
+      long ref = createRandnArray(adims, type);
+      if (ref == 0)
+          throw new Exception("Failed to create Array");
+      return new Array(ref);
   }
 
-  public static void constant(Array res, double val, int[] dims, int type) throws Exception {
-    int[] adims = Array.dim4(dims);
-    long ref = createConstantsArray(val, adims, type);
-    if (ref == 0)
-      throw new Exception("Failed to create Array");
-    res.set(ref);
+  public static Array constant(double val, int[] dims, int type) throws Exception {
+      int[] adims = Array.dim4(dims);
+      long ref = createConstantsArray(val, adims, type);
+      if (ref == 0)
+          throw new Exception("Failed to create Array");
+      return new Array(ref);
   }
+
+  public static Array identity(int[] dims, int type) throws Exception {
+      int[] adims = Array.dim4(dims);
+      long ref = createIdentityArray(adims, type);
+      if (ref == 0) {
+          throw new Exception("Failed to create Array");
+      }
+      return new Array(ref);
+  }
+
+  public static Array identity(int[] dims) throws Exception {
+      int[] adims = Array.dim4(dims);
+      long ref = createIdentityArray(adims, Array.FloatType);
+      return new Array(ref);
+  }
+
 }

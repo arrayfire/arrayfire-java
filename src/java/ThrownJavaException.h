@@ -1,7 +1,3 @@
-#include <arrayfire.h>
-#include <assert.h>
-#include <jni.h>
-#include <stdexcept>
 
 namespace java {
 class ThrownJavaException : std::runtime_error {

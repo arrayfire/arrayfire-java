@@ -15,7 +15,19 @@ public class Array extends ArrayFire implements AutoCloseable {
 
   private native static int getType(long ref);
 
-  private native static long createIdentityArray(int[] dims, int type);
+  private native static long createEmptyArray(int[] dims, int type);
+
+  private native static long createArrayFromFloat(int[] dims, float[] elems);
+
+  private native static long createArrayFromDouble(int[] dims, double[] elems);
+
+  private native static long createArrayFromFloatComplex(int[] dims, FloatComplex[] elems);
+
+  private native static long createArrayFromDoubleComplex(int[] dims, DoubleComplex[] elems);
+
+  private native static long createArrayFromInt(int[] dims, int[] elems);
+
+  private native static long createArrayFromBoolean(int[] dims, boolean[] elems);
 
   // Global reference to JVM object
   // to persist between JNI calls
@@ -30,23 +42,96 @@ public class Array extends ArrayFire implements AutoCloseable {
   }
 
   public Array(int[] dims, int type) throws Exception {
-    Data.allocate(this, dims, type);
+    int[] adims = Array.dim4(dims);
+    set(createEmptyArray(adims, type));
   }
 
   public Array(int[] dims, float[] elems) throws Exception {
-    Data.createArray(this, dims, elems);
+    int[] adims = Array.dim4(dims);
+
+    int total_size = 1;
+    for (int i = 0; i < adims.length; i++)
+      total_size *= adims[i];
+
+    if (elems == null) {
+      throw new Exception("Null elems object provided");
+    }
+
+    if (elems.length > total_size || elems.length < total_size) {
+      throw new Exception("Mismatching dims and array size");
+    }
+
+    set(createArrayFromFloat(adims, elems));
+  }
+
+  public Array(int[] dims, double[] elems) throws Exception {
+    int[] adims = Array.dim4(dims);
+
+    int total_size = 1;
+    for (int i = 0; i < adims.length; i++)
+      total_size *= adims[i];
+
+    if (elems == null) {
+      throw new Exception("Null elems object provided");
+    }
+
+    if (elems.length > total_size || elems.length < total_size) {
+      throw new Exception("Mismatching dims and array size");
+    }
+
+    set(createArrayFromDouble(adims, elems));
   }
 
   public Array(int[] dims, int[] elems) throws Exception {
-    Data.createArray(this, dims, elems);
+    int[] adims = Array.dim4(dims);
+
+    int total_size = 1;
+    for (int dim : adims) { total_size *= dim; }
+    if (elems == null) {
+      throw new Exception("Null elems object provided");
+    }
+
+    if (elems.length > total_size || elems.length < total_size) {
+      throw new Exception("Mismatching dims and array size");
+    }
+
+    set(createArrayFromInt(adims, elems));
   }
 
   public Array(int[] dims, FloatComplex[] elems) throws Exception {
-    Data.createArray(this, dims, elems);
+    int[] adims = Array.dim4(dims);
+
+    int total_size = 1;
+    for (int i = 0; i < adims.length; i++)
+      total_size *= adims[i];
+
+    if (elems == null) {
+      throw new Exception("Null elems object provided");
+    }
+
+    if (elems.length > total_size || elems.length < total_size) {
+      throw new Exception("Mismatching dims and array size");
+    }
+
+    set(createArrayFromFloatComplex(adims, elems));
   }
 
   public Array(int[] dims, DoubleComplex[] elems) throws Exception {
-    Data.createArray(this, dims, elems);
+    int[] adims = Array.dim4(dims);
+
+    int total_size = 1;
+    for (int i = 0; i < adims.length; i++)
+      total_size *= adims[i];
+
+    if (elems == null) {
+      throw new Exception("Null elems object provided");
+    }
+
+    if (elems.length > total_size || elems.length < total_size) {
+      throw new Exception("Mismatching dims and array size");
+    }
+
+    set(createArrayFromDoubleComplex(adims, elems));
   }
 
   protected void set(long other_ref) {
@@ -83,11 +168,8 @@ public class Array extends ArrayFire implements AutoCloseable {
       throw new Exception("ArrayFire supports up to 4 dimensions only");
     }
 
-    int[] adims;
-    adims = new int[] { 1, 1, 1, 1 };
-    for (int i = 0; i < dims.length; i++)
-      adims[i] = dims[i];
-
+    int[] adims = new int[] { 1, 1, 1, 1 };
+    System.arraycopy(dims, 0, adims, 0, dims.length);
     return adims;
   }
 
@@ -126,40 +208,6 @@ public class Array extends ArrayFire implements AutoCloseable {
 
   public boolean[] getBooleanArray() throws Exception {
     return Data.getBooleanArray(this);
-  }
-
-  // Binary operations
-  public static Array randu(int[] dims, int type) throws Exception {
-    Array array = new Array();
-    Data.randu(array, dims, type);
-    return array;
-  }
-
-  public static Array randn(int[] dims, int type) throws Exception {
-    Array array = new Array();
-    Data.randn(array, dims, type);
-    return array;
-  }
-
-  public static Array constant(double val, int[] dims, int type) throws Exception {
-    Array array = new Array();
-    Data.constant(array, val, dims, type);
-    return array;
-  }
-
-  public static Array identity(int[] dims, int type) throws Exception {
-    int[] adims = Array.dim4(dims);
-    long ref = createIdentityArray(adims, FloatType);
-    if (ref == 0) {
-      throw new Exception("Failed to create Array");
-    }
-    return new Array(ref);
-  }
-
-  public static Array identity(int[] dims) throws Exception {
-    int[] adims = Array.dim4(dims);
-    long ref = createIdentityArray(adims, FloatType);
-    return new Array(ref);
   }
 
   @Override

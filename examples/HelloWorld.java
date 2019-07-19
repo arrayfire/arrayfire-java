@@ -52,9 +52,9 @@ public class HelloWorld {
         System.out.println(str);
       }
 
-            A.close();
-            B.close();
-            C.close();
+      A.close();
+      B.close();
+      C.close();
     } catch (Exception e) {
       System.out.println("Failed to use ArrayFire");
       e.printStackTrace();
