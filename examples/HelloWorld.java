@@ -2,63 +2,68 @@ import java.util.Random;
 import com.arrayfire.*;
 
 public class HelloWorld {
+
   public static void main(String[] args) {
-    System.out.println("Demonstrating Array Addition using ArrayFire");
 
-    int[] dims;
-    int total = 1;
-    float[] left, right, res;
-    Random rand = new Random();
-    String str;
-
-    dims = new int[2];
-    dims[0] = 10;
-    dims[1] = 1;
-
-    for (int i = 0; i < dims.length; i++) {
-      total *= dims[i];
-    }
-
-    left = new float[total];
-    right = new float[total];
-
-    for (int i = 0; i < total; i++) {
-      left[i] = (float) i;
-      double tmp = Math.ceil(rand.nextDouble() * 10) / 10;
-      right[i] = (float) (tmp);
-    }
-
+    Array a = new Array(), b = new Array(), c = new Array(), d = new Array();
+    Array f = new Array();
     try {
-      // Get info about arrayfire information
-      Util.info();
+        Util.info();
+        System.out.println("Create a 5-by-3 matrix of random floats on the GPU");
+        Data.randu(a, new int[] {5, 3}, Array.FloatType);
+        a.print("a");
 
-      // Send data to ArrayFire
-      Array A = new Array(dims, left);
-      Array B = new Array(dims, right);
-      Array C = new Array();
+        System.out.println("Element-wise arithmetic");
+        Arith.sin(b, a);
+        b.print("b");
 
-      // Do vector addition on the device
-      Arith.add(C, A, B);
+        System.out.println("Fourier transform the result");
+        Signal.fft(c, b);
+        c.print("c");
 
-      // Get result back to host memory
-      res = C.getFloatArray();
+        System.out.println("Matmul b and c");
+        Arith.mul(d, b, c);
+        d.print("d");
 
-      for (int i = 0; i < total; i++) {
-        str = Integer.toString(i) + ". ";
-        float val = left[i] + right[i];
-        str = str + Float.toString(left[i]) + " + ";
-        str = str + Float.toString(right[i]) + " = ";
-        str = str + Float.toString(res[i]);
-        System.out.println(str);
-      }
+        System.out.println("Create a 2-by-3 matrix from host data");
+        int[] dims = new int[] { 2, 3 };
+        int total = 1;
+        for (int dim : dims) {
+          total *= dim;
+        }
+        float[] data = new float[total];
+        Random rand = new Random();
 
-      A.close();
-      B.close();
-      C.close();
-    } catch (Exception e) {
-      System.out.println("Failed to use ArrayFire");
-      e.printStackTrace();
+        for (int i = 0; i < total; i++) {
+            double tmp = Math.ceil(rand.nextDouble() * 10) / 10;
+            data[i] = (float) (tmp);
+        }
+        Array e = new Array(dims, data);
+        e.print("e");
+
+        System.out.println("Add e and random array");
+        Array randa = new Array();
+        Data.randu(randa, dims, Array.FloatType);
+        Arith.add(f, e, randa);
+        f.print("f");
+
+
+        System.out.println("Copy result back to host.");
+        float[] result = f.getFloatArray();
+        for (int i = 0; i < dims[0]; i++) {
+            for (int y = 0; y < dims[1]; y++) {
+                System.out.print(result[y * dims[0] + i] + " ");
+            }
+            System.out.println();
+        }
+        a.close();
+        b.close();
+        c.close();
+        d.close();
+        e.close();
+        f.close();
+    } catch (Exception ex) {
+        ex.printStackTrace();
     }
-
   }
 }
