@@ -12,7 +12,6 @@ INCLUDE_DIRECTORIES(${JNI_INCLUDE_DIRS} ${ArrayFire_INCLUDE_DIRS})
 
 ADD_LIBRARY(${AF_LIB} SHARED
   java/JavaException.h
-  java/ThrownJavaException.h
   java/JavaException.cpp
   jni_helper.h
   algorithm.cpp

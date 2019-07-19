@@ -8,7 +8,7 @@ BEGIN_EXTERN_C
   JNIEXPORT jlong JNICALL SIGNAL_FUNC(convolve##N)(                       \
       JNIEnv * env, jclass clazz, jlong a, jlong b, int method) {         \
     af_array ret = 0;                                                     \
-    THROWS(af_convolve##N(&ret, ARRAY(a), ARRAY(b), (af_conv_mode)method, \
+    AF_CHECK(af_convolve##N(&ret, ARRAY(a), ARRAY(b), (af_conv_mode)method, \
                           AF_CONV_AUTO));                                 \
     return JLONG(ret);                                                    \
   }
@@ -23,9 +23,9 @@ CONVOLVE(3)
     af_array ret = 0;                                                        \
     double norm = 1.0;                                                       \
     dim_t dims[4];                                                           \
-    THROWS(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a)));   \
+    AF_CHECK(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a)));   \
     if (is_inv) norm *= dims[0];                                             \
-    THROWS(af_##func(&ret, ARRAY(a), norm, dim0));                           \
+    AF_CHECK(af_##func(&ret, ARRAY(a), norm, dim0));                           \
     return JLONG(ret);                                                       \
   }
 
@@ -38,9 +38,9 @@ FFT(ifft, false)
     af_array ret = 0;                                                        \
     double norm = 1.0;                                                       \
     dim_t dims[4];                                                           \
-    THROWS(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a)));   \
+    AF_CHECK(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a)));   \
     if (is_inv) norm *= dims[0] * dims[1];                                   \
-    THROWS(af_##func(&ret, ARRAY(a), norm, dim0, dim1));                     \
+    AF_CHECK(af_##func(&ret, ARRAY(a), norm, dim0, dim1));                     \
     return JLONG(ret);                                                       \
   }
 
@@ -54,9 +54,9 @@ FFT2(ifft2, false)
     af_array ret = 0;                                                      \
     double norm = 1.0;                                                     \
     dim_t dims[4];                                                         \
-    THROWS(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a))); \
+    AF_CHECK(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a))); \
     if (is_inv) norm *= dims[0] * dims[1] * dims[2];                       \
-    THROWS(af_##func(&ret, ARRAY(a), norm, dim0, dim1, dim2));             \
+    AF_CHECK(af_##func(&ret, ARRAY(a), norm, dim0, dim1, dim2));             \
     return JLONG(ret);                                                     \
   }
 

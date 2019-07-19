@@ -8,7 +8,7 @@ BEGIN_EXTERN_C
   JNIEXPORT jlong JNICALL ARITH_FUNC(func)(JNIEnv * env, jclass clazz,     \
                                            jlong a, jlong b) {             \
     af_array ret = 0;                                                      \
-    THROWS(af_##func(&ret, ARRAY(a), ARRAY(b), false));                    \
+    AF_CHECK(af_##func(&ret, ARRAY(a), ARRAY(b), false));                    \
     return JLONG(ret);                                                     \
   }                                                                        \
                                                                            \
@@ -18,11 +18,11 @@ BEGIN_EXTERN_C
     af_array tmp = 0;                                                      \
     dim_t dims[4];                                                         \
     af_dtype ty = f32;                                                     \
-    THROWS(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a))); \
-    THROWS(af_get_type(&ty, ARRAY(a)));                                    \
-    THROWS(af_constant(&tmp, b, 4, dims, ty));                             \
-    THROWS(af_##func(&ret, ARRAY(a), tmp, false));                         \
-    THROWS(af_release_array(tmp));                                         \
+    AF_CHECK(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(a))); \
+    AF_CHECK(af_get_type(&ty, ARRAY(a)));                                    \
+    AF_CHECK(af_constant(&tmp, b, 4, dims, ty));                             \
+    AF_CHECK(af_##func(&ret, ARRAY(a), tmp, false));                         \
+    AF_CHECK(af_release_array(tmp));                                         \
     return JLONG(ret);                                                     \
   }                                                                        \
                                                                            \
@@ -32,11 +32,11 @@ BEGIN_EXTERN_C
     af_array tmp = 0;                                                      \
     dim_t dims[4];                                                         \
     af_dtype ty = f32;                                                     \
-    THROWS(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(b))); \
-    THROWS(af_get_type(&ty, ARRAY(b)));                                    \
-    THROWS(af_constant(&tmp, a, 4, dims, ty));                             \
-    THROWS(af_##func(&ret, tmp, ARRAY(b), false));                         \
-    THROWS(af_release_array(tmp));                                         \
+    AF_CHECK(af_get_dims(dims + 0, dims + 1, dims + 2, dims + 3, ARRAY(b))); \
+    AF_CHECK(af_get_type(&ty, ARRAY(b)));                                    \
+    AF_CHECK(af_constant(&tmp, a, 4, dims, ty));                             \
+    AF_CHECK(af_##func(&ret, tmp, ARRAY(b), false));                         \
+    AF_CHECK(af_release_array(tmp));                                         \
     return JLONG(ret);                                                     \
   }
 
@@ -56,7 +56,7 @@ BINARY_OP_DEF(pow)
   JNIEXPORT jlong JNICALL ARITH_FUNC(func)(JNIEnv * env, jclass clazz, \
                                            jlong a) {                  \
     af_array ret = 0;                                                  \
-    THROWS(af_##func(&ret, ARRAY(a)));                                 \
+    AF_CHECK(af_##func(&ret, ARRAY(a)));                                 \
     return JLONG(ret);                                                 \
   }
 

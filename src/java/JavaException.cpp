@@ -26,7 +26,6 @@ static const char *mapJavaTypeToString(JavaType type) {
     case JavaType::Short: return "S";
     case JavaType::Void: return "V";
     case JavaType::Boolean: return "B";
-    default: throw std::logic_error("Unknown Java Type");
   }
 }
 

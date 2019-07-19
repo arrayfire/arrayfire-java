@@ -22,8 +22,8 @@ public class MonteCarloPi {
     try {
 
       int[] dims = new int[] { size, 1 };
-      x = Array.randu(dims, Array.FloatType);
-      y = Array.randu(dims, Array.FloatType);
+      x = Data.randu(dims, Array.FloatType);
+      y = Data.randu(dims, Array.FloatType);
 
       Arith.mul(x, x, x);
       Arith.mul(y, y, y);
