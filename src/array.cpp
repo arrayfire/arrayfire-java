@@ -9,6 +9,13 @@ JNIEXPORT void JNICALL ARRAY_FUNC(destroyArray)(JNIEnv *env, jclass clazz,
   AF_CHECK_VOID(af_release_array(ARRAY(ref)));
 }
 
+JNIEXPORT void JNICALL ARRAY_FUNC(afPrint)(JNIEnv *env, jclass clazz, jlong ref,
+                                           jstring name) {
+  const char *str = env->GetStringUTFChars(name, 0);
+  AF_CHECK_VOID(af_print_array_gen(str, ARRAY(ref), 3));
+  env->ReleaseStringUTFChars(name, str);
+}
+
 JNIEXPORT jintArray JNICALL ARRAY_FUNC(getDims)(JNIEnv *env, jclass clazz,
                                                 jlong ref) {
   jintArray result = env->NewIntArray(MaxDimSupported);
