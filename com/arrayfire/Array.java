@@ -50,8 +50,9 @@ public class Array extends ArrayFire implements AutoCloseable {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
+    for (int dim : adims) {
+      total_size *= dim;
+    }
 
     if (elems == null) {
       throw new Exception("Null elems object provided");
@@ -68,8 +69,9 @@ public class Array extends ArrayFire implements AutoCloseable {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
+    for (int dim : adims) {
+      total_size *= dim;
+    }
 
     if (elems == null) {
       throw new Exception("Null elems object provided");
@@ -86,7 +88,9 @@ public class Array extends ArrayFire implements AutoCloseable {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
-    for (int dim : adims) { total_size *= dim; }
+    for (int dim : adims) {
+      total_size *= dim;
+    }
     if (elems == null) {
       throw new Exception("Null elems object provided");
     }
@@ -102,8 +106,9 @@ public class Array extends ArrayFire implements AutoCloseable {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
+    for (int dim : adims) {
+      total_size *= dim;
+    }
 
     if (elems == null) {
       throw new Exception("Null elems object provided");
@@ -120,8 +125,9 @@ public class Array extends ArrayFire implements AutoCloseable {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
-    for (int i = 0; i < adims.length; i++)
-      total_size *= adims[i];
+    for (int dim : adims) {
+      total_size *= dim;
+    }
 
     if (elems == null) {
       throw new Exception("Null elems object provided");

@@ -18,12 +18,12 @@ public class MonteCarloPi {
   }
 
   public static double deviceCalcPi(int size) throws Exception {
-    Array x = null, y = null, res = new Array();
+    Array x = new Array(), y = new Array(), res = new Array();
     try {
 
       int[] dims = new int[] { size, 1 };
-      x = Data.randu(dims, Array.FloatType);
-      y = Data.randu(dims, Array.FloatType);
+      Data.randu(x, dims, Array.FloatType);
+      Data.randu(y, dims, Array.FloatType);
 
       Arith.mul(x, x, x);
       Arith.mul(y, y, y);
@@ -34,6 +34,8 @@ public class MonteCarloPi {
       double count = Algorithm.sumAll(res);
       return 4.0 * ((double) (count)) / size;
 
+    } catch (Exception e) {
+      throw e;
     } finally {
       x.close();
       y.close();
@@ -70,7 +72,7 @@ public class MonteCarloPi {
       System.out.println("Speedup: " + Math.round((hostElapsed) / (deviceElapsed)));
 
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
   }
 }
