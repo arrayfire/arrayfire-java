@@ -29,6 +29,7 @@ ADD_JAR(${AF_JAR}
   com/arrayfire/Image.java
   com/arrayfire/Signal.java
   com/arrayfire/Util.java
+  com/arrayfire/Statistics.java
   com/util/JNIException.java
   com/arrayfire/ArrayFireException.java
   )
