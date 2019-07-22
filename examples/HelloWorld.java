@@ -25,6 +25,18 @@ public class HelloWorld {
         Arith.mul(d, b, c);
         d.print("d");
 
+
+        Array forMean = new Array();
+        Array weights = new Array();
+        Data.randn(forMean, new int[] {1}, Array.FloatComplexType);
+        Data.randn(weights, new int[] {1}, Array.FloatComplexType);
+        forMean.print("forMean");
+        //Array mean = Statistics.mean(forMean, weights, 0);
+        //mean.print("mean");
+
+        DoubleComplex abc = Statistics.mean(forMean, DoubleComplex.class);
+        System.out.println(String.format("Mean is: %f and %f", abc.real(), abc.imag()));
+
         System.out.println("Create a 2-by-3 matrix from host data");
         int[] dims = new int[] { 2, 3 };
         int total = 1;
