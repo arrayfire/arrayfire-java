@@ -11,8 +11,8 @@ ENDIF()
 INCLUDE_DIRECTORIES(${JNI_INCLUDE_DIRS} ${ArrayFire_INCLUDE_DIRS})
 
 ADD_LIBRARY(${AF_LIB} SHARED
-  java/JavaException.h
-  java/JavaException.cpp
+  java/java.h
+  java/java.cpp
   jni_helper.h
   algorithm.cpp
   arith.cpp

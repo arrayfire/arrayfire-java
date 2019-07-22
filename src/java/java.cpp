@@ -1,4 +1,4 @@
-#include "JavaException.h"
+#include "java.h"
 
 namespace java {
 enum class JavaType {
