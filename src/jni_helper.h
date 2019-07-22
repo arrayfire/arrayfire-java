@@ -1,6 +1,6 @@
 #pragma once
 #include <assert.h>
-#include "java/JavaException.h"
+#include "java/java.h"
 
 #ifdef ANDROID
 #include <android/log.h>
