@@ -50,8 +50,8 @@ void throwArrayFireException(JNIEnv *env, const char *functionName,
 
   const std::string constructorSig = generateFunctionSignature(
       JavaType::Void, {JavaType::Int, JavaType::String});
-  jmethodID constructor =env->GetMethodID(exceptionClass, "<init>",
-                                          constructorSig.c_str());
+  jmethodID constructor =
+      env->GetMethodID(exceptionClass, "<init>", constructorSig.c_str());
 
   jthrowable exception = reinterpret_cast<jthrowable>(
       env->NewObject(exceptionClass, constructor, code,
@@ -62,8 +62,8 @@ void throwArrayFireException(JNIEnv *env, const char *functionName,
   const std::string setLocationSig = generateFunctionSignature(
       JavaType::Void, {JavaType::String, JavaType::String, JavaType::Int});
 
-  jmethodID setLocationID = env->GetMethodID(exceptionClass, "setLocation",
-                                             setLocationSig.c_str());
+  jmethodID setLocationID =
+      env->GetMethodID(exceptionClass, "setLocation", setLocationSig.c_str());
 
   env->CallVoidMethod(exception, setLocationID, env->NewStringUTF(functionName),
                       env->NewStringUTF(file), line);
@@ -74,19 +74,17 @@ void throwArrayFireException(JNIEnv *env, const char *functionName,
 
 template <typename... Args>
 jobject createJavaObject(JNIEnv *env, JavaObjects objectType, Args... args) {
-    switch (objectType) {
+  switch (objectType) {
     case JavaObjects::FloatComplex: {
-
       static jclass cls = env->FindClass("com/arrayfire/FloatComplex");
-      static std::string sig = generateFunctionSignature(JavaType::Void,
-                                                         {JavaType::Float, JavaType::Float});
+      static std::string sig = generateFunctionSignature(
+          JavaType::Void, {JavaType::Float, JavaType::Float});
       static jmethodID id = env->GetMethodID(cls, "<init>", sig.c_str());
       jobject obj = env->NewObject(cls, id, args...);
       return obj;
 
     } break;
     case JavaObjects::DoubleComplex: {
-
       static jclass cls = env->FindClass("com/arrayfire/DoubleComplex");
       static std::string sig = generateFunctionSignature(
           JavaType::Void, {JavaType::Double, JavaType::Double});
@@ -94,10 +92,10 @@ jobject createJavaObject(JNIEnv *env, JavaObjects objectType, Args... args) {
       jobject obj = env->NewObject(cls, id, args...);
       return obj;
     } break;
-    }
+  }
 }
-#define INSTANTIATE(type)                                               \
-    template jobject createJavaObject<type>(JNIEnv *, JavaObjects, type, type); \
+#define INSTANTIATE(type) \
+  template jobject createJavaObject<type>(JNIEnv *, JavaObjects, type, type);
 
 INSTANTIATE(float)
 INSTANTIATE(double)

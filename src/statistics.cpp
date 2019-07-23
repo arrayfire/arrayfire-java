@@ -5,15 +5,15 @@ BEGIN_EXTERN_C
 
 #define STATISTICS_FUNC(FUNC) AF_MANGLE(Statistics, FUNC)
 
-#define INSTANTIATE_MEAN(jtype)                               \
-  JNIEXPORT jobject JNICALL STATISTICS_FUNC(afMeanAll##jtype)(       \
-      JNIEnv * env, jclass clazz, jlong ref) {                       \
-    double real = 0, img = 0;                                        \
-    AF_CHECK(af_mean_all(&real, &img, ARRAY(ref)));                  \
+#define INSTANTIATE_MEAN(jtype)                                              \
+  JNIEXPORT jobject JNICALL STATISTICS_FUNC(afMeanAll##jtype)(               \
+      JNIEnv * env, jclass clazz, jlong ref) {                               \
+    double real = 0, img = 0;                                                \
+    AF_CHECK(af_mean_all(&real, &img, ARRAY(ref)));                          \
     return java::createJavaObject(env, java::JavaObjects::jtype, real, img); \
   }
 
-#define INSTANTIATE_WEIGHTED(jtype, Name, name)                         \
+#define INSTANTIATE_WEIGHTED(jtype, Name, name)                                \
   JNIEXPORT jobject JNICALL STATISTICS_FUNC(af##Name##All##jtype##Weighted)(   \
       JNIEnv * env, jclass clazz, jlong ref, jlong weightsRef) {               \
     double real = 0, img = 0;                                                  \
@@ -39,12 +39,12 @@ BEGIN_EXTERN_C
     return JLONG(ret);                                                        \
   }
 
-#define INSTANTIATE_VAR(jtype)                                          \
-  JNIEXPORT jobject JNICALL STATISTICS_FUNC(afVarAll##jtype)(                  \
-      JNIEnv * env, jclass clazz, jlong ref, jboolean isBiased) {              \
-    double real = 0, img = 0;                                                  \
-    AF_CHECK(af_var_all(&real, &img, ARRAY(ref), isBiased));                   \
-    return java::createJavaObject(env, java::JavaObjects::jtype, real, img);   \
+#define INSTANTIATE_VAR(jtype)                                               \
+  JNIEXPORT jobject JNICALL STATISTICS_FUNC(afVarAll##jtype)(                \
+      JNIEnv * env, jclass clazz, jlong ref, jboolean isBiased) {            \
+    double real = 0, img = 0;                                                \
+    AF_CHECK(af_var_all(&real, &img, ARRAY(ref), isBiased));                 \
+    return java::createJavaObject(env, java::JavaObjects::jtype, real, img); \
   }
 
 JNIEXPORT jlong JNICALL STATISTICS_FUNC(afMean)(JNIEnv *env, jclass clazz,
