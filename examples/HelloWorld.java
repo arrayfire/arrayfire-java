@@ -28,13 +28,11 @@ public class HelloWorld {
 
         Array forMean = new Array();
         Array weights = new Array();
-        Data.randn(forMean, new int[] {1}, Array.FloatComplexType);
-        Data.randn(weights, new int[] {1}, Array.FloatComplexType);
+        Data.randn(forMean, new int[] {3, 3}, Array.FloatComplexType);
+        Data.randn(weights, new int[] {3, 3}, Array.FloatType);
         forMean.print("forMean");
-        //Array mean = Statistics.mean(forMean, weights, 0);
-        //mean.print("mean");
 
-        DoubleComplex abc = Statistics.mean(forMean, DoubleComplex.class);
+        FloatComplex abc = Statistics.mean(forMean, weights, FloatComplex.class);
         System.out.println(String.format("Mean is: %f and %f", abc.real(), abc.imag()));
 
         System.out.println("Create a 2-by-3 matrix from host data");
