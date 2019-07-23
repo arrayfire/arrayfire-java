@@ -245,12 +245,8 @@ af_matmul
 
 af_maxfilt
 af_maxof
-af_mean
-af_mean_all
-af_mean_all_weighted
 
 af_meanvar
-af_mean_weighted
 
 af_medfilt1
 af_medfilt2
@@ -394,10 +390,7 @@ af_unlock_array
 af_unlock_device_ptr
 af_unwrap
 af_upper
-af_var
-af_var_all
-af_var_all_weighted
-af_var_weighted
+
 af_where
 af_wrap
 af_write_array
