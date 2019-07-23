@@ -32,7 +32,7 @@ public class HelloWorld {
       Data.randn(weights, new int[] { 5, 3 }, Array.DoubleType);
       forVar.print("forVar");
 
-      double abc = Statistics.mean(forVar, weights, Double.class);
+      double abc = Statistics.var(forVar, weights, Double.class);
       System.out.println(String.format("Variance is: %f", abc));
 
       System.out.println("Create a 2-by-3 matrix from host data");

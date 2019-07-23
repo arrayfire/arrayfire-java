@@ -81,9 +81,6 @@ JNIEXPORT jobjectArray JNICALL DATA_FUNC(getFloatComplexFromArray)(JNIEnv *env,
   AF_CHECK(af_get_elements(&elements, ARRAY(ref)));
 
   jclass cls = env->FindClass("com/arrayfire/FloatComplex");
-  jmethodID id = env->GetMethodID(cls, "<init>", "(FF)V");
-  if (id == NULL) return NULL;
-
   result = env->NewObjectArray(elements, cls, NULL);
 
   af_cfloat *tmp = (af_cfloat *)malloc(sizeof(af_cfloat) * elements);
@@ -92,7 +89,7 @@ JNIEXPORT jobjectArray JNICALL DATA_FUNC(getFloatComplexFromArray)(JNIEnv *env,
   for (int i = 0; i < elements; i++) {
     float re = tmp[i].real;
     float im = tmp[i].imag;
-    jobject obj = env->NewObject(cls, id, re, im);
+    jobject obj = java::createJavaObject(env, java::JavaObjects::FloatComplex, re, im);
     env->SetObjectArrayElement(result, i, obj);
   }
 
@@ -107,9 +104,6 @@ DATA_FUNC(getDoubleComplexFromArray)(JNIEnv *env, jclass clazz, jlong ref) {
   AF_CHECK(af_get_elements(&elements, ARRAY(ref)));
 
   jclass cls = env->FindClass("com/arrayfire/DoubleComplex");
-  jmethodID id = env->GetMethodID(cls, "<init>", "(DD)V");
-  if (id == NULL) return NULL;
-
   result = env->NewObjectArray(elements, cls, NULL);
 
   af_cdouble *tmp = (af_cdouble *)malloc(sizeof(af_cdouble) * elements);
@@ -118,7 +112,8 @@ DATA_FUNC(getDoubleComplexFromArray)(JNIEnv *env, jclass clazz, jlong ref) {
   for (int i = 0; i < elements; i++) {
     double re = tmp[i].real;
     double im = tmp[i].imag;
-    jobject obj = env->NewObject(cls, id, re, im);
+    jobject obj =
+        java::createJavaObject(env, java::JavaObjects::DoubleComplex, re, im);
     env->SetObjectArrayElement(result, i, obj);
   }
 
