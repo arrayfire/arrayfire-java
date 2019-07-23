@@ -53,7 +53,7 @@ void throwArrayFireException(JNIEnv *env, const char *functionName,
   jmethodID constructor =
       env->GetMethodID(exceptionClass, "<init>", constructorSig.c_str());
 
-  jthrowable exception = reinterpret_cast<jthrowable>(
+  jthrowable exception = static_cast<jthrowable>(
       env->NewObject(exceptionClass, constructor, code,
                      env->NewStringUTF("Some custom message here.")));
 
