@@ -71,4 +71,37 @@ void throwArrayFireException(JNIEnv *env, const char *functionName,
   env->Throw(exception);
   env->DeleteLocalRef(exceptionClass);
 }
+
+template <typename... Args>
+jobject createJavaObject(JNIEnv *env, JavaObjects objectType, Args... args) {
+    switch (objectType) {
+    case JavaObjects::FloatComplex: {
+
+      static jclass cls = env->FindClass("com/arrayfire/FloatComplex");
+      static std::string sig = generateFunctionSignature(JavaType::Void,
+                                                         {JavaType::Float, JavaType::Float});
+      static jmethodID id = env->GetMethodID(cls, "<init>", sig.c_str());
+      jobject obj = env->NewObject(cls, id, args...);
+      return obj;
+
+    } break;
+    case JavaObjects::DoubleComplex: {
+
+      static jclass cls = env->FindClass("com/arrayfire/DoubleComplex");
+      static std::string sig = generateFunctionSignature(
+          JavaType::Void, {JavaType::Double, JavaType::Double});
+      static jmethodID id = env->GetMethodID(cls, "<init>", sig.c_str());
+      jobject obj = env->NewObject(cls, id, args...);
+      return obj;
+    } break;
+    }
+}
+#define INSTANTIATE(type)                                               \
+    template jobject createJavaObject<type>(JNIEnv *, JavaObjects, type, type); \
+
+INSTANTIATE(float)
+INSTANTIATE(double)
+
+#undef INSTANTIATE
+
 }  // namespace java

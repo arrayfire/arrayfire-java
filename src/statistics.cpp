@@ -5,27 +5,21 @@ BEGIN_EXTERN_C
 
 #define STATISTICS_FUNC(FUNC) AF_MANGLE(Statistics, FUNC)
 
-#define INSTANTIATE_MEAN(jtype, param)                               \
+#define INSTANTIATE_MEAN(jtype)                               \
   JNIEXPORT jobject JNICALL STATISTICS_FUNC(afMeanAll##jtype)(       \
       JNIEnv * env, jclass clazz, jlong ref) {                       \
     double real = 0, img = 0;                                        \
     AF_CHECK(af_mean_all(&real, &img, ARRAY(ref)));                  \
-    jclass cls = env->FindClass("com/arrayfire/" #jtype);            \
-    jmethodID id = env->GetMethodID(cls, "<init>", "(" #param ")V"); \
-    jobject obj = env->NewObject(cls, id, real, img);                \
-    return obj;                                                      \
+    return java::createJavaObject(env, java::JavaObjects::jtype, real, img); \
   }
 
-#define INSTANTIATE_WEIGHTED(jtype, param, Name, name)                         \
+#define INSTANTIATE_WEIGHTED(jtype, Name, name)                         \
   JNIEXPORT jobject JNICALL STATISTICS_FUNC(af##Name##All##jtype##Weighted)(   \
       JNIEnv * env, jclass clazz, jlong ref, jlong weightsRef) {               \
     double real = 0, img = 0;                                                  \
     AF_CHECK(                                                                  \
         af_##name##_all_weighted(&real, &img, ARRAY(ref), ARRAY(weightsRef))); \
-    jclass cls = env->FindClass("com/arrayfire/" #jtype);                      \
-    jmethodID id = env->GetMethodID(cls, "<init>", "(" #param ")V");           \
-    jobject obj = env->NewObject(cls, id, real, img);                          \
-    return obj;                                                                \
+    return java::createJavaObject(env, java::JavaObjects::jtype, real, img);   \
   }
 
 #define INSTANTIATE_ALL_REAL_WEIGHTED(Name, name)                             \
@@ -45,15 +39,12 @@ BEGIN_EXTERN_C
     return JLONG(ret);                                                        \
   }
 
-#define INSTANTIATE_VAR(jtype, param)                                \
-  JNIEXPORT jobject JNICALL STATISTICS_FUNC(afVarAll##jtype)(        \
-      JNIEnv * env, jclass clazz, jlong ref, jboolean isBiased) {    \
-    double real = 0, img = 0;                                        \
-    AF_CHECK(af_var_all(&real, &img, ARRAY(ref), isBiased));         \
-    jclass cls = env->FindClass("com/arrayfire/" #jtype);            \
-    jmethodID id = env->GetMethodID(cls, "<init>", "(" #param ")V"); \
-    jobject obj = env->NewObject(cls, id, real, img);                \
-    return obj;                                                      \
+#define INSTANTIATE_VAR(jtype)                                          \
+  JNIEXPORT jobject JNICALL STATISTICS_FUNC(afVarAll##jtype)(                  \
+      JNIEnv * env, jclass clazz, jlong ref, jboolean isBiased) {              \
+    double real = 0, img = 0;                                                  \
+    AF_CHECK(af_var_all(&real, &img, ARRAY(ref), isBiased));                   \
+    return java::createJavaObject(env, java::JavaObjects::jtype, real, img);   \
   }
 
 JNIEXPORT jlong JNICALL STATISTICS_FUNC(afMean)(JNIEnv *env, jclass clazz,
@@ -70,12 +61,12 @@ JNIEXPORT jdouble JNICALL STATISTICS_FUNC(afMeanAll)(JNIEnv *env, jclass clazz,
   return (jdouble)ret;
 }
 
-INSTANTIATE_MEAN(FloatComplex, FF)
-INSTANTIATE_MEAN(DoubleComplex, DD)
+INSTANTIATE_MEAN(FloatComplex)
+INSTANTIATE_MEAN(DoubleComplex)
 INSTANTIATE_ALL_REAL_WEIGHTED(Mean, mean)
 INSTANTIATE_REAL_WEIGHTED(Mean, mean)
-INSTANTIATE_WEIGHTED(FloatComplex, FF, Mean, mean)
-INSTANTIATE_WEIGHTED(DoubleComplex, DD, Mean, mean)
+INSTANTIATE_WEIGHTED(FloatComplex, Mean, mean)
+INSTANTIATE_WEIGHTED(DoubleComplex, Mean, mean)
 
 #undef INSTANTIATE_MEAN
 
@@ -95,12 +86,12 @@ JNIEXPORT jdouble JNICALL STATISTICS_FUNC(afVarAll)(JNIEnv *env, jclass clazz,
   return (jdouble)ret;
 }
 
-INSTANTIATE_VAR(FloatComplex, FF)
-INSTANTIATE_VAR(DoubleComplex, DD)
+INSTANTIATE_VAR(FloatComplex)
+INSTANTIATE_VAR(DoubleComplex)
 INSTANTIATE_REAL_WEIGHTED(Var, var)
 INSTANTIATE_ALL_REAL_WEIGHTED(Var, var)
-INSTANTIATE_WEIGHTED(FloatComplex, FF, Var, var)
-INSTANTIATE_WEIGHTED(DoubleComplex, DD, Var, var)
+INSTANTIATE_WEIGHTED(FloatComplex, Var, var)
+INSTANTIATE_WEIGHTED(DoubleComplex, Var, var)
 
 #undef INSTANTIATE_VAR
 #undef INSTANTIATE_MEAN
