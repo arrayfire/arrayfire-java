@@ -5,38 +5,6 @@ BEGIN_EXTERN_C
 
 #define STATISTICS_FUNC(FUNC) AF_MANGLE(Statistics, FUNC)
 
-JNIEXPORT jlong JNICALL STATISTICS_FUNC(afMean)(JNIEnv *env, jclass clazz,
-                                                jlong ref, jint dim) {
-  af_array ret = 0;
-  AF_CHECK(af_mean(&ret, ARRAY(ref), dim));
-  return JLONG(ret);
-}
-
-JNIEXPORT jlong JNICALL STATISTICS_FUNC(afMeanWeighted)(JNIEnv *env,
-                                                        jclass clazz, jlong ref,
-                                                        jlong weightsRef,
-                                                        jint dim) {
-  af_array ret = 0;
-  AF_CHECK(af_mean_weighted(&ret, ARRAY(ref), ARRAY(weightsRef), dim));
-  return JLONG(ret);
-}
-
-JNIEXPORT jdouble JNICALL STATISTICS_FUNC(afMeanAll)(JNIEnv *env, jclass clazz,
-                                                     jlong ref) {
-  double ret = 0;
-  AF_CHECK(af_mean_all(&ret, NULL, ARRAY(ref)));
-  return (jdouble)ret;
-}
-
-JNIEXPORT jdouble JNICALL STATISTICS_FUNC(afMeanAllWeighted)(JNIEnv *env,
-                                                             jclass clazz,
-                                                             jlong ref,
-                                                             jlong weightsRef) {
-  double ret = 0;
-  AF_CHECK(af_mean_all_weighted(&ret, NULL, ARRAY(ref), ARRAY(weightsRef)));
-  return (jdouble)ret;
-}
-
 #define INSTANTIATE_MEAN(jtype, param)                               \
   JNIEXPORT jobject JNICALL STATISTICS_FUNC(afMeanAll##jtype)(       \
       JNIEnv * env, jclass clazz, jlong ref) {                       \
@@ -48,21 +16,96 @@ JNIEXPORT jdouble JNICALL STATISTICS_FUNC(afMeanAllWeighted)(JNIEnv *env,
     return obj;                                                      \
   }
 
-#define INSTANTIATE_MEAN_WEIGHTED(jtype, param)                            \
-  JNIEXPORT jobject JNICALL STATISTICS_FUNC(afMeanAll##jtype##Weighted)(   \
-      JNIEnv * env, jclass clazz, jlong ref, jlong weightsRef) {           \
-    double real = 0, img = 0;                                              \
-    AF_CHECK(                                                              \
-        af_mean_all_weighted(&real, &img, ARRAY(ref), ARRAY(weightsRef))); \
-    jclass cls = env->FindClass("com/arrayfire/" #jtype);                  \
-    jmethodID id = env->GetMethodID(cls, "<init>", "(" #param ")V");       \
-    jobject obj = env->NewObject(cls, id, real, img);                      \
-    return obj;                                                            \
+#define INSTANTIATE_WEIGHTED(jtype, param, Name, name)                         \
+  JNIEXPORT jobject JNICALL STATISTICS_FUNC(af##Name##All##jtype##Weighted)(   \
+      JNIEnv * env, jclass clazz, jlong ref, jlong weightsRef) {               \
+    double real = 0, img = 0;                                                  \
+    AF_CHECK(                                                                  \
+        af_##name##_all_weighted(&real, &img, ARRAY(ref), ARRAY(weightsRef))); \
+    jclass cls = env->FindClass("com/arrayfire/" #jtype);                      \
+    jmethodID id = env->GetMethodID(cls, "<init>", "(" #param ")V");           \
+    jobject obj = env->NewObject(cls, id, real, img);                          \
+    return obj;                                                                \
   }
+
+#define INSTANTIATE_ALL_REAL_WEIGHTED(Name, name)                             \
+  JNIEXPORT jdouble JNICALL STATISTICS_FUNC(af##Name##AllWeighted)(           \
+      JNIEnv * env, jclass clazz, jlong ref, jlong weightsRef) {              \
+    double ret = 0;                                                           \
+    AF_CHECK(                                                                 \
+        af_##name##_all_weighted(&ret, NULL, ARRAY(ref), ARRAY(weightsRef))); \
+    return (jdouble)ret;                                                      \
+  }
+
+#define INSTANTIATE_REAL_WEIGHTED(Name, name)                                 \
+  JNIEXPORT jlong JNICALL STATISTICS_FUNC(af##Name##Weighted)(                \
+      JNIEnv * env, jclass clazz, jlong ref, jlong weightsRef, jint dim) {    \
+    af_array ret = 0;                                                         \
+    AF_CHECK(af_##name##_weighted(&ret, ARRAY(ref), ARRAY(weightsRef), dim)); \
+    return JLONG(ret);                                                        \
+  }
+
+#define INSTANTIATE_VAR(jtype, param)                                \
+  JNIEXPORT jobject JNICALL STATISTICS_FUNC(afVarAll##jtype)(        \
+      JNIEnv * env, jclass clazz, jlong ref, jboolean isBiased) {    \
+    double real = 0, img = 0;                                        \
+    AF_CHECK(af_var_all(&real, &img, ARRAY(ref), isBiased));         \
+    jclass cls = env->FindClass("com/arrayfire/" #jtype);            \
+    jmethodID id = env->GetMethodID(cls, "<init>", "(" #param ")V"); \
+    jobject obj = env->NewObject(cls, id, real, img);                \
+    return obj;                                                      \
+  }
+
+JNIEXPORT jlong JNICALL STATISTICS_FUNC(afMean)(JNIEnv *env, jclass clazz,
+                                                jlong ref, jint dim) {
+  af_array ret = 0;
+  AF_CHECK(af_mean(&ret, ARRAY(ref), dim));
+  return JLONG(ret);
+}
+
+JNIEXPORT jdouble JNICALL STATISTICS_FUNC(afMeanAll)(JNIEnv *env, jclass clazz,
+                                                     jlong ref) {
+  double ret = 0;
+  AF_CHECK(af_mean_all(&ret, NULL, ARRAY(ref)));
+  return (jdouble)ret;
+}
 
 INSTANTIATE_MEAN(FloatComplex, FF)
 INSTANTIATE_MEAN(DoubleComplex, DD)
-INSTANTIATE_MEAN_WEIGHTED(FloatComplex, FF)
-INSTANTIATE_MEAN_WEIGHTED(DoubleComplex, DD)
+INSTANTIATE_ALL_REAL_WEIGHTED(Mean, mean)
+INSTANTIATE_REAL_WEIGHTED(Mean, mean)
+INSTANTIATE_WEIGHTED(FloatComplex, FF, Mean, mean)
+INSTANTIATE_WEIGHTED(DoubleComplex, DD, Mean, mean)
+
+#undef INSTANTIATE_MEAN
+
+JNIEXPORT jlong JNICALL STATISTICS_FUNC(afVar)(JNIEnv *env, jclass clazz,
+                                               jlong ref, jboolean isBiased,
+                                               jint dim) {
+  af_array ret = 0;
+  AF_CHECK(af_var(&ret, ARRAY(ref), isBiased, dim));
+  return JLONG(ret);
+}
+
+JNIEXPORT jdouble JNICALL STATISTICS_FUNC(afVarAll)(JNIEnv *env, jclass clazz,
+                                                    jlong ref,
+                                                    jboolean isBiased) {
+  double ret = 0;
+  AF_CHECK(af_var_all(&ret, NULL, ARRAY(ref), isBiased));
+  return (jdouble)ret;
+}
+
+INSTANTIATE_VAR(FloatComplex, FF)
+INSTANTIATE_VAR(DoubleComplex, DD)
+INSTANTIATE_REAL_WEIGHTED(Var, var)
+INSTANTIATE_ALL_REAL_WEIGHTED(Var, var)
+INSTANTIATE_WEIGHTED(FloatComplex, FF, Var, var)
+INSTANTIATE_WEIGHTED(DoubleComplex, DD, Var, var)
+
+#undef INSTANTIATE_VAR
+#undef INSTANTIATE_MEAN
+#undef INSTANTIATE_WEIGHTED
+#undef INSTANTIATE_REAL_WEIGHTED
+#undef INSTANTIATE_ALL_REAL_WEIGHTED
 
 END_EXTERN_C
