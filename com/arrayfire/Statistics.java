@@ -66,7 +66,6 @@ public class Statistics extends ArrayFire {
       FloatComplex res = (FloatComplex) afMeanAllFloatComplexWeighted(in.ref, weights.ref);
       return type.cast(res);
     } else if (type == DoubleComplex.class) {
-      System.out.println(Long.toString(weights.ref));
       DoubleComplex res = (DoubleComplex) afMeanAllDoubleComplexWeighted(in.ref, weights.ref);
       return type.cast(res);
     }
@@ -115,7 +114,6 @@ public class Statistics extends ArrayFire {
       FloatComplex res = (FloatComplex) afVarAllFloatComplexWeighted(in.ref, weights.ref);
       return type.cast(res);
     } else if (type == DoubleComplex.class) {
-      System.out.println(Long.toString(weights.ref));
       DoubleComplex res = (DoubleComplex) afVarAllDoubleComplexWeighted(in.ref, weights.ref);
       return type.cast(res);
     }
