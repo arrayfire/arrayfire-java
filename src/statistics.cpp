@@ -54,6 +54,13 @@ JNIEXPORT jlong JNICALL STATISTICS_FUNC(afVar)(JNIEnv *env, jclass clazz,
   return JLONG(ret);
 }
 
+JNIEXPORT jobject JNICALL STATISTICS_FUNC(afVarAll)(JNIEnv *env, jclass clazz,
+                                               jlong ref, jboolean isBiased) {
+    double real = 0, img = 0;
+  AF_CHECK(af_var_all(&real, &img, ARRAY(ref), isBiased));
+  return java::createJavaObject(env, java::JavaObjects::DoubleComplex, real, img);
+}
+
 INSTANTIATE_STAT_WEIGHTED(Var, var)
 INSTANTIATE_STAT_ALL_WEIGHTED(Var, var)
 
