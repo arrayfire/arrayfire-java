@@ -9,13 +9,11 @@ JNIEXPORT void JNICALL ARRAY_FUNC(destroyArray)(JNIEnv *env, jclass clazz,
   AF_CHECK_VOID(af_release_array(ARRAY(ref)));
 }
 
-JNIEXPORT jstring JNICALL ARRAY_FUNC(afPrint)(JNIEnv *env, jclass clazz, jlong ref,
+JNIEXPORT jstring JNICALL ARRAY_FUNC(afToString)(JNIEnv *env, jclass clazz, jlong ref,
                                            jstring name) {
+  char *res;
   const char *str = env->GetStringUTFChars(name, 0);
-  char * res;
   af_array_to_string(&res, str, ARRAY(ref), 4, false);
-
-  //AF_CHECK_VOID(af_print_array_gen(str, ARRAY(ref), 3));
   env->ReleaseStringUTFChars(name, str);
   return env->NewStringUTF(res);
 }
