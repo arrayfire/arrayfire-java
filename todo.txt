@@ -15,7 +15,6 @@ af_approx1_uniform
 af_approx2
 af_approx2_uniform
 af_arg
-af_array_to_string
 
 af_assign_gen
 af_assign_seq
@@ -44,11 +43,10 @@ af_constant_ulong
 af_convolve2_sep
 
 af_copy_array
-af_corrcoef
 
 af_count
 af_count_all
-af_cov
+
 af_cplx
 af_cplx2
 
@@ -250,8 +248,6 @@ af_meanvar
 
 af_medfilt1
 af_medfilt2
-af_median
-af_median_all
 
 af_minfilt
 af_minof
@@ -270,7 +266,7 @@ af_pinverse
 
 af_pow2
 af_print_array
-
+af_print_array_gen
 af_print_mem_info
 af_product
 af_product_all
@@ -367,9 +363,6 @@ af_sparse_get_storage
 af_sparse_get_values
 af_sparse_to_dense
 
-af_stdev
-af_stdev_all
-
 af_sum_nan
 af_sum_nan_all
 af_susan
@@ -379,7 +372,7 @@ af_sync
 
 af_tgamma
 af_tile
-af_topk
+
 af_transform
 af_transform_coordinates
 af_translate
