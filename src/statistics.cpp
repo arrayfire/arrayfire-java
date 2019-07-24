@@ -1,4 +1,3 @@
-
 #include "jni_helper.h"
 
 BEGIN_EXTERN_C
@@ -55,21 +54,47 @@ JNIEXPORT jlong JNICALL STATISTICS_FUNC(afVar)(JNIEnv *env, jclass clazz,
   return JLONG(ret);
 }
 
-JNIEXPORT jobject JNICALL STATISTICS_FUNC(afVarAll)(JNIEnv *env, jclass clazz,
-                                                    jlong ref,
-                                                    jboolean isBiased) {
-  double real = 0, img = 0;
-  AF_CHECK(af_var_all(&real, &img, ARRAY(ref), isBiased));
-  return java::createJavaObject(env, java::JavaObjects::DoubleComplex, real,
-                                img);
-}
-
 INSTANTIATE_STAT_WEIGHTED(Var, var)
 INSTANTIATE_STAT_ALL_WEIGHTED(Var, var)
 
 // Standard dev
 INSTANTIATE_STAT(Stdev, stdev)
 INSTANTIATE_STAT_ALL(Stdev, stdev)
+
+// Median
+INSTANTIATE_STAT(Median, median)
+INSTANTIATE_STAT_ALL(Median, median)
+
+// Covariance
+JNIEXPORT jlong JNICALL STATISTICS_FUNC(afCov)(JNIEnv *env, jclass clazz,
+                                               jlong ref, jlong ref2,
+                                               jboolean isBiased) {
+  af_array ret = 0;
+  AF_CHECK(af_cov(&ret, ARRAY(ref), ARRAY(ref2), isBiased));
+  return JLONG(ret);
+}
+
+// Correlation coefficient
+JNIEXPORT jobject JNICALL STATISTICS_FUNC(afCorrcoef)(JNIEnv *env, jclass clazz,
+                                                      jlong ref, jlong ref2) {
+  double real = 0;
+  AF_CHECK(af_corrcoef(&real, NULL, ARRAY(ref), ARRAY(ref2)));
+  return java::createJavaObject(env, java::JavaObjects::DoubleComplex, real,
+                                0.0);
+}
+
+// Topk elements
+JNIEXPORT jlongArray JNICALL STATISTICS_FUNC(afTopk)(JNIEnv *env, jclass clazz,
+                                                     jlong ref, jint k,
+                                                     jint dim, jint order) {
+  af_array vals = 0, idxs = 0;
+  AF_CHECK(af_topk(&vals, &idxs, ARRAY(ref), k, dim,
+                   static_cast<af_topk_function>(order)));
+  jlong refs[2]{JLONG(idxs), JLONG(vals)};
+  jlongArray jRefs = env->NewLongArray(2);
+  env->SetLongArrayRegion(jRefs, 0, 2, refs);
+  return jRefs;
+}
 
 #undef INSTANTIATE_STAT
 #undef INSTANTIATE_STAT_ALL

@@ -1,6 +1,7 @@
 package com.arrayfire;
 
 public class Statistics extends ArrayFire {
+
   static private native long afMean(long ref, int dim);
 
   static private native long afMeanWeighted(long ref, long weightsRef, int dim);
@@ -20,6 +21,16 @@ public class Statistics extends ArrayFire {
   static private native long afStdev(long ref, int dim);
 
   static private native DoubleComplex afStdevAll(long ref);
+
+  static private native long afMedian(long ref, int dim);
+
+  static private native DoubleComplex afMedianAll(long ref);
+
+  static private native long afCov(long ref, long ref2, boolean isBiased);
+
+  static private native DoubleComplex afCorrcoef(long ref, long ref2);
+
+  static private native long[] afTopk(long ref, int k, int dim, int order);
 
   static public Array mean(final Array in, int dim) {
     return new Array(afMean(in.ref, dim));
@@ -66,6 +77,29 @@ public class Statistics extends ArrayFire {
     return castResult(res, type);
   }
 
+  static public Array median(final Array in, int dim) {
+    return new Array(afMedian(in.ref, dim));
+  }
+
+  static public <T> T median(final Array in, Class<T> type) throws Exception {
+    DoubleComplex res = afMedianAll(in.ref);
+    return castResult(res, type);
+  }
+
+  static public Array cov(Array x, Array y, boolean isBiased) {
+    return new Array(afCov(x.ref, y.ref, isBiased));
+  }
+
+  static public <T extends Number> T corrcoef(final Array x, final Array y, Class<T> type) throws Exception {
+    DoubleComplex res = afCorrcoef(x.ref, y.ref);
+    return castResult(res, type);
+  }
+
+  static public Array[] topk(final Array in, int k, int dim, TopkOrder order) throws Exception {
+    long[] refs = afTopk(in.ref, k, dim, order.getOrder());
+    return new Array[] { new Array(refs[0]), new Array(refs[1]) };
+  }
+
   static public <T> T castResult(DoubleComplex res, Class<T> type) throws Exception {
     Object ret;
     if (type == Float.class) {
@@ -83,5 +117,19 @@ public class Statistics extends ArrayFire {
     }
 
     return type.cast(ret);
+  }
+
+  public enum TopkOrder {
+    DEFAULT(0), MIN(1), MAX(2);
+
+    private final int order;
+
+    TopkOrder(int order) {
+      this.order = order;
+    }
+
+    public int getOrder() {
+      return order;
+    }
   }
 }
