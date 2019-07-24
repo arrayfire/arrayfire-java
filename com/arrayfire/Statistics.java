@@ -33,6 +33,14 @@ public class Statistics extends ArrayFire {
 
   static private native DoubleComplex afVarAllDoubleComplexWeighted(long ref, long weightsRef);
 
+  static private native long afStdev(long ref, int dim);
+
+  static private native double afStdevAll(long ref);
+
+  static private native FloatComplex afStdevAllFloatComplex(long ref);
+
+  static private native DoubleComplex afStdevAllDoubleComplex(long ref);
+
   static public Array mean(final Array in, int dim) {
     return new Array(afMean(in.ref, dim));
   }
@@ -128,4 +136,28 @@ public class Statistics extends ArrayFire {
     }
     throw new Exception("Unknown type");
   }
+
+    static public Array stdev(final Array in, int dim) {
+        return new Array(afStdev(in.ref, dim));
+    }
+
+    static public <T> T stdev(final Array in, Class<T> type) throws Exception {
+        if (type == FloatComplex.class) {
+            FloatComplex res = (FloatComplex)afStdevAllFloatComplex(in.ref);
+            return type.cast(res);
+        } else if (type == DoubleComplex.class) {
+            DoubleComplex res = (DoubleComplex)afStdevAllDoubleComplex(in.ref);
+            return type.cast(res);
+        }
+
+        double res = afStdevAll(in.ref);
+        if (type == Float.class) {
+            return type.cast(Float.valueOf((float) res));
+        } else if (type == Double.class) {
+            return type.cast(Double.valueOf((double) res));
+        } else if (type == Integer.class) {
+            return type.cast(Integer.valueOf((int) res));
+        }
+        throw new Exception("Unknown type");
+    }
 }

@@ -15,25 +15,35 @@ public class HelloWorld {
 
       System.out.println("Element-wise arithmetic");
       Arith.sin(b, a);
-      System.out.println(a.toString("b"));
+      System.out.println(b.toString("b"));
 
       System.out.println("Fourier transform the result");
       Signal.fft(c, b);
-      System.out.println(a.toString("c"));
+      System.out.println(c.toString("c"));
 
       System.out.println("Matmul b and c");
       Arith.mul(d, b, c);
-      System.out.println(a.toString("d"));
+      System.out.println(d.toString("d"));
 
       System.out.println("Calculate weighted variance.");
       Array forVar = new Array();
       Array weights = new Array();
       Data.randn(forVar, new int[] { 5, 3 }, Array.DoubleType);
       Data.randn(weights, new int[] { 5, 3 }, Array.DoubleType);
-      System.out.println(a.toString("forVar"));
+      System.out.println(forVar.toString("forVar"));
 
       double abc = Statistics.var(forVar, weights, Double.class);
       System.out.println(String.format("Variance is: %f", abc));
+      forVar.close();
+      weights.close();
+
+      System.out.println("Calculate standard deviation");
+      Array forStdev = new Array();
+      Data.randu(forStdev, new int[] {5, 3}, Array.DoubleType);
+      System.out.println(forStdev.toString("forVar"));
+      double stdev = Statistics.stdev(forStdev, Double.class);
+
+      System.out.println(String.format("Stdev is: %f", stdev));
 
       System.out.println("Create a 2-by-3 matrix from host data");
       int[] dims = new int[] { 2, 3 };
@@ -49,13 +59,13 @@ public class HelloWorld {
         data[i] = (float) (tmp);
       }
       Array e = new Array(dims, data);
-      System.out.println(a.toString("e"));
+      System.out.println(e.toString("e"));
 
       System.out.println("Add e and random array");
       Array randa = new Array();
       Data.randu(randa, dims, Array.FloatType);
       Arith.add(f, e, randa);
-      System.out.println(a.toString("f"));
+      System.out.println(f.toString("f"));
 
       System.out.println("Copy result back to host.");
       float[] result = f.getFloatArray();
