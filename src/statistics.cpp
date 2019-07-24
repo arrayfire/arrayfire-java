@@ -47,19 +47,26 @@ BEGIN_EXTERN_C
     return java::createJavaObject(env, java::JavaObjects::jtype, real, img); \
   }
 
-JNIEXPORT jlong JNICALL STATISTICS_FUNC(afMean)(JNIEnv *env, jclass clazz,
-                                                jlong ref, jint dim) {
-  af_array ret = 0;
-  AF_CHECK(af_mean(&ret, ARRAY(ref), dim));
-  return JLONG(ret);
+#define INSTANTIATE_STAT(Name, name)                                    \
+    JNIEXPORT jlong JNICALL STATISTICS_FUNC(af##Name)(JNIEnv *env, jclass clazz, \
+                                                    jlong ref, jint dim) { \
+    af_array ret = 0;                                                   \
+    AF_CHECK(af_##name(&ret, ARRAY(ref), dim));                           \
+    return JLONG(ret);                                                  \
 }
 
-JNIEXPORT jdouble JNICALL STATISTICS_FUNC(afMeanAll)(JNIEnv *env, jclass clazz,
-                                                     jlong ref) {
-  double ret = 0;
-  AF_CHECK(af_mean_all(&ret, NULL, ARRAY(ref)));
-  return (jdouble)ret;
+INSTANTIATE_STAT(Mean, mean)
+INSTANTIATE_STAT(Stdev, stdev)
+
+#define INSTANTIATE_STAT_ALL(Name, name)                                \
+    JNIEXPORT jdouble JNICALL STATISTICS_FUNC(af##Name##All)(JNIEnv *env, jclass clazz, \
+                                                         jlong ref) {   \
+    double ret = 0;                                                     \
+    AF_CHECK(af_##name##_all(&ret, NULL, ARRAY(ref)));                      \
+    return (jdouble)ret;                                                \
 }
+
+INSTANTIATE_STAT_ALL(Mean, mean)
 
 INSTANTIATE_MEAN(FloatComplex)
 INSTANTIATE_MEAN(DoubleComplex)

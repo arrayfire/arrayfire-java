@@ -11,26 +11,26 @@ public class HelloWorld {
       Util.info();
       System.out.println("Create a 5-by-3 matrix of random floats on the GPU");
       Data.randu(a, new int[] { 5, 3 }, Array.FloatType);
-      a.print("a");
+      System.out.println(a.toString("a"));
 
       System.out.println("Element-wise arithmetic");
       Arith.sin(b, a);
-      b.print("b");
+      System.out.println(a.toString("b"));
 
       System.out.println("Fourier transform the result");
       Signal.fft(c, b);
-      c.print("c");
+      System.out.println(a.toString("c"));
 
       System.out.println("Matmul b and c");
       Arith.mul(d, b, c);
-      d.print("d");
+      System.out.println(a.toString("d"));
 
       System.out.println("Calculate weighted variance.");
       Array forVar = new Array();
       Array weights = new Array();
       Data.randn(forVar, new int[] { 5, 3 }, Array.DoubleType);
       Data.randn(weights, new int[] { 5, 3 }, Array.DoubleType);
-      forVar.print("forVar");
+      System.out.println(a.toString("forVar"));
 
       double abc = Statistics.var(forVar, weights, Double.class);
       System.out.println(String.format("Variance is: %f", abc));
@@ -49,13 +49,13 @@ public class HelloWorld {
         data[i] = (float) (tmp);
       }
       Array e = new Array(dims, data);
-      e.print("e");
+      System.out.println(a.toString("e"));
 
       System.out.println("Add e and random array");
       Array randa = new Array();
       Data.randu(randa, dims, Array.FloatType);
       Arith.add(f, e, randa);
-      f.print("f");
+      System.out.println(a.toString("f"));
 
       System.out.println("Copy result back to host.");
       float[] result = f.getFloatArray();
