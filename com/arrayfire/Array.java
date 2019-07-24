@@ -29,7 +29,7 @@ public class Array extends ArrayFire implements AutoCloseable {
 
   private native static long createArrayFromBoolean(int[] dims, boolean[] elems);
 
-  private native static void afPrint(long ref, String name);
+  private native static String afPrint(long ref, String name);
 
   // Global reference to JVM object
   // to persist between JNI calls
@@ -218,8 +218,13 @@ public class Array extends ArrayFire implements AutoCloseable {
     return Data.getBooleanArray(this);
   }
 
-  public void print(String name) {
-      afPrint(ref, name);
+  @Override
+  public String toString() {
+      return afPrint(ref, "No name");
+  }
+
+  public String toString(String name) {
+      return afPrint(ref, name);
   }
 
   @Override
