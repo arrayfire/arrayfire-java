@@ -28,8 +28,8 @@ public class HelloWorld {
       System.out.println("Calculate weighted variance.");
       Array forVar = new Array();
       Array weights = new Array();
-      Data.randn(forVar, new int[] { 5, 3 }, Array.DoubleType);
-      Data.randn(weights, new int[] { 5, 3 }, Array.DoubleType);
+      Data.randn(forVar, new int[] { 5, 5 }, Array.DoubleType);
+      Data.randn(weights, new int[] { 5, 5 }, Array.DoubleType);
       System.out.println(forVar.toString("forVar"));
 
       double abc = Statistics.var(forVar, weights, Double.class);
@@ -40,7 +40,7 @@ public class HelloWorld {
       System.out.println("Calculate standard deviation");
       Array forStdev = new Array();
       Data.randu(forStdev, new int[] {5, 3}, Array.DoubleType);
-      System.out.println(forStdev.toString("forVar"));
+      System.out.println(forStdev.toString("forStdev"));
       double stdev = Statistics.stdev(forStdev, Double.class);
 
       System.out.println(String.format("Stdev is: %f", stdev));
