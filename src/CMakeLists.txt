@@ -21,6 +21,7 @@ ADD_LIBRARY(${AF_LIB} SHARED
   image.cpp
   signal.cpp
   statistics.cpp
+  graphics.cpp
   util.cpp
   )
 
