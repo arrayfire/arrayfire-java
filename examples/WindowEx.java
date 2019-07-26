@@ -5,7 +5,7 @@ public class WindowEx {
       System.out.println("Creating window");
       try {
           Array img = new Array();
-          Data.randu(img, new int[] { 200, 200 }, Array.IntType);
+          Data.randu(img, new int[] { 200, 200 }, Array.Type.Int);
           Window window = new Window();
           while (!window.closeWindow()) {
               window.image(img, "Image");
