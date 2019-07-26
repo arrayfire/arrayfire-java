@@ -58,9 +58,7 @@ af_create_sparse_array
 af_create_sparse_array_from_dense
 af_create_sparse_array_from_ptr
 af_create_strided_array
-af_create_window
 af_delete_image_memory
-af_destroy_window
 af_det
 af_device_array
 af_device_gc
@@ -76,22 +74,10 @@ af_dilate3
 af_dog
 af_dot
 af_dot_all
-af_draw_hist
-af_draw_image
 af_draw_plot
-af_draw_plot_2d
 af_draw_plot3
-af_draw_plot_3d
-af_draw_plot_nd
 af_draw_scatter
-af_draw_scatter_2d
 af_draw_scatter3
-af_draw_scatter_3d
-af_draw_scatter_nd
-af_draw_surface
-af_draw_vector_field_2d
-af_draw_vector_field_3d
-af_draw_vector_field_nd
 
 af_erf
 af_erfc
@@ -166,7 +152,6 @@ af_get_version
 af_gloh
 af_gradient
 af_gray2rgb
-af_grid
 
 af_hamming_matcher
 af_harris
@@ -216,7 +201,6 @@ af_is_scalar
 af_is_single
 af_is_sparse
 af_is_vector
-af_is_window_closed
 af_iszero
 af_iterative_deconv
 af_join
@@ -321,10 +305,6 @@ af_select_scalar_l
 af_select_scalar_r
 af_set_array_indexer
 af_set_axes_label_format
-af_set_axes_limits_2d
-af_set_axes_limits_3d
-af_set_axes_limits_compute
-af_set_axes_titles
 af_set_backend
 af_set_default_random_engine_type
 af_set_device
@@ -332,17 +312,12 @@ af_set_fft_plan_cache_size
 af_set_intersect
 af_set_manual_eval_flag
 af_set_mem_step_size
-af_set_position
 af_set_seed
 af_set_seq_indexer
 af_set_seq_param_indexer
-af_set_size
-af_set_title
 af_set_union
 af_set_unique
-af_set_visibility
 af_shift
-af_show
 af_sift
 af_sigmoid
 af_sign
