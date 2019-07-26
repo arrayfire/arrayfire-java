@@ -90,14 +90,15 @@ public class Statistics extends ArrayFire {
     return new Array(afCov(x.ref, y.ref, isBiased));
   }
 
-  static public <T extends Number> T corrcoef(final Array x, final Array y, Class<T> type) throws Exception {
+  static public <T extends Number> T corrcoef(final Array x, final Array y, Class<T> type)
+      throws Exception {
     DoubleComplex res = afCorrcoef(x.ref, y.ref);
     return castResult(res, type);
   }
 
   static public Array[] topk(final Array in, int k, int dim, TopkOrder order) throws Exception {
     long[] refs = afTopk(in.ref, k, dim, order.getOrder());
-    return new Array[] { new Array(refs[0]), new Array(refs[1]) };
+    return new Array[] {new Array(refs[0]), new Array(refs[1])};
   }
 
   static public <T> T castResult(DoubleComplex res, Class<T> type) throws Exception {
