@@ -28,4 +28,5 @@ macro(BUILD_EXAMPLE src)
 endmacro()
 
 build_example(HelloWorld.java)
+build_example(WindowEx.java)
 build_example(MonteCarloPi.java)
