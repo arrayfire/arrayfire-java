@@ -16,7 +16,7 @@ public class Array extends ArrayFire implements AutoCloseable {
           this.type = type;
       }
 
-      public static Type fromInt(int type) throws Exception {
+      public static Type fromInt(int type) throws IllegalArgumentException {
           switch (type) {
             case 0:
                 return Type.Float;
@@ -31,7 +31,7 @@ public class Array extends ArrayFire implements AutoCloseable {
             case 5:
                 return Type.Int;
             default:
-                throw new Exception("Unknown type.");
+                throw new IllegalArgumentException("Unknown type.");
           }
       }
 
@@ -96,7 +96,7 @@ public class Array extends ArrayFire implements AutoCloseable {
     set(createEmptyArray(adims, type));
   }
 
-  public Array(int[] dims, float[] elems) throws Exception {
+  public Array(int[] dims, float[] elems) throws IllegalArgumentException {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
@@ -105,17 +105,17 @@ public class Array extends ArrayFire implements AutoCloseable {
     }
 
     if (elems == null) {
-      throw new Exception("Null elems object provided");
+      throw new IllegalArgumentException("Null elems object provided");
     }
 
     if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
+      throw new IllegalArgumentException("Mismatching dims and array size");
     }
 
     set(createArrayFromFloat(adims, elems));
   }
 
-  public Array(int[] dims, double[] elems) throws Exception {
+  public Array(int[] dims, double[] elems) throws IllegalArgumentException {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
@@ -124,17 +124,17 @@ public class Array extends ArrayFire implements AutoCloseable {
     }
 
     if (elems == null) {
-      throw new Exception("Null elems object provided");
+      throw new IllegalArgumentException("Null elems object provided");
     }
 
     if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
+      throw new IllegalArgumentException("Mismatching dims and array size");
     }
 
     set(createArrayFromDouble(adims, elems));
   }
 
-  public Array(int[] dims, int[] elems) throws Exception {
+  public Array(int[] dims, int[] elems) throws IllegalArgumentException {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
@@ -142,11 +142,11 @@ public class Array extends ArrayFire implements AutoCloseable {
       total_size *= dim;
     }
     if (elems == null) {
-      throw new Exception("Null elems object provided");
+      throw new IllegalArgumentException("Null elems object provided");
     }
 
     if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
+      throw new IllegalArgumentException("Mismatching dims and array size");
     }
 
     set(createArrayFromInt(adims, elems));
@@ -171,7 +171,7 @@ public class Array extends ArrayFire implements AutoCloseable {
     set(createArrayFromFloatComplex(adims, elems));
   }
 
-  public Array(int[] dims, DoubleComplex[] elems) throws Exception {
+  public Array(int[] dims, DoubleComplex[] elems) throws IllegalArgumentException {
     int[] adims = Array.dim4(dims);
 
     int total_size = 1;
@@ -180,11 +180,11 @@ public class Array extends ArrayFire implements AutoCloseable {
     }
 
     if (elems == null) {
-      throw new Exception("Null elems object provided");
+      throw new IllegalArgumentException("Null elems object provided");
     }
 
     if (elems.length > total_size || elems.length < total_size) {
-      throw new Exception("Mismatching dims and array size");
+      throw new IllegalArgumentException("Mismatching dims and array size");
     }
 
     set(createArrayFromDoubleComplex(adims, elems));
@@ -204,12 +204,12 @@ public class Array extends ArrayFire implements AutoCloseable {
       return Array.Type.fromInt(getType(ref));
   }
 
-  protected static int[] dim4(int[] dims) throws Exception {
+  protected static int[] dim4(int[] dims) throws IllegalArgumentException {
 
     if (dims == null) {
-      throw new Exception("Null dimensions object provided");
+      throw new IllegalArgumentException("Null dimensions object provided");
     } else if (dims.length > 4) {
-      throw new Exception("ArrayFire supports up to 4 dimensions only");
+      throw new IllegalArgumentException("ArrayFire supports up to 4 dimensions only");
     }
 
     int[] adims = new int[] { 1, 1, 1, 1 };
@@ -225,7 +225,7 @@ public class Array extends ArrayFire implements AutoCloseable {
       String str = "Type mismatch: ";
       str = str + "Requested " + ty;
       str = str + ". Found " + myType;
-      throw new Exception(str);
+      throw new IllegalArgumentException(str);
     }
     return;
   }
