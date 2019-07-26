@@ -1,10 +1,19 @@
 package com.arrayfire;
 
-class Graphics {
+class Graphics extends ArrayFire {
 
   public enum ColorMap {
-    DEFAULT(0), SPECTRUM(1), COLORS(2), RED(3), MOOD(4), HEAT(5),
-    BLUE(6), INFERNO(7), MAGMA(8), PLASMA(9), VIRIDIS(10);
+    DEFAULT(0),
+    SPECTRUM(1),
+    COLORS(2),
+    RED(3),
+    MOOD(4),
+    HEAT(5),
+    BLUE(6),
+    INFERNO(7),
+    MAGMA(8),
+    PLASMA(9),
+    VIRIDIS(10);
 
     private final int map;
 
@@ -18,7 +27,14 @@ class Graphics {
   }
 
   public enum MarkerType {
-    NONE(0), POINT(1), CIRCLE(2), SQUARE(3), TRIANGLE(4), CROSS(5), PLUS(6), STAR(7);
+    NONE(0),
+    POINT(1),
+    CIRCLE(2),
+    SQUARE(3),
+    TRIANGLE(4),
+    CROSS(5),
+    PLUS(6),
+    STAR(7);
 
     private final int type;
 
@@ -56,9 +72,9 @@ class Graphics {
   public static native void afDrawScatternd(long wnd, long arr, int r, int c,
                                             int markerType, String title);
 
-    public static native void afDrawScatter2d(long wnd, long arrX, long arrY,
-                                              int r, int c,
-                                              int markerType, String title);
+  public static native void afDrawScatter2d(long wnd, long arrX, long arrY,
+                                            int r, int c,
+                                            int markerType, String title);
 
   public static native void afDrawScatter3d(long wnd, long arrX, long arrY,
                                             long arrZ, int r, int c,
@@ -112,5 +128,4 @@ class Graphics {
   public static native boolean afClose(long wnd);
 
   public static native void afSetVisibility(long wnd, boolean isVisible);
-
 }

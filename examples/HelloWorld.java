@@ -9,6 +9,7 @@ public class HelloWorld {
     Array f = new Array();
     try {
       Util.info();
+
       System.out.println("Create a 5-by-3 matrix of random floats on the GPU");
       Data.randu(a, new int[] { 5, 3 }, Array.FloatType);
       System.out.println(a.toString("a"));
@@ -113,6 +114,7 @@ public class HelloWorld {
       d.close();
       e.close();
       f.close();
+
     } catch (Exception ex) {
       ex.printStackTrace();
     }
