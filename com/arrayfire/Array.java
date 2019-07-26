@@ -2,12 +2,60 @@ package com.arrayfire;
 
 public class Array extends ArrayFire implements AutoCloseable {
 
-  public static final int FloatType = 0;
-  public static final int FloatComplexType = 1;
-  public static final int DoubleType = 2;
-  public static final int DoubleComplexType = 3;
-  public static final int BooleanType = 4;
-  public static final int IntType = 5;
+  public enum Type {
+      Float(0),
+      FloatComplex(1),
+      Double(2),
+      DoubleComplex(3),
+      Boolean(4),
+      Int(5);
+
+      private final int type;
+
+      private Type(int type) {
+          this.type = type;
+      }
+
+      public static Type fromInt(int type) throws Exception {
+          switch (type) {
+            case 0:
+                return Type.Float;
+            case 1:
+                return Type.FloatComplex;
+            case 2:
+                return Type.Double;
+            case 3:
+                return Type.DoubleComplex;
+            case 4:
+                return Type.Boolean;
+            case 5:
+                return Type.Int;
+            default:
+                throw new Exception("Unknown type.");
+          }
+      }
+
+      public int getType() {
+          return type;
+      }
+
+      public Type f32() {
+          return Type.Float;
+      }
+
+      public Type f64() {
+          return Type.Double;
+      }
+
+      public Type int32() {
+          return Type.Int;
+      }
+
+      @Override
+      public String toString() {
+          return this.name();
+      }
+  }
 
   private native static void destroyArray(long ref);
 
@@ -152,20 +200,8 @@ public class Array extends ArrayFire implements AutoCloseable {
     return getDims(ref);
   }
 
-  public int type() {
-    return getType(ref);
-  }
-
-  public String typeName(int ty) throws Exception {
-    switch (ty) {
-    case FloatType: return "float";
-    case DoubleType: return "double";
-    case IntType: return "int";
-    case BooleanType: return "boolean";
-    case FloatComplexType: return "FloatComplex";
-    case DoubleComplexType: return "DoubleComplex";
-    default: throw new Exception("Unknown type");
-    }
+  public Array.Type type() throws Exception {
+      return Array.Type.fromInt(getType(ref));
   }
 
   protected static int[] dim4(int[] dims) throws Exception {
@@ -181,14 +217,14 @@ public class Array extends ArrayFire implements AutoCloseable {
     return adims;
   }
 
-  protected void assertType(int ty) throws Exception {
+  protected void assertType(Array.Type ty) throws Exception {
 
-    int myType = type();
+    Type myType = type();
 
     if (myType != ty) {
       String str = "Type mismatch: ";
-      str = str + "Requested " + typeName(ty);
-      str = str + ". Found " + typeName(myType);
+      str = str + "Requested " + ty;
+      str = str + ". Found " + myType;
       throw new Exception(str);
     }
     return;
