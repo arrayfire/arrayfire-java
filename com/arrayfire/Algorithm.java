@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-class Algorithm extends ArrayFire {
+class Algorithm {
 
   // Scalar return operations
   private native static double sumAll(long a);
