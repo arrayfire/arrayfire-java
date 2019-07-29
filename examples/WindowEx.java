@@ -1,3 +1,4 @@
+import static com.arrayfire.ArrayFire.*;
 import com.arrayfire.*;
 
 public class WindowEx {
@@ -5,7 +6,7 @@ public class WindowEx {
       System.out.println("Creating window");
       try {
           Array img = new Array();
-          Data.randu(img, new int[] { 200, 200 }, Array.Type.Int);
+          randu(img, new int[] { 200, 200 }, Type.Int);
           Window window = new Window();
           while (!window.closeWindow()) {
               window.image(img, "Image");

@@ -1,5 +1,6 @@
 import java.util.Random;
 import com.arrayfire.*;
+import static com.arrayfire.ArrayFire.*;
 
 public class HelloWorld {
 
@@ -8,73 +9,73 @@ public class HelloWorld {
     Array a = new Array(), b = new Array(), c = new Array(), d = new Array();
     Array f = new Array();
     try {
-      Util.info();
+      info();
 
       System.out.println("Create a 5-by-3 matrix of random floats on the GPU");
-      Data.randu(a, new int[] { 5, 3 }, Array.Type.Float);
+      randu(a, new int[] { 5, 3 }, Type.Float);
       System.out.println(a.toString("a"));
 
       System.out.println("Element-wise arithmetic");
-      Arith.sin(b, a);
+      sin(b, a);
       System.out.println(b.toString("b"));
 
       System.out.println("Fourier transform the result");
-      Signal.fft(c, b);
+      fft(c, b);
       System.out.println(c.toString("c"));
 
       System.out.println("Matmul b and c");
-      Arith.mul(d, b, c);
+      mul(d, b, c);
       System.out.println(d.toString("d"));
 
       System.out.println("Calculate weighted variance.");
       Array forVar = new Array();
       Array weights = new Array();
-      Data.randn(forVar, new int[] { 5, 5 }, Array.Type.Double);
-      Data.randn(weights, new int[] { 5, 5 }, Array.Type.Double);
+      randn(forVar, new int[] { 5, 5 }, Type.Double);
+      randn(weights, new int[] { 5, 5 }, Type.Double);
       System.out.println(forVar.toString("forVar"));
 
-      double abc = Statistics.var(forVar, weights, Double.class);
+      double abc = var(forVar, weights, Double.class);
       System.out.println(String.format("Variance is: %f", abc));
       forVar.close();
       weights.close();
 
       System.out.println("Median");
       Array forMedian = new Array();
-      Data.randu(forMedian, new int[] { 3, 5 }, Array.Type.Double);
+      randu(forMedian, new int[] { 3, 5 }, Type.Double);
       System.out.println(forMedian.toString("forMedian"));
-      double median = Statistics.median(forMedian, Double.class);
+      double median = median(forMedian, Double.class);
       System.out.printf("Median = %f\n", median);
       forMedian.close();
 
       System.out.println("Calculate standard deviation");
       Array forStdev = new Array();
-      Data.randu(forStdev, new int[] { 5, 3 }, Array.Type.Double);
+      randu(forStdev, new int[] { 5, 3 }, Type.Double);
       System.out.println(forStdev.toString("forStdev"));
-      double stdev = Statistics.stdev(forStdev, Double.class);
+      double stdev = stdev(forStdev, Double.class);
       System.out.println(String.format("Stdev is: %f", stdev));
       forStdev.close();
 
       System.out.println("Covariance");
       Array x = new Array();
       Array z = new Array();
-      Data.randu(x, new int[] { 5, 3 }, Array.Type.Double);
-      Data.randu(z, new int[] { 5, 3 }, Array.Type.Double);
+      randu(x, new int[] { 5, 3 }, Type.Double);
+      randu(z, new int[] { 5, 3 }, Type.Double);
       System.out.println(x.toString("x"));
       System.out.println(z.toString("z"));
-      Array cov = Statistics.cov(x, z, false);
+      Array cov = cov(x, z, false);
       System.out.println(cov.toString("cov"));
 
       System.out.println("Correlation coefficient of the 2 previous arrays");
-      double corrcoef = Statistics.corrcoef(x, z, Double.class);
+      double corrcoef = corrcoef(x, z, Double.class);
       System.out.printf("Corrcoef = %f\n", corrcoef);
       x.close();
       z.close();
 
       System.out.println("Topk");
       Array forTopk = new Array();
-      Data.randu(forTopk, new int[] { 3, 3 }, Array.Type.Double);
+      randu(forTopk, new int[] { 3, 3 }, Type.Double);
       System.out.println(forTopk.toString("forTopk"));
-      Array[] results = Statistics.topk(forTopk, 3, 0, Statistics.TopkOrder.DEFAULT);
+      Array[] results = topk(forTopk, 3, 0, TopkOrder.DEFAULT);
       System.out.println(results[0].toString("Indicies"));
       System.out.println(results[1].toString("Values"));
 
@@ -84,6 +85,7 @@ public class HelloWorld {
       for (int dim : dims) {
         total *= dim;
       }
+
       float[] data = new float[total];
       Random rand = new Random();
 
@@ -96,8 +98,8 @@ public class HelloWorld {
 
       System.out.println("Add e and random array");
       Array randa = new Array();
-      Data.randu(randa, dims, Array.Type.Float);
-      Arith.add(f, e, randa);
+      randu(randa, dims, Type.Float);
+      add(f, e, randa);
       System.out.println(f.toString("f"));
 
       System.out.println("Copy result back to host.");
