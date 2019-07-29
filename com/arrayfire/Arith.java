@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-class Arith extends ArrayFire {
+class Arith {
 
   // Binary operations
   private native static long add(long a, long b);

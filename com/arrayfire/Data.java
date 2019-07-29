@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-class Data extends ArrayFire {
+class Data {
 
   private native static long createRanduArray(int[] dims, int type);
 

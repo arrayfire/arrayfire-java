@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-class Signal extends ArrayFire {
+class Signal {
 
   private native static long fft(long a, int dim0);
 
