@@ -1,5 +1,6 @@
 import java.util.Random;
 import com.arrayfire.*;
+import static com.arrayfire.ArrayFire.*;
 
 public class MonteCarloPi {
 
@@ -22,16 +23,16 @@ public class MonteCarloPi {
     try {
 
       int[] dims = new int[] { size, 1 };
-      Data.randu(x, dims, Array.Type.Float);
-      Data.randu(y, dims, Array.Type.Float);
+      randu(x, dims, Type.Float);
+      randu(y, dims, Type.Float);
 
-      Arith.mul(x, x, x);
-      Arith.mul(y, y, y);
+      mul(x, x, x);
+      mul(y, y, y);
 
-      Arith.add(res, x, y);
-      Arith.lt(res, res, 1);
+      add(res, x, y);
+      lt(res, res, 1);
 
-      double count = Algorithm.sumAll(res);
+      double count = sumAll(res);
       return 4.0 * ((double) (count)) / size;
 
     } catch (Exception e) {
