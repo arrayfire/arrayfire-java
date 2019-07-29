@@ -1,6 +1,6 @@
-package com.util;
+package com.arrayfire;
 
-public class JNIException extends Exception {
+class JNIException extends Exception {
   public JNIException(String message) {
     super(message);
   }
