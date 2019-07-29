@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-public class Array implements AutoCloseable {
+public class Array extends AFLibLoader implements AutoCloseable {
 
   private native static void destroyArray(long ref);
 

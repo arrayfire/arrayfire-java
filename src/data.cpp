@@ -28,6 +28,16 @@ JNIEXPORT jlong JNICALL DATA_FUNC(createRandnArray)(JNIEnv *env, jclass clazz,
   return JLONG(ret);
 }
 
+JNIEXPORT jlong JNICALL DATA_FUNC(afRange)(JNIEnv *env, jclass clazz,
+                                           jintArray dims, jint seqDim,
+                                           jint type) {
+  af_array ret = 0;
+  jint *dimptr = env->GetIntArrayElements(dims, 0);
+  dim_t tdims[4] = {dimptr[0], dimptr[1], dimptr[2], dimptr[3]};
+  AF_CHECK(af_range(&ret, 4, tdims, seqDim, (af_dtype)type));
+  env->ReleaseIntArrayElements(dims, dimptr, 0);
+}
+
 JNIEXPORT jlong JNICALL DATA_FUNC(createConstantsArray)(
     JNIEnv *env, jclass clazz, jdouble val, jintArray dims, jint type) {
   af_array ret = 0;

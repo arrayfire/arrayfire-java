@@ -27,4 +27,8 @@ class Util extends ArrayFire {
     }
     return ret_ary;
   }
+
+  public static int signbit(double x) {
+      return x < 0 ? -1 : 0;
+  }
 }

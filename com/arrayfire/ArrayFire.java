@@ -2,10 +2,7 @@ package com.arrayfire;
 
 import com.arrayfire.Util;
 
-public class ArrayFire {
-  static {
-    System.loadLibrary("af_java");
-  }
+public class ArrayFire extends AFLibLoader {
 
   /* ************* Algorithm ************* */
 
@@ -279,6 +276,24 @@ public class ArrayFire {
     Data.identity(res, dims);
   }
 
+  public static Array range(int[] dims, int seqDim, Type type) {
+      return Data.range(dims, seqDim, type);
+  }
+
+
+  public static Array range(int[] dims, int seqDim) {
+      return Data.range(dims, seqDim, Type.Float);
+  }
+
+  public static Array range(int[] dims) {
+      return Data.range(dims, -1, Type.Float);
+  }
+
+
+  public static Array range(int dim) {
+      return Data.range(new int[] {dim}, -1, Type.Float);
+  }
+
   /* ************* Image ************* */
 
   public static void erode(Array res, Array a, Array b) throws Exception {
@@ -489,6 +504,7 @@ public class ArrayFire {
   public static void info() {
       Util.info();
   }
+
 
   // Enums
 

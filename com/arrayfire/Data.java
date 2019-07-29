@@ -22,6 +22,8 @@ class Data {
 
   private native static long createIdentityArray(int[] dims, int type);
 
+  private native static long afRange(int[] dims, int seqDim, int type);
+
   public static float[] getFloatArray(Array A) throws Exception {
     A.assertType(ArrayFire.Type.Float);
     return getFloatFromArray(A.ref);
@@ -77,4 +79,8 @@ class Data {
     identity(res, dims, ArrayFire.Type.Float);
   }
 
+  public static Array range(int[] dims, int seqDim, ArrayFire.Type type) {
+      int[] adims = Array.dim4(dims);
+      return new Array(afRange(adims, seqDim, seqDim));
+  }
 }
