@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-public class Data extends ArrayFire {
+class Data extends ArrayFire {
 
   private native static long createRanduArray(int[] dims, int type);
 
@@ -23,58 +23,58 @@ public class Data extends ArrayFire {
   private native static long createIdentityArray(int[] dims, int type);
 
   public static float[] getFloatArray(Array A) throws Exception {
-    A.assertType(Array.Type.Float);
+    A.assertType(ArrayFire.Type.Float);
     return getFloatFromArray(A.ref);
   }
 
   public static double[] getDoubleArray(Array A) throws Exception {
-    A.assertType(Array.Type.Double);
+    A.assertType(ArrayFire.Type.Double);
     return getDoubleFromArray(A.ref);
   }
 
   public static FloatComplex[] getFloatComplexArray(Array A) throws Exception {
-    A.assertType(Array.Type.FloatComplex);
+    A.assertType(ArrayFire.Type.FloatComplex);
     return getFloatComplexFromArray(A.ref);
   }
 
   public static DoubleComplex[] getDoubleComplexArray(Array A) throws Exception {
-    A.assertType(Array.Type.DoubleComplex);
+    A.assertType(ArrayFire.Type.DoubleComplex);
     return getDoubleComplexFromArray(A.ref);
   }
 
   public static int[] getIntArray(Array A) throws Exception {
-    A.assertType(Array.Type.Int);
+    A.assertType(ArrayFire.Type.Int);
     return getIntFromArray(A.ref);
   }
 
   public static boolean[] getBooleanArray(Array A) throws Exception {
-    A.assertType(Array.Type.Boolean);
+    A.assertType(ArrayFire.Type.Boolean);
     return getBooleanFromArray(A.ref);
   }
 
   // Binary operations
-  public static void randu(Array res, int[] dims, Array.Type type) throws Exception {
+  public static void randu(Array res, int[] dims, ArrayFire.Type type) throws Exception {
     int[] adims = Array.dim4(dims);
     res.set(createRanduArray(adims, type.getType()));
   }
 
-  public static void randn(Array res, int[] dims, Array.Type type) throws Exception {
+  public static void randn(Array res, int[] dims, ArrayFire.Type type) throws Exception {
     int[] adims = Array.dim4(dims);
     res.set(createRandnArray(adims, type.getType()));
   }
 
-  public static void constant(Array res, double val, int[] dims, Array.Type type) throws Exception {
+  public static void constant(Array res, double val, int[] dims, ArrayFire.Type type) throws Exception {
     int[] adims = Array.dim4(dims);
     res.set(createConstantsArray(val, adims, type.getType()));
   }
 
-  public static void identity(Array res, int[] dims, Array.Type type) throws Exception {
+  public static void identity(Array res, int[] dims, ArrayFire.Type type) throws Exception {
     int[] adims = Array.dim4(dims);
     res.set(createIdentityArray(adims, type.getType()));
   }
 
   public static void identity(Array res, int[] dims) throws Exception {
-    identity(res, dims, Array.Type.Float);
+    identity(res, dims, ArrayFire.Type.Float);
   }
 
 }

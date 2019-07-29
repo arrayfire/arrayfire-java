@@ -1,6 +1,6 @@
 package com.arrayfire;
 
-public class Util extends ArrayFire {
+class Util extends ArrayFire {
 
   public native static void info();
 
