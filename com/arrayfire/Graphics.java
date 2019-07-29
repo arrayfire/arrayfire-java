@@ -1,51 +1,6 @@
 package com.arrayfire;
 
-class Graphics extends ArrayFire {
-
-  public enum ColorMap {
-    DEFAULT(0),
-    SPECTRUM(1),
-    COLORS(2),
-    RED(3),
-    MOOD(4),
-    HEAT(5),
-    BLUE(6),
-    INFERNO(7),
-    MAGMA(8),
-    PLASMA(9),
-    VIRIDIS(10);
-
-    private final int map;
-
-    private ColorMap(int map) {
-      this.map = map;
-    }
-
-    public int getMap() {
-      return map;
-    }
-  }
-
-  public enum MarkerType {
-    NONE(0),
-    POINT(1),
-    CIRCLE(2),
-    SQUARE(3),
-    TRIANGLE(4),
-    CROSS(5),
-    PLUS(6),
-    STAR(7);
-
-    private final int type;
-
-    private MarkerType(int type) {
-      this.type = type;
-    }
-
-    public int getType() {
-      return type;
-    }
-  }
+class Graphics {
 
   public static native long afInitWindow(int width, int height, String name);
 

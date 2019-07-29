@@ -1,61 +1,6 @@
 package com.arrayfire;
 
-public class Array extends ArrayFire implements AutoCloseable {
-
-  public enum Type {
-      Float(0),
-      FloatComplex(1),
-      Double(2),
-      DoubleComplex(3),
-      Boolean(4),
-      Int(5);
-
-      private final int type;
-
-      private Type(int type) {
-          this.type = type;
-      }
-
-      public static Type fromInt(int type) throws IllegalArgumentException {
-          switch (type) {
-            case 0:
-                return Type.Float;
-            case 1:
-                return Type.FloatComplex;
-            case 2:
-                return Type.Double;
-            case 3:
-                return Type.DoubleComplex;
-            case 4:
-                return Type.Boolean;
-            case 5:
-                return Type.Int;
-            default:
-                throw new IllegalArgumentException("Unknown type.");
-          }
-      }
-
-      public int getType() {
-          return type;
-      }
-
-      public Type f32() {
-          return Type.Float;
-      }
-
-      public Type f64() {
-          return Type.Double;
-      }
-
-      public Type int32() {
-          return Type.Int;
-      }
-
-      @Override
-      public String toString() {
-          return this.name();
-      }
-  }
+public class Array implements AutoCloseable {
 
   private native static void destroyArray(long ref);
 
@@ -200,8 +145,8 @@ public class Array extends ArrayFire implements AutoCloseable {
     return getDims(ref);
   }
 
-  public Array.Type type() throws Exception {
-      return Array.Type.fromInt(getType(ref));
+  public ArrayFire.Type type() throws Exception {
+      return ArrayFire.Type.fromInt(getType(ref));
   }
 
   protected static int[] dim4(int[] dims) throws IllegalArgumentException {
@@ -217,9 +162,9 @@ public class Array extends ArrayFire implements AutoCloseable {
     return adims;
   }
 
-  protected void assertType(Array.Type ty) throws Exception {
+  protected void assertType(ArrayFire.Type ty) throws Exception {
 
-    Type myType = type();
+    ArrayFire.Type myType = type();
 
     if (myType != ty) {
       String str = "Type mismatch: ";

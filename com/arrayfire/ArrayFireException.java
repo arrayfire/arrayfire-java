@@ -4,9 +4,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.util.JNIException;
 
-public class ArrayFireException extends JNIException {
+class ArrayFireException extends JNIException {
   private static final Map<Integer, String> errorCodes;
 
   static {

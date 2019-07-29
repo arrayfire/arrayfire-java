@@ -1,6 +1,8 @@
 package com.arrayfire;
 
-public class Statistics extends ArrayFire {
+import static com.arrayfire.ArrayFire.*;
+
+class Statistics {
 
   static private native long afMean(long ref, int dim);
 
@@ -96,7 +98,7 @@ public class Statistics extends ArrayFire {
     return castResult(res, type);
   }
 
-  static public Array[] topk(final Array in, int k, int dim, TopkOrder order) throws Exception {
+  static public Array[] topk(final Array in, int k, int dim, ArrayFire.TopkOrder order) throws Exception {
     long[] refs = afTopk(in.ref, k, dim, order.getOrder());
     return new Array[] {new Array(refs[0]), new Array(refs[1])};
   }
@@ -118,19 +120,5 @@ public class Statistics extends ArrayFire {
     }
 
     return type.cast(ret);
-  }
-
-  public enum TopkOrder {
-    DEFAULT(0), MIN(1), MAX(2);
-
-    private final int order;
-
-    TopkOrder(int order) {
-      this.order = order;
-    }
-
-    public int getOrder() {
-      return order;
-    }
   }
 }

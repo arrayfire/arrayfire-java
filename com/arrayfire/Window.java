@@ -1,9 +1,9 @@
 package com.arrayfire;
 
-import com.arrayfire.Graphics.ColorMap;
-import com.arrayfire.Graphics.MarkerType;
+import static com.arrayfire.ArrayFire.*;
 
 public class Window implements AutoCloseable {
+
 
   protected long ref;
   private int r;
@@ -111,20 +111,16 @@ public class Window implements AutoCloseable {
     Graphics.afDrawVectorFieldnd(ref, points.ref, directions.ref, r, c, title);
   }
 
-  public void vectorField(final Array xPoints, final Array yPoints,
-                          final Array xDirections, final Array yDirections,
-      String title) {
-    Graphics.afDrawVectorField2d(ref, xPoints.ref, yPoints.ref,
-                                 xDirections.ref, yDirections.ref, r, c, title);
+  public void vectorField(final Array xPoints, final Array yPoints, final Array xDirections,
+      final Array yDirections, String title) {
+    Graphics.afDrawVectorField2d(ref, xPoints.ref, yPoints.ref, xDirections.ref, yDirections.ref, r,
+        c, title);
   }
 
-  public void vectorField(final Array xPoints, final Array yPoints,
-                          final Array zPoints, final Array xDirections,
-                          final Array yDirections, final Array zDirections,
-                          String title) {
-    Graphics.afDrawVectorField3d(ref, xPoints.ref, yPoints.ref, zPoints.ref,
-                                 xDirections.ref, yDirections.ref,
-                                 zDirections.ref, r, c, title);
+  public void vectorField(final Array xPoints, final Array yPoints, final Array zPoints,
+      final Array xDirections, final Array yDirections, final Array zDirections, String title) {
+    Graphics.afDrawVectorField3d(ref, xPoints.ref, yPoints.ref, zPoints.ref, xDirections.ref,
+        yDirections.ref, zDirections.ref, r, c, title);
   }
 
   public void grid(int rows, int cols) {
@@ -135,20 +131,17 @@ public class Window implements AutoCloseable {
     Graphics.afSetAxesLimitsCompute(ref, x.ref, y.ref, 0, isExact, r, c);
   }
 
-  public void setAxesLimits(final Array x, final Array y, final Array z,
-                            boolean isExact) {
+  public void setAxesLimits(final Array x, final Array y, final Array z, boolean isExact) {
     Graphics.afSetAxesLimitsCompute(ref, x.ref, y.ref, z.ref, isExact, r, c);
   }
 
-  public void setAxesLimits(float xMin, float xMax, float yMin, float yMax,
-                            boolean isExact) {
+  public void setAxesLimits(float xMin, float xMax, float yMin, float yMax, boolean isExact) {
     Graphics.afSetAxesLimits2d(ref, xMin, xMax, yMin, yMax, isExact, r, c);
   }
 
-  public void setAxesLimits(float xMin, float xMax, float yMin, float yMax,
-                            float zMin, float zMax, boolean isExact) {
-    Graphics.afSetAxesLimits3d(ref, xMin, xMax, yMin, yMax, zMin, zMax, isExact,
-                               r, c);
+  public void setAxesLimits(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax,
+      boolean isExact) {
+    Graphics.afSetAxesLimits3d(ref, xMin, xMax, yMin, yMax, zMin, zMax, isExact, r, c);
   }
 
   public void setAxesTitles(String xTitle, String yTitle, String zTitle) {
