@@ -10,6 +10,8 @@ enum class JavaObjects { FloatComplex, DoubleComplex };
 template <typename... Args>
 jobject createJavaObject(JNIEnv *env, JavaObjects objectType, Args... args);
 
+af_index_t jIndexToCIndex(JNIEnv *env, jobject obj);
+
 void throwArrayFireException(JNIEnv *env, const char *functionName,
                              const char *file, const int line, const int code);
 }  // namespace java

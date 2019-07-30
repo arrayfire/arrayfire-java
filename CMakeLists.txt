@@ -35,6 +35,7 @@ ADD_JAR(${AF_JAR}
   com/arrayfire/Graphics.java
   com/arrayfire/Window.java
   com/arrayfire/Seq.java
+  com/arrayfire/Index.java
   com/arrayfire/AFLibLoader.java
   )
 

@@ -1,86 +1,244 @@
 package com.arrayfire;
 
-import com.arrayfire.Util;
+import com.arrayfire.Index;
 
 public class ArrayFire extends AFLibLoader {
 
+  public static final Seq SPAN = Seq.span();
   /* ************* Algorithm ************* */
 
-  // Scalar return operations
+
+  /**
+   * Sum all the elements in an Array, wraps {@link http://arrayfire.org/docs/group__reduce__func__sum.htm }
+   * @param a the array to be summed
+   * @return  the sum
+   * @throws  Exception
+   * @see     Array
+   */
   public static double sumAll(Array a) throws Exception {
     return Algorithm.sumAll(a);
   }
 
+  /**
+   * Finds the maximum value in an array, wraps {@link http://arrayfire.org/docs/group__reduce__func__max.htm} 
+   * @param a the input array
+   * @return  the maximum value
+   * @throws  Exception
+   * @see     Array
+   */
   public static double maxAll(Array a) throws Exception {
     return Algorithm.maxAll(a);
   }
 
+  /**
+   * Finds the minimum value in an array, wraps {@link http://arrayfire.org/docs/group__reduce__func__min.htm}.
+   * @param a the input array
+   * @return  the minimum value
+   * @throws  Exception
+   * @see     Array
+   */
   public static double minAll(Array a) throws Exception {
     return Algorithm.minAll(a);
   }
 
+  /**
+   * Finds the sum of an array across 1 dimension and stores the result in a 2nd array.
+   * @param res the array in which to store the result
+   * @param a   the input array
+   * @param dim the dimension across which to find the sum
+   * @throws Exception
+   * @see       Array
+   */
   public static void sum(Array res, Array a, int dim) throws Exception {
     Algorithm.sum(res, a, dim);
   }
 
+  /**
+   * Finds the maximum values of an array across 1 dimension and stores the result in a 2nd array.
+   * @param res   the array in which to store the result.
+   * @param a     the input array
+   * @param dim   the dimenstion across which to find the maximum values
+   * @throws Exception
+   * @see         Array
+   */
   public static void max(Array res, Array a, int dim) throws Exception {
     Algorithm.max(res, a, dim);
   }
 
+  /**
+   * Finds the minimum values in an array across 1 dimenstion and stores the result in a 2nd array.
+   * @param res   the array in which to store the result
+   * @param a     the input array
+   * @param dim   the dimension across which to find the maximum values
+   * @throws Exception
+   * @see         Array
+   */
   public static void min(Array res, Array a, int dim) throws Exception {
     Algorithm.min(res, a, dim);
   }
 
+
+  /**
+   * Finds the sum of values in an array across all dimenstion and stores the result in a 2nd array.
+   * @param res   the array in which to store the result
+   * @param a     the input array
+   * @throws Exception
+   * @see         Array
+   */
   public static void sum(Array res, Array a) throws Exception {
     Algorithm.sum(res, a);
   }
 
+  /**
+   * Finds the max values in an array across all dimenstion and stores the result in a 2nd array.
+   * @param res   the array in which to store the result
+   * @param a     the input array
+   * @throws Exception
+   * @see         Array
+   */
   public static void max(Array res, Array a) throws Exception {
     Algorithm.max(res, a);
   }
 
+  /**
+   * Finds the minimum values in an array across all dimenstion and stores the result in a 2nd array.
+   * @param res   the array in which to store the result
+   * @param a     the input array
+   * @throws Exception
+   * @see         Array
+   */
   public static void min(Array res, Array a) throws Exception {
     Algorithm.min(res, a, 0);
   }
 
+  /**
+   * Finds the indices of all non-zero values in an input array, wraps {@link http://arrayfire.org/docs/group__scan__func__where.htm}
+   * @param in  the input array
+   * @return    an array containing the indices of all non-zero values in the input array
+   * @throws Exception
+   */
+  public static Array where(final Array in) throws Exception {
+    return Algorithm.where(in);
+  }
+
   /* ************* Arith ************* */
 
+  /**
+   * Performs element-wise addition between 2 arrays and stores the result in another array, wraps {@link http://arrayfire.org/docs/group__arith__func__add.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void add(Array c, Array a, Array b) throws Exception {
     Arith.add(c, a, b);
   }
 
+  /**
+   * Subtracts 2 arrays, storing the result in another array, wraps {@link http://arrayfire.org/docs/group__arith__func__sub.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void sub(Array c, Array a, Array b) throws Exception {
     Arith.sub(c, a, b);
   }
 
+  /**
+   * Performs element-wise multiplication between 2 arrays, wraps {@link http://arrayfire.org/docs/group__arith__func__mul.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void mul(Array c, Array a, Array b) throws Exception {
     Arith.mul(c, a, b);
   }
 
+  /**
+   * Divides one array by another array, wraps {@link http://arrayfire.org/docs/group__arith__func__div.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void div(Array c, Array a, Array b) throws Exception {
     Arith.div(c, a, b);
   }
 
+  /**
+   * Checks if an array is less than or equal to another, wraps {@link http://arrayfire.org/docs/group__arith__func__le.htm}.
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void le(Array c, Array a, Array b) throws Exception {
     Arith.le(c, a, b);
   }
 
+  /**
+   * Checks if an array is less than another, wraps {@link http://arrayfire.org/docs/group__arith__func__lt.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void lt(Array c, Array a, Array b) throws Exception {
     Arith.lt(c, a, b);
   }
 
+  /**
+   * Checks if an array is greater than or equal to another, wraps {@link http://arrayfire.org/docs/group__arith__func__ge.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void ge(Array c, Array a, Array b) throws Exception {
     Arith.ge(c, a, b);
   }
 
+  /**
+   * Checks if an array is greater than another, wraps {@link http://arrayfire.org/docs/group__arith__func__gt.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void gt(Array c, Array a, Array b) throws Exception {
     Arith.gt(c, a, b);
   }
 
+  /**
+   * Checks if 2 input arrays are equal, wraps {@link http://arrayfire.org/docs/group__arith__func__eq.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void eq(Array c, Array a, Array b) throws Exception {
     Arith.eq(c, a, b);
   }
 
+  /**
+   * Checks if 2 input arrays are not equal, wraps {@link http://arrayfire.org/docs/group__arith__func__neq.htm}
+   * @param c   the resulting array
+   * @param a   the lhs array
+   * @param b   the rhs array
+   * @return    the resulting array
+   * @throws Exception
+   */
   public static void neq(Array c, Array a, Array b) throws Exception {
     Arith.neq(c, a, b);
   }
@@ -491,6 +649,33 @@ public class ArrayFire extends AFLibLoader {
     return Statistics.castResult(res, type);
   }
 
+  /* ************* Index ************* */
+
+
+  public static Array lookup(final Array in, final Array idx, int dim) throws Exception {
+      return Index.lookup(in, idx, dim);
+  }
+
+  public static Array lookup(final Array in, final Array idx) throws Exception {
+      return Index.lookup(in, idx, 0);
+  }
+
+  public static void copy(Array dst, final Array src, Index idx0, Index idx1, Index idx2, Index idx3) throws Exception {
+      Index.copy(dst, src, idx0, idx1, idx2, idx3);
+  }
+
+  public static void copy(Array dst, final Array src, Index idx0, Index idx1, Index idx2) throws Exception {
+      Index.copy(dst, src, idx0, idx1, idx2, new Index());
+  }
+
+  public static void copy(Array dst, final Array src, Index idx0, Index idx1) throws Exception {
+      Index.copy(dst, src, idx0, idx1, new Index(), new Index());
+  }
+
+  public static void copy(Array dst, final Array src, Index idx0) throws Exception {
+      Index.copy(dst, src, idx0, new Index(), new Index(), new Index());
+  }
+
   // Utils
 
   public static String toString(Array a, String delim) {
@@ -504,7 +689,6 @@ public class ArrayFire extends AFLibLoader {
   public static void info() {
       Util.info();
   }
-
 
   // Enums
 

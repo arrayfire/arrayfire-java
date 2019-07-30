@@ -11,7 +11,8 @@ enum class JavaType {
   String,
   Short,
   Void,
-  Boolean
+  Boolean,
+  Seq
 };
 
 static const char *mapJavaTypeToString(JavaType type) {
@@ -26,6 +27,7 @@ static const char *mapJavaTypeToString(JavaType type) {
     case JavaType::Short: return "S";
     case JavaType::Void: return "V";
     case JavaType::Boolean: return "B";
+    case JavaType::Seq: return "Lcom/arrayfire/Seq";
   }
 }
 
@@ -94,6 +96,56 @@ jobject createJavaObject(JNIEnv *env, JavaObjects objectType, Args... args) {
     } break;
   }
 }
+
+af_index_t jIndexToCIndex(JNIEnv *env, jobject obj) {
+    af_index_t index;
+    jclass cls = env->GetObjectClass(obj);
+    assert(cls == env->FindClass("com/arrayfire/Index"));
+
+    std::string getIsSeqSig = generateFunctionSignature(JavaType::Boolean, {});
+    jmethodID getIsSeqId = env->GetMethodID(cls, "isSeq", getIsSeqSig.c_str());
+    assert(getIsSeqId != NULL);
+    index.isSeq = env->CallBooleanMethod(obj, getIsSeqId);
+
+    std::string getIsBatchSig = generateFunctionSignature(JavaType::Boolean, {});
+    jmethodID getIsBatchId = env->GetMethodID(cls, "isBatch", getIsBatchSig.c_str());
+    assert(getIsBatchId != NULL);
+    index.isBatch = env->CallBooleanMethod(obj, getIsBatchId);
+
+    if (index.isSeq) {
+      // get seq object
+      std::string getSeqSig = generateFunctionSignature(JavaType::Seq, {});
+      jmethodID getSeqId = env->GetMethodID(cls, "getSeq", getSeqSig.c_str());
+      assert(getSeqId != NULL);
+      jobject seq = env->CallObjectMethod(obj, getSeqId);
+
+      // get seq fields
+      jclass seqCls = env->GetObjectClass(seq);
+      assert(seqCls == env->FindClass("com/arrayfire/Seq"));
+
+      jfieldID beginID = env->GetFieldID(seqCls, "begin", mapJavaTypeToString(JavaType::Double));
+      assert(beginID != NULL);
+      double begin = env->GetDoubleField(seq, beginID);
+
+      jfieldID endID = env->GetFieldID(seqCls, "end", mapJavaTypeToString(JavaType::Double));
+      assert(endID != NULL);
+      double end = env->GetDoubleField(seq, endID);
+
+      jfieldID stepID = env->GetFieldID(seqCls, "step", mapJavaTypeToString(JavaType::Double));
+      assert(stepID != NULL);
+      double step = env->GetDoubleField(seq, stepID);
+
+      index.idx.seq = af_make_seq(begin, end, step);
+    } else {
+      std::string getArrSig = generateFunctionSignature(JavaType::Long, {});
+      jmethodID getArrId = env->GetMethodID(cls, "getArrRef", getArrSig.c_str());
+      assert(getArrId != NULL);
+      long arrRef = env->CallLongMethod(obj, getArrId);
+      index.idx.arr = (af_array)arrRef;
+    }
+    return index;
+}
+
 #define INSTANTIATE(type) \
   template jobject createJavaObject<type>(JNIEnv *, JavaObjects, type, type);
 
