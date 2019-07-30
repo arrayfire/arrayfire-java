@@ -28,4 +28,10 @@ ARRAY_RET_OP_DEF(sum)
 ARRAY_RET_OP_DEF(max)
 ARRAY_RET_OP_DEF(min)
 
+JNIEXPORT jlong JNICALL ALGO_FUNC(afWhere)(JNIEnv *env, jclass clazz, jlong arr) {
+    af_array ret = 0;
+    AF_CHECK(af_where(&ret, ARRAY(arr)));
+    return JLONG(ret);
+}
+
 END_EXTERN_C

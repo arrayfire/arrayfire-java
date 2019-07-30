@@ -15,6 +15,8 @@ class Algorithm {
 
   private native static long min(long a, int dim);
 
+  private native static long afWhere(long ref);
+
   // Scalar return operations
   public static double sumAll(Array a) throws Exception {
     return sumAll(a.ref);
@@ -53,5 +55,9 @@ class Algorithm {
 
   public static void min(Array res, Array a) throws Exception {
     min(res, a, 0);
+  }
+
+  public static Array where(final Array in) throws Exception {
+      return new Array(afWhere(in.ref));
   }
 }
