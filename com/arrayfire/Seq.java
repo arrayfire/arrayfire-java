@@ -14,7 +14,7 @@ public class Seq extends AFLibLoader {
     private double step;
 
     private long size;
-    private boolean gfor; // always false until implemented
+    protected boolean gfor; // always false until implemented
 
     public Seq() {
         this(0);
@@ -44,6 +44,14 @@ public class Seq extends AFLibLoader {
 
     public Seq(Seq other) {
         set(other);
+    }
+
+    protected static Seq span() {
+        try {
+            return new Seq(1, 1, 0); // will never throw
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     public void set(Seq other) {
