@@ -145,7 +145,7 @@ public class Array extends AFLibLoader implements AutoCloseable {
     return getDims(ref);
   }
 
-  public ArrayFire.Type type() throws Exception {
+  public ArrayFire.Type type() {
       return ArrayFire.Type.fromInt(getType(ref));
   }
 
@@ -198,6 +198,10 @@ public class Array extends AFLibLoader implements AutoCloseable {
   public boolean[] getBooleanArray() throws Exception {
     return Data.getBooleanArray(this);
   }
+
+    public boolean isBool() {
+        return type() == ArrayFire.Type.Boolean;
+    }
 
   @Override
   public String toString() {
