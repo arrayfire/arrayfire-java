@@ -36,9 +36,9 @@ public class Array extends AFLibLoader implements AutoCloseable {
     ref = other_ref;
   }
 
-  public Array(int[] dims, int type) throws Exception {
+  public Array(int[] dims, ArrayFire.Type type) throws Exception {
     int[] adims = Array.dim4(dims);
-    set(createEmptyArray(adims, type));
+    set(createEmptyArray(adims, type.getType()));
   }
 
   public Array(int[] dims, float[] elems) throws IllegalArgumentException {

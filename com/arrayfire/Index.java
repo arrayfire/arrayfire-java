@@ -1,5 +1,7 @@
 package com.arrayfire;
 
+import java.util.Arrays;
+
 public class Index {
     private Array arr;
     private Seq seq;
@@ -7,7 +9,7 @@ public class Index {
     private boolean isBatch;
 
     private static native long afLookup(long in, long index, int dim);
-    private static native void afCopy(long dst, long src, Object idx0, Object idx1,
+    private static native void afCopy(long dst, long src, int ndims, Object idx0, Object idx1,
                                       Object idx2, Object idx3);
 
     public Index() {
@@ -45,7 +47,7 @@ public class Index {
         return arr.ref;
     }
 
-    public Seq getSeq() {
+    public Object getSeq() {
         return seq;
     }
 
@@ -67,6 +69,7 @@ public class Index {
 
     static void copy(Array dst, final Array src, Index idx0, Index idx1,
                      Index idx2, Index idx3) throws Exception{
-        afCopy(dst.ref, src.ref, idx0, idx1, idx2, idx3);
+        int ndims = Arrays.stream(dst.dims()).filter(x -> x > 1).toArray().length;
+        afCopy(dst.ref, src.ref, ndims, idx0, idx1, idx2, idx3);
     }
 }

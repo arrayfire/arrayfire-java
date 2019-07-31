@@ -14,6 +14,7 @@ JNIEXPORT jlong JNICALL INDEX_FUNC(afLookup)(JNIEnv *env, jclass clazz, jlong in
 
 JNIEXPORT void JNICALL INDEX_FUNC(afCopy)(JNIEnv *env, jclass clazz,
                                           jlong dst ,jlong src,
+                                          jint ndims,
                                           jobject idx0,
                                           jobject idx1, jobject idx2,
                                           jobject idx3, int dim) {
@@ -23,7 +24,7 @@ JNIEXPORT void JNICALL INDEX_FUNC(afCopy)(JNIEnv *env, jclass clazz,
           java::jIndexToCIndex(env, idx3)};
 
   af_array lhs = ARRAY(dst);
-  AF_CHECK_VOID(af_assign_gen(&lhs, lhs, 4, indices, ARRAY(src)));
+  AF_CHECK_VOID(af_assign_gen(&lhs, lhs, ndims, indices, ARRAY(src)));
 }
 
 END_EXTERN_C

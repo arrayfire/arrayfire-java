@@ -12,7 +12,7 @@ enum class JavaType {
   Short,
   Void,
   Boolean,
-  Seq
+  Object
 };
 
 static const char *mapJavaTypeToString(JavaType type) {
@@ -26,8 +26,8 @@ static const char *mapJavaTypeToString(JavaType type) {
     case JavaType::String: return "Ljava/lang/String;";
     case JavaType::Short: return "S";
     case JavaType::Void: return "V";
-    case JavaType::Boolean: return "B";
-    case JavaType::Seq: return "Lcom/arrayfire/Seq";
+    case JavaType::Boolean: return "Z";
+    case JavaType::Object: return "Ljava/lang/Object;";
   }
 }
 
@@ -57,7 +57,7 @@ void throwArrayFireException(JNIEnv *env, const char *functionName,
 
   jthrowable exception = static_cast<jthrowable>(
       env->NewObject(exceptionClass, constructor, code,
-                     env->NewStringUTF("Some custom message here.")));
+                     env->NewStringUTF("")));
 
   // Find setLocation method and call it with
   // the function name, file and line parameters
@@ -100,7 +100,6 @@ jobject createJavaObject(JNIEnv *env, JavaObjects objectType, Args... args) {
 af_index_t jIndexToCIndex(JNIEnv *env, jobject obj) {
     af_index_t index;
     jclass cls = env->GetObjectClass(obj);
-    assert(cls == env->FindClass("com/arrayfire/Index"));
 
     std::string getIsSeqSig = generateFunctionSignature(JavaType::Boolean, {});
     jmethodID getIsSeqId = env->GetMethodID(cls, "isSeq", getIsSeqSig.c_str());
@@ -114,7 +113,7 @@ af_index_t jIndexToCIndex(JNIEnv *env, jobject obj) {
 
     if (index.isSeq) {
       // get seq object
-      std::string getSeqSig = generateFunctionSignature(JavaType::Seq, {});
+      std::string getSeqSig = generateFunctionSignature(JavaType::Object, {});
       jmethodID getSeqId = env->GetMethodID(cls, "getSeq", getSeqSig.c_str());
       assert(getSeqId != NULL);
       jobject seq = env->CallObjectMethod(obj, getSeqId);
