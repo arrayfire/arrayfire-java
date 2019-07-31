@@ -5,8 +5,8 @@ import com.arrayfire.Index;
 public class ArrayFire extends AFLibLoader {
 
   public static final Seq SPAN = Seq.span();
-  /* ************* Algorithm ************* */
 
+  /* ************* Algorithm ************* */
 
   /**
    * Sum all the elements in an Array, wraps
@@ -1429,11 +1429,31 @@ public class ArrayFire extends AFLibLoader {
     return Statistics.cov(x, y, isBiased);
   }
 
+  /**
+   * Find the correlation coefficient of values in an input, wraps
+   * {@link http://arrayfire.org/docs/group__stat__func__corrcoef.htm}
+   * @param <T>   the type, should be a number
+   * @param x     the first input array
+   * @param y     the seconds input array
+   * @param type  the type of data in the arrays
+   * @return      the correlation coefficent of the two arrays
+   * @throws Exception
+   */
   public static <T extends Number> T corrcoef(final Array x, final Array y, Class<T> type)
       throws Exception {
     return Statistics.corrcoef(x, y, type);
   }
 
+  /**
+   * Find the top k values along a given dimension on an input array, wraps
+   * {@link http://arrayfire.org/docs/group__stat__func__topk.htm}
+   * @param in    the input array
+   * @param k     the number of elements to be retrieved along the given dimension
+   * @param dim   the dimension along which top k values are extracted
+   * @param order the order by which to retrieve the values
+   * @return      an array of array scontaining the top k values
+   * @see         TopkOrder
+   */
   public static Array[] topk(final Array in, int k, int dim, TopkOrder order) throws Exception {
     return Statistics.topk(in, k, dim, order);
   }
@@ -1444,28 +1464,84 @@ public class ArrayFire extends AFLibLoader {
 
   /* ************* Index ************* */
 
+  /**
+   * Look up values in an array by indexing another array, wraps
+   * {@link http://arrayfire.org/docs/group__index__func__lookup.htm}
+   * @param in    the input array
+   * @param idx   the indexing array
+   * @param dim   the dimension used for indexing
+   * @return      the array containing the indexed input array
+   * @throws Exception
+   */
   public static Array lookup(final Array in, final Array idx, int dim) throws Exception {
     return Index.lookup(in, idx, dim);
   }
 
+  /**
+   * Look up values in an array by indexing another array, wraps
+   * {@link http://arrayfire.org/docs/group__index__func__lookup.htm}
+   * @param in    the input array
+   * @param idx   the indexing array
+   * @param dim   the dimension used for indexing
+   * @return      the array containing the indexed input array
+   * @throws Exception
+   */
   public static Array lookup(final Array in, final Array idx) throws Exception {
     return Index.lookup(in, idx, 0);
   }
 
+  /**
+   * Copy the values of an input array based on an index, wraps
+   * {@link http://arrayfire.org/docs/group__index__func__index.htm}
+   * @param dst   the array to copy into
+   * @param src   the array to copy from
+   * @param idx0  the first index
+   * @param idx1  the second index
+   * @param idx2  the third index
+   * @param idx3  the fourth index
+   * @throws Exception
+   */
   public static void copy(Array dst, final Array src, Index idx0, Index idx1, Index idx2,
       Index idx3) throws Exception {
     Index.copy(dst, src, idx0, idx1, idx2, idx3);
   }
 
+  /**
+   * Copy the values of an input array based on an index, wraps
+   * {@link http://arrayfire.org/docs/group__index__func__index.htm}
+   * @param dst   the array to copy into
+   * @param src   the array to copy from
+   * @param idx0  the first index
+   * @param idx1  the second index
+   * @param idx2  the third index
+   * @throws Exception
+   */
   public static void copy(Array dst, final Array src, Index idx0, Index idx1, Index idx2)
       throws Exception {
     Index.copy(dst, src, idx0, idx1, idx2, new Index());
   }
 
+  /**
+   * Copy the values of an input array based on an index, wraps
+   * {@link http://arrayfire.org/docs/group__index__func__index.htm}
+   * @param dst   the array to copy into
+   * @param src   the array to copy from
+   * @param idx0  the first index
+   * @param idx1  the second index
+   * @throws Exception
+   */
   public static void copy(Array dst, final Array src, Index idx0, Index idx1) throws Exception {
     Index.copy(dst, src, idx0, idx1, new Index(), new Index());
   }
 
+  /**
+   * Copy the values of an input array based on an index, wraps
+   * {@link http://arrayfire.org/docs/group__index__func__index.htm}
+   * @param dst   the array to copy into
+   * @param src   the array to copy from
+   * @param idx0  the first index
+   * @throws Exception
+   */
   public static void copy(Array dst, final Array src, Index idx0) throws Exception {
     Index.copy(dst, src, idx0, new Index(), new Index(), new Index());
   }
